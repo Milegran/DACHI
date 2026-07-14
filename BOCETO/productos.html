@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mis Productos | DACHI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e0e3df","secondary": "#795900","primary-container": "#16482b",
+                    "surface": "#f7faf5","error": "#ba1a1a","secondary-container": "#ffc641",
+                    "surface-container-lowest": "#ffffff","surface-container-low": "#f1f4f0","inverse-primary": "#9ed3ac",
+                    "surface-tint": "#386848","surface-dim": "#d8dbd6","tertiary-fixed": "#ffdadc",
+                    "on-surface": "#191c1a","secondary-fixed": "#ffdfa0","error-container": "#ffdad6",
+                    "surface-container-high": "#e6e9e4","inverse-surface": "#2d312e","on-tertiary-fixed": "#370c14",
+                    "tertiary-fixed-dim": "#ffb2b9","on-tertiary-container": "#e0979f","on-secondary-container": "#715300",
+                    "inverse-on-surface": "#eff2ed","surface-bright": "#f7faf5","on-background": "#191c1a",
+                    "on-error": "#ffffff","tertiary": "#491a21","tertiary-container": "#642f36",
+                    "primary": "#003118","on-primary": "#ffffff","secondary-fixed-dim": "#f6be39",
+                    "outline": "#717971","on-surface-variant": "#414942","on-secondary-fixed": "#261a00",
+                    "on-secondary-fixed-variant": "#5c4300","outline-variant": "#c1c9bf","on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#6d363d","primary-fixed-dim": "#9ed3ac","on-primary-fixed": "#00210e",
+                    "background": "#f7faf5","surface-container": "#ecefea","on-primary-container": "#83b691",
+                    "surface-variant": "#e0e3df","on-tertiary": "#ffffff","on-secondary": "#ffffff",
+                    "primary-fixed": "#b9efc7","on-primary-fixed-variant": "#1f5032"
+            },
+            "borderRadius": {"DEFAULT": "0.25rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+            "spacing": {"margin-desktop": "48px","gutter": "24px","stack-sm": "8px","stack-lg": "32px","base": "8px","stack-xl": "64px","margin-mobile": "16px","stack-md": "16px","container-max": "1280px"},
+            "fontFamily": {"headline-md": ["\"Source Serif 4\""],"body-md": ["Hanken Grotesk"],"label-md": ["Hanken Grotesk"],"body-lg": ["Hanken Grotesk"],"headline-sm": ["\"Source Serif 4\""],"display-lg-mobile": ["\"Source Serif 4\""],"display-lg": ["\"Source Serif 4\""],"label-sm": ["Hanken Grotesk"]},
+            "fontSize": {"headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],"body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],"label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],"body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],"headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],"display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "700"}],"display-lg": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],"label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]}
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f7faf5; color: #191c1a; font-family: 'Hanken Grotesk', sans-serif; scroll-behavior: smooth; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .product-card { transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px -8px rgba(0, 49, 24, 0.08); }
+        .glass-effect { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f4f0; }
+        ::-webkit-scrollbar-thumb { background: #c1c9bf; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #717971; }
+        .sidebar { transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar.active { transform: translateX(0); }
+        .sidebar-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+        .thumb-remove { display:none; }
+        .thumb-wrap:hover .thumb-remove { display:flex; }
+        .user-menu { transform: translateY(-8px); opacity: 0; pointer-events: none; transition: all .15s ease; }
+        .user-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .modal-overlay { transition: opacity .2s ease; }
+        html.dark body { background-color:#10130f; color:#dfe5dc; }
+        html.dark .glass-container { background: radial-gradient(circle at top left, rgba(185,239,199,0.04), transparent 40%), radial-gradient(circle at bottom right, rgba(255,223,160,0.04), transparent 40%); }
+        html.dark .bg-surface, html.dark .bg-background { background-color:#10130f !important; }
+        html.dark .bg-surface-container-lowest, html.dark .bg-white { background-color:#1c211b !important; }
+        html.dark .bg-surface-container-low { background-color:#20261f !important; }
+        html.dark .bg-surface-container { background-color:#242b23 !important; }
+        html.dark .bg-surface-container-high { background-color:#2b3229 !important; }
+        html.dark .bg-surface-container-highest, html.dark .bg-surface-container-highest\/80 { background-color:#333c30 !important; }
+        html.dark .glass-card, html.dark .glass-effect { background: rgba(28, 33, 27, 0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
+        html.dark .shadow-forest, html.dark .shadow-forest-active, html.dark .forest-shadow, html.dark .forest-shadow-active { box-shadow: 0px 4px 20px rgba(0,0,0,0.35) !important; }
+        html.dark .text-on-surface, html.dark .text-on-background { color:#e5e9e2 !important; }
+        html.dark .text-on-surface-variant { color:#9fab9a !important; }
+        html.dark .text-primary { color:#8fd6a3 !important; }
+        html.dark .text-on-primary { color:#02160c !important; }
+        html.dark .text-secondary { color:#f6be39 !important; }
+        html.dark .bg-primary { background-color:#3a7a55 !important; }
+        html.dark .bg-primary-fixed { background-color:#1e3b28 !important; }
+        html.dark .bg-primary-fixed\/20, html.dark .bg-primary-fixed\/30 { background-color:rgba(143,214,163,0.12) !important; }
+        html.dark .bg-primary-container\/10 { background-color:rgba(143,214,163,0.08) !important; }
+        html.dark .text-on-primary-fixed { color:#dfe5dc !important; }
+        html.dark .bg-secondary-container { background-color:#5c4200 !important; color:#ffdfa0 !important; }
+        html.dark .text-on-secondary-container { color:#ffdfa0 !important; }
+        html.dark .bg-secondary-fixed, html.dark .bg-secondary-fixed\/30 { background-color:rgba(246,190,57,0.18) !important; }
+        html.dark .border-outline-variant { border-color:#333c30 !important; }
+        html.dark .border-outline { border-color:#4a5546 !important; }
+        html.dark .table-row-hover:hover { background-color: rgba(255,255,255,0.04) !important; }
+        html.dark input, html.dark select, html.dark textarea { background-color:#1c211b !important; color:#e5e9e2 !important; border-color:#333c30 !important; }
+        html.dark input::placeholder, html.dark textarea::placeholder { color:#77826f !important; }
+        html.dark .bg-primary-fixed\/10 { background-color: rgba(143,214,163,0.06) !important; }
+        html.dark ::-webkit-scrollbar-track { background:#10130f !important; }
+        html.dark ::-webkit-scrollbar-thumb { background:#333c30 !important; }
+    </style>
+</head>
+<body class="bg-background">
+<!-- BLOQUE SIDEBAR MOBILE -->
+<aside class="sidebar fixed left-0 top-0 h-full w-[280px] bg-surface-container-lowest z-[70] shadow-xl p-6" id="sidebar">
+<div class="flex justify-between items-center mb-stack-xl">
+<a class="flex items-center gap-2" href="#">
+<img alt="DACHI Logo" class="h-8 w-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAsOnwK_fdenP-kJ8hQkYtzPQbKxtx76pYFxl0W15bJO4Tk5y0IpfZAehEa37eMOHSSvOMUl7f06RalVDCCQO0Xpu49_vMGdVQcQBzK3CuQuKXjIUp49_15uZ3dFV3QnNwAQEymLhMIeqH02I9PPFfPCrXxxnJPHO26jZdBGPFOl7QaadvagLIoomd9DN25aTqqct2HGeUBrW9XMBllUM5BXcW16Mj7GnFLyT9kw52Mr3Z42kG2n5Xvbg1PRHKvD6sLFMPX4y2Vg"/>
+<span class="font-headline-sm text-headline-sm font-bold text-primary">DACHI</span>
+</a>
+<button class="p-2 rounded-full hover:bg-surface-container-low" id="closeSidebar">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="space-y-4">
+<a class="flex items-center gap-4 p-3 rounded-lg bg-primary/10 text-primary transition-colors font-label-md" href="productos.html">
+<span class="material-symbols-outlined">inventory_2</span> Mis Productos
+        </a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors font-label-md" href="panel.html">
+<span class="material-symbols-outlined">dashboard</span> Panel
+        </a>
+<hr class="border-outline-variant my-4"/>
+<button class="flex items-center gap-4 p-3 rounded-lg text-error hover:bg-surface-container-low transition-colors font-label-md w-full text-left" onclick="logout()">
+<span class="material-symbols-outlined">logout</span> Cerrar Sesión
+        </button>
+</nav>
+</aside>
+<div class="sidebar-overlay fixed inset-0 bg-black/40 z-[60]" id="sidebarOverlay"></div>
+<!-- BLOQUE NAVBAR -->
+<header class="w-full top-0 sticky z-50 glass-effect border-b border-outline-variant/30 shadow-sm transition-all duration-300">
+<div class="flex justify-between items-center px-gutter py-3 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-low transition-all md:hidden" id="openSidebar">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<a class="flex items-center gap-2" href="#">
+<img alt="DACHI Logo" class="h-10 w-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAsOnwK_fdenP-kJ8hQkYtzPQbKxtx76pYFxl0W15bJO4Tk5y0IpfZAehEa37eMOHSSvOMUl7f06RalVDCCQO0Xpu49_vMGdVQcQBzK3CuQuKXjIUp49_15uZ3dFV3QnNwAQEymLhMIeqH02I9PPFfPCrXxxnJPHO26jZdBGPFOl7QaadvagLIoomd9DN25aTqqct2HGeUBrW9XMBllUM5BXcW16Mj7GnFLyT9kw52Mr3Z42kG2n5Xvbg1PRHKvD6sLFMPX4y2Vg"/>
+<span class="font-headline-sm text-headline-sm font-bold text-primary">DACHI</span>
+</a>
+</div>
+<nav class="hidden md:flex gap-gutter items-center">
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1" href="productos.html">Mis Productos</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="panel.html">Panel</a>
+</nav>
+<div class="flex items-center gap-stack-md relative">
+<span class="font-label-md text-label-md text-on-surface-variant hidden sm:inline" id="producerName"></span>
+<button class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant flex items-center justify-center font-bold text-primary cursor-pointer" id="userAvatarBtn" onclick="toggleUserMenu()">
+<img alt="Foto de perfil" class="avatar-img hidden w-full h-full object-cover" id="producerAvatarImg"/>
+<span class="avatar-initial" id="producerInitial">?</span>
+</button>
+<div class="user-menu absolute right-0 top-12 w-72 bg-white rounded-2xl border border-outline-variant/50 shadow-xl p-2 z-[200]" id="userMenu">
+<div class="flex items-center gap-3 p-3 border-b border-outline-variant/30 mb-2">
+<div class="w-12 h-12 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant flex items-center justify-center font-bold text-primary flex-none">
+<img alt="Foto de perfil" class="avatar-img hidden w-full h-full object-cover" id="menuAvatarImg"/>
+<span class="avatar-initial" id="menuInitial">?</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate" id="userMenuName">Usuario</p>
+<p class="text-label-sm text-on-surface-variant truncate" id="userMenuEmail"></p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide" id="menuRoleTag">ROL</span>
+</div>
+</div>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="logout()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">swap_horiz</span> Cambiar Cuenta
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openSettingsModal()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">tune</span> Configuración
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openProfileModal()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">person</span> Editar Perfil
+</button>
+<hr class="border-outline-variant/50 my-1"/>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-error flex items-center gap-3" onclick="logout()">
+<span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
+<section class="mb-stack-xl">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-2">Gestión de Catálogo</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Administra tus productos agrícolas con precisión técnica. Publica nuevas cosechas y mantén tu inventario actualizado para los compradores.</p>
+</section>
+<!-- BLOQUE STATS -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-stack-xl" id="statsBar"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- BLOQUE PUBLICAR -->
+<aside class="lg:col-span-4 lg:sticky lg:top-24">
+<div class="bg-surface-container-lowest p-stack-lg rounded-[24px] border border-outline-variant/50 shadow-sm">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-stack-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" id="formIcon">add_circle</span>
+<span id="formTitle">Publicar Producto</span>
+</h2>
+<form class="space-y-stack-md" id="productForm">
+<input id="editId" type="hidden" value=""/>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="prodName">Nombre del Producto</label>
+<input class="w-full bg-surface-container-low border-transparent rounded-[12px] px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" id="prodName" placeholder="Ej. Café Geisha" required type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="prodPrice">Precio ($)</label>
+<input class="w-full bg-surface-container-low border-transparent rounded-[12px] px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" id="prodPrice" min="0" placeholder="0.00" required step="0.01" type="number"/>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="prodQty">Cantidad</label>
+<input class="w-full bg-surface-container-low border-transparent rounded-[12px] px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none" id="prodQty" min="0" placeholder="0" required step="1" type="number"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-md">
+<div class="space-y-1 relative">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="prodCat">Categoría</label>
+<select class="w-full bg-surface-container-low border-transparent rounded-[12px] px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer" id="prodCat">
+<option>Hortalizas</option>
+<option>Frutas</option>
+<option>Café</option>
+<option>Cacao</option>
+<option>Orgánico</option>
+<option>Artesanal</option>
+<option>Especialidad</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-[42px] pointer-events-none text-on-surface-variant text-[20px]">expand_more</span>
+</div>
+<div class="space-y-1 relative">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="prodZone">Zona</label>
+<select class="w-full bg-surface-container-low border-transparent rounded-[12px] px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer" id="prodZone">
+<option>Chiriquí</option>
+<option>Bocas del Toro</option>
+<option>Coclé</option>
+<option>Colón</option>
+<option>Los Santos</option>
+<option>Veraguas</option>
+<option>Panamá Oeste</option>
+<option>Herrera</option>
+<option>Darién</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-[42px] pointer-events-none text-on-surface-variant text-[20px]">expand_more</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="prodDesc">Descripción</label>
+<textarea class="w-full bg-surface-container-low border-transparent rounded-[12px] px-4 py-3 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none" id="prodDesc" placeholder="Detalles de la cosecha y origen..." required rows="4"></textarea>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant px-1">Fotos del Producto (puedes subir varias)</label>
+<div class="border-2 border-dashed border-outline-variant/60 rounded-[12px] p-6 text-center cursor-pointer hover:bg-surface-container-low hover:border-primary/40 transition-all group" id="dropZone">
+<input accept="image/*" class="hidden" id="fileInput" multiple type="file"/>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-3xl mb-2">add_photo_alternate</span>
+<p class="text-label-sm font-label-sm text-outline group-hover:text-on-surface transition-colors">Arrastra o haz click para subir imágenes</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-2" id="previewRow"></div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary text-white font-bold py-4 rounded-[12px] hover:bg-primary/90 shadow-md transition-all active:scale-[0.98] flex justify-center items-center gap-2 mt-4" id="submitBtn" type="submit">
+<span class="material-symbols-outlined text-[20px]" id="submitIcon">save</span>
+<span id="submitText">Guardar Producto</span>
+</button>
+<button class="hidden flex-none bg-surface-container-high text-on-surface font-bold px-4 rounded-[12px] hover:bg-surface-container-highest transition-all mt-4" id="cancelEdit" type="button">
+                            Cancelar
+                        </button>
+</div>
+</form>
+</div>
+</aside>
+<!-- BLOQUE GESTIÓN -->
+<div class="lg:col-span-8 space-y-stack-lg">
+<div class="flex justify-between items-center bg-surface-container/50 backdrop-blur-sm p-4 rounded-xl border border-outline-variant/30">
+<h2 class="font-headline-sm text-headline-sm text-primary">Productos Publicados</h2>
+<span class="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-label-md font-bold flex items-center gap-2" id="activeCount">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span id="activeCountText">0 Activos</span>
+</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter" id="productsList"></div>
+<div class="border-2 border-dashed border-outline-variant rounded-[16px] flex flex-col items-center justify-center p-stack-lg min-h-[300px] text-center group cursor-pointer hover:bg-surface-container-low hover:border-primary/40 transition-all" id="emptyTrigger" onclick="document.getElementById('prodName').focus(); resetForm();">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/10 transition-all">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:rotate-90 transition-transform duration-300">add</span>
+</div>
+<h3 class="font-headline-sm text-on-surface mb-2">Agregar nuevo</h3>
+<p class="text-body-md text-on-surface-variant max-w-[220px]">Crea una nueva ficha de producto para tu inventario.</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="w-full mt-stack-xl border-t border-outline-variant bg-surface-container-low/50">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop py-stack-lg w-full max-w-container-max mx-auto">
+<div class="mb-stack-md md:mb-0">
+<div class="flex items-center gap-2">
+<img alt="DACHI Logo" class="h-8 w-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAsOnwK_fdenP-kJ8hQkYtzPQbKxtx76pYFxl0W15bJO4Tk5y0IpfZAehEa37eMOHSSvOMUl7f06RalVDCCQO0Xpu49_vMGdVQcQBzK3CuQuKXjIUp49_15uZ3dFV3QnNwAQEymLhMIeqH02I9PPFfPCrXxxnJPHO26jZdBGPFOl7QaadvagLIoomd9DN25aTqqct2HGeUBrW9XMBllUM5BXcW16Mj7GnFLyT9kw52Mr3Z42kG2n5Xvbg1PRHKvD6sLFMPX4y2Vg"/>
+<span class="font-headline-sm text-headline-sm text-primary">DACHI</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">© 2024 DACHI. Cultivando confianza.</p>
+</div>
+</div>
+</footer>
+<!-- BLOQUE MODAL PERFIL -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[300] hidden items-center justify-center p-4 modal-overlay" id="profileModal">
+<div class="bg-white rounded-[24px] w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Editar Perfil</h3>
+<span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide" id="profileRoleTag">ROL</span>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeProfileModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-stack-md" onsubmit="saveProfile(event)">
+<div class="flex flex-col items-center gap-3 mb-4">
+<div class="w-24 h-24 rounded-full bg-surface-container-low border border-outline-variant overflow-hidden flex items-center justify-center relative">
+<img alt="Foto de perfil" class="hidden w-full h-full object-cover" id="profilePhotoPreview"/>
+<span class="material-symbols-outlined text-outline text-4xl" id="profilePhotoPlaceholder">person</span>
+</div>
+<label class="text-label-sm text-primary font-bold cursor-pointer hover:underline">
+Cambiar fotografía
+<input accept="image/*" class="hidden" onchange="handleProfilePhoto(event)" type="file"/>
+</label>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Nombre Completo</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileNombre" required type="text"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-stack-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Correo</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-low text-on-surface-variant outline-none" disabled id="profileCorreo" type="email"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Teléfono</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileTelefono" placeholder="+507 6000-0000" type="tel"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Dirección</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileDireccion" placeholder="Provincia, corregimiento..." type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Descripción</label>
+<textarea class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white resize-none" id="profileDescripcion" placeholder="Cuéntanos sobre ti..." rows="3"></textarea>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98] mt-2" type="submit">GUARDAR CAMBIOS</button>
+</form>
+</div>
+</div>
+<!-- BLOQUE MODAL CONFIGURACION -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[300] hidden items-center justify-center p-4 modal-overlay" id="settingsModal">
+<div class="bg-white rounded-[24px] w-full max-w-md p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-primary">Configuración</h3>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeSettingsModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-stack-lg" onsubmit="saveSettingsModal(event)">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2 ml-1">Tamaño de Fuente</label>
+<select class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary outline-none bg-white" id="settingsFontSize">
+<option value="pequeno">Pequeño</option>
+<option value="mediano">Mediano</option>
+<option value="grande">Grande</option>
+</select>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Modo Oscuro</h4>
+<p class="text-on-surface-variant text-label-sm">Reduce el brillo de la interfaz.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="settingsDarkMode" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98]" type="submit">GUARDAR</button>
+</form>
+</div>
+</div>
+<!-- BLOQUE LOGICA JS -->
+<script>
+// BLOQUE SESION
+function getSession() {
+    const raw = sessionStorage.getItem('dachi_session') || localStorage.getItem('dachi_session');
+    return raw ? JSON.parse(raw) : null;
+}
+const session = getSession();
+if (!session || session.role !== 'productor') {
+    const map = { admin: 'panel.html', consumidor: 'home.html', repartidor: 'panel.html', distribuidor: 'panel.html' };
+    window.location.href = (session && map[session.role]) || 'index.html';
+}
+function logout() {
+    sessionStorage.removeItem('dachi_session');
+    localStorage.removeItem('dachi_session');
+    window.location.href = 'index.html';
+}
+
+// BLOQUE ROLES Y PERFIL
+const ROLE_LABELS = { admin: 'PERFIL DE ADMIN', consumidor: 'PERFIL DE CONSUMIDOR', repartidor: 'PERFIL LOGISTICO', productor: 'PERFIL DE PRODUCTOR', distribuidor: 'PERFIL DE DISTRIBUIDOR' };
+function getPerfil() { return JSON.parse(localStorage.getItem('dachi_perfil_' + session.email) || '{}'); }
+function savePerfil(p) { localStorage.setItem('dachi_perfil_' + session.email, JSON.stringify(p)); }
+function getAjustes() { return JSON.parse(localStorage.getItem('dachi_ajustes_' + session.email) || '{}'); }
+function saveAjustes(a) { localStorage.setItem('dachi_ajustes_' + session.email, JSON.stringify(a)); }
+function applyAjustes() {
+    const a = getAjustes();
+    const sizes = { pequeno: '14px', mediano: '16px', grande: '18px' };
+    document.documentElement.style.fontSize = sizes[a.fontSize] || '16px';
+    document.documentElement.classList.toggle('dark', !!a.darkMode);
+}
+function refreshAvatarUI() {
+    const perfil = getPerfil();
+    const initial = session.nombre.charAt(0).toUpperCase();
+    document.querySelectorAll('.avatar-initial').forEach(el => el.textContent = initial);
+    document.querySelectorAll('.avatar-img').forEach(el => {
+        if (perfil.foto) { el.src = perfil.foto; el.classList.remove('hidden'); }
+        else { el.classList.add('hidden'); }
+    });
+    const roleTag = document.getElementById('menuRoleTag');
+    if (roleTag) roleTag.textContent = ROLE_LABELS[session.role] || '';
+    const nameEl = document.getElementById('userMenuName');
+    if (nameEl) nameEl.textContent = perfil.nombreCompleto || session.nombre;
+    const emailEl = document.getElementById('userMenuEmail');
+    if (emailEl) emailEl.textContent = session.email;
+}
+function toggleUserMenu() { document.getElementById('userMenu').classList.toggle('open'); }
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('userMenu');
+    const btn = document.getElementById('userAvatarBtn');
+    if (menu && btn && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove('open');
+});
+function openProfileModal() {
+    document.getElementById('userMenu').classList.remove('open');
+    const p = getPerfil();
+    document.getElementById('profileNombre').value = p.nombreCompleto || session.nombre;
+    document.getElementById('profileCorreo').value = session.email;
+    document.getElementById('profileTelefono').value = p.telefono || '';
+    document.getElementById('profileDireccion').value = p.direccion || '';
+    document.getElementById('profileDescripcion').value = p.descripcion || '';
+    document.getElementById('profileRoleTag').textContent = ROLE_LABELS[session.role] || '';
+    const preview = document.getElementById('profilePhotoPreview');
+    preview.removeAttribute('data-newphoto');
+    if (p.foto) { preview.src = p.foto; preview.classList.remove('hidden'); document.getElementById('profilePhotoPlaceholder').classList.add('hidden'); }
+    else { preview.classList.add('hidden'); document.getElementById('profilePhotoPlaceholder').classList.remove('hidden'); }
+    document.getElementById('profileModal').classList.remove('hidden');
+    document.getElementById('profileModal').classList.add('flex');
+}
+function closeProfileModal() {
+    document.getElementById('profileModal').classList.add('hidden');
+    document.getElementById('profileModal').classList.remove('flex');
+}
+function handleProfilePhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        const preview = document.getElementById('profilePhotoPreview');
+        preview.src = ev.target.result;
+        preview.classList.remove('hidden');
+        document.getElementById('profilePhotoPlaceholder').classList.add('hidden');
+        preview.dataset.newphoto = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+function saveProfile(event) {
+    event.preventDefault();
+    const p = getPerfil();
+    p.nombreCompleto = document.getElementById('profileNombre').value.trim();
+    p.telefono = document.getElementById('profileTelefono').value.trim();
+    p.direccion = document.getElementById('profileDireccion').value.trim();
+    p.descripcion = document.getElementById('profileDescripcion').value.trim();
+    const newphoto = document.getElementById('profilePhotoPreview').dataset.newphoto;
+    if (newphoto) p.foto = newphoto;
+    savePerfil(p);
+    refreshAvatarUI();
+    closeProfileModal();
+}
+function openSettingsModal() {
+    document.getElementById('userMenu').classList.remove('open');
+    const a = getAjustes();
+    document.getElementById('settingsFontSize').value = a.fontSize || 'mediano';
+    document.getElementById('settingsDarkMode').checked = !!a.darkMode;
+    document.getElementById('settingsModal').classList.remove('hidden');
+    document.getElementById('settingsModal').classList.add('flex');
+}
+function closeSettingsModal() {
+    document.getElementById('settingsModal').classList.add('hidden');
+    document.getElementById('settingsModal').classList.remove('flex');
+}
+function saveSettingsModal(event) {
+    event.preventDefault();
+    const a = { fontSize: document.getElementById('settingsFontSize').value, darkMode: document.getElementById('settingsDarkMode').checked };
+    saveAjustes(a);
+    applyAjustes();
+    closeSettingsModal();
+}
+
+// BLOQUE DATOS DE PRUEBA (idempotente: solo siembra si no hay productos guardados)
+function seedDemoData() {
+    if (localStorage.getItem('dachi_products')) return;
+    const img = (seed) => `https://picsum.photos/seed/${seed}/600/450`;
+    const now = new Date().toLocaleDateString('es-PA');
+    const demoProducts = [
+        { id: 'seed1', name: 'Tomate Chonto Orgánico', price: '1.25', quantity: 80, category: 'Hortalizas', zone: 'Chiriquí', description: 'Tomates chonto cultivados sin pesticidas en las tierras altas de Chiriquí, cosechados semanalmente.', images: [img('tomate1'), img('tomate2')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 34, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:4}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Excelente calidad, muy frescos.',date:now}] },
+        { id: 'seed2', name: 'Café Geisha Especial', price: '18.50', quantity: 25, category: 'Café', zone: 'Chiriquí', description: 'Café Geisha de altura, tueste medio, notas florales y cítricas. Cosecha de Boquete.', images: [img('cafe1'), img('cafe2')], status: 'active', producerEmail: 'boquete@dachi.pa', producerName: 'Café Boquete Dorado', sold: 52, ratings: [{email:'sara@gmail.com',stars:5}], comments: [{email:'maria@gmail.com',nombre:'María González',text:'El mejor café que he probado en Panamá.',date:now}] },
+        { id: 'seed3', name: 'Piña Perolera', price: '2.10', quantity: 60, category: 'Frutas', zone: 'Colón', description: 'Piñas dulces y jugosas, cosechadas en su punto óptimo de maduración.', images: [img('pina1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 21, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: '6.75', quantity: 40, category: 'Cacao', zone: 'Darién', description: 'Cacao criollo fermentado y secado artesanalmente, ideal para chocolatería fina.', images: [img('cacao1'), img('cacao2')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 15, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:5}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Aroma increíble, se nota la calidad.',date:now}] },
+        { id: 'seed5', name: 'Ñame Criollo', price: '0.95', quantity: 100, category: 'Hortalizas', zone: 'Coclé', description: 'Ñame fresco cosechado en Coclé, ideal para sancocho.', images: [img('name1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 44, ratings: [], comments: [] },
+        { id: 'seed6', name: 'Plátano Verde', price: '0.60', quantity: 150, category: 'Frutas', zone: 'Bocas del Toro', description: 'Plátanos verdes de exportación, cultivados en fincas familiares de Bocas del Toro.', images: [img('platano1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 66, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed7', name: 'Miel de Abeja Pura', price: '8.00', quantity: 30, category: 'Artesanal', zone: 'Veraguas', description: 'Miel 100% pura extraída de forma artesanal en apiarios de Veraguas.', images: [img('miel1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 19, ratings: [{email:'sara@gmail.com',stars:5}], comments: [] },
+        { id: 'seed8', name: 'Queso de Aro Artesanal', price: '5.40', quantity: 20, category: 'Especialidad', zone: 'Los Santos', description: 'Queso de aro tradicional, elaborado con leche fresca de Los Santos.', images: [img('queso1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 12, ratings: [], comments: [] },
+        { id: 'seed9', name: 'Naranja Valencia', price: '1.10', quantity: 90, category: 'Frutas', zone: 'Panamá Oeste', description: 'Naranjas jugosas ideales para jugo, cultivadas en Panamá Oeste.', images: [img('naranja1')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 28, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed10', name: 'Yuca Fresca', price: '0.85', quantity: 120, category: 'Hortalizas', zone: 'Herrera', description: 'Yuca fresca recién cosechada, lista para tu mesa.', images: [img('yuca1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 37, ratings: [], comments: [] }
+    ];
+    localStorage.setItem('dachi_products', JSON.stringify(demoProducts));
+}
+seedDemoData();
+function seedDemoOrders() {
+    if (localStorage.getItem('dachi_orders')) return;
+    const demoOrders = [
+        { id: '1000001', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed1', name: 'Tomate Chonto Orgánico', price: 1.25, qty: 4, image: '' }], total: 5.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000002', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed2', name: 'Café Geisha Especial', price: 18.50, qty: 1, image: '' }], total: 18.50, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'fulo@gmail.com' },
+        { id: '1000003', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: 6.75, qty: 2, image: '' }], total: 13.50, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000004', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed6', name: 'Plátano Verde', price: 0.60, qty: 10, image: '' }], total: 6.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000005', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed9', name: 'Naranja Valencia', price: 1.10, qty: 6, image: '' }], total: 6.60, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'jose@gmail.com' }
+    ];
+    localStorage.setItem('dachi_orders', JSON.stringify(demoOrders));
+}
+seedDemoOrders();
+
+document.addEventListener('DOMContentLoaded', () => {
+    applyAjustes();
+    document.getElementById('producerName').textContent = session.nombre;
+    refreshAvatarUI();
+
+    // BLOQUE SIDEBAR
+    const openSidebarBtn = document.getElementById('openSidebar');
+    const closeSidebarBtn = document.getElementById('closeSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggleSidebar = () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.classList.toggle('overflow-hidden');
+    };
+    if (openSidebarBtn) openSidebarBtn.addEventListener('click', toggleSidebar);
+    if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', toggleSidebar);
+    if (overlay) overlay.addEventListener('click', toggleSidebar);
+
+    // BLOQUE ESTADO
+    function getAllProducts() {
+        return JSON.parse(localStorage.getItem('dachi_products') || '[]');
+    }
+    function saveAllProducts(list) {
+        localStorage.setItem('dachi_products', JSON.stringify(list));
+    }
+    function myProducts() {
+        return getAllProducts().filter(p => p.producerEmail === session.email);
+    }
+
+    const productsList = document.getElementById('productsList');
+    const activeCountText = document.getElementById('activeCountText');
+    const productForm = document.getElementById('productForm');
+    const cancelEditBtn = document.getElementById('cancelEdit');
+    const formTitle = document.getElementById('formTitle');
+    const formIcon = document.getElementById('formIcon');
+    const submitText = document.getElementById('submitText');
+    const submitIcon = document.getElementById('submitIcon');
+    const editIdInput = document.getElementById('editId');
+    const statsBar = document.getElementById('statsBar');
+
+    // BLOQUE UPLOAD IMAGENES
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const previewRow = document.getElementById('previewRow');
+    let currentImages = [];
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                currentImages.push(event.target.result);
+                renderPreviews();
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function renderPreviews() {
+        previewRow.innerHTML = currentImages.map((img, i) => `
+            <div class="thumb-wrap relative w-16 h-16 rounded-lg overflow-hidden border border-outline-variant/50">
+                <img src="${img}" class="w-full h-full object-cover"/>
+                <button type="button" class="thumb-remove absolute top-0 right-0 bg-black/60 text-white rounded-bl-lg p-0.5" onclick="event.stopPropagation();window.removeImg(${i})">
+                    <span class="material-symbols-outlined text-[14px]">close</span>
+                </button>
+            </div>
+        `).join('');
+    }
+    window.removeImg = function(i) {
+        currentImages.splice(i, 1);
+        renderPreviews();
+    };
+    function resetImageUpload() {
+        fileInput.value = '';
+        currentImages = [];
+        renderPreviews();
+    }
+
+    // BLOQUE STATS
+    function renderStats() {
+        const mine = myProducts();
+        const activos = mine.filter(p => p.status === 'active').length;
+        const totalSold = mine.reduce((a, p) => a + (p.sold || 0), 0);
+        const best = mine.slice().sort((a, b) => (b.sold || 0) - (a.sold || 0))[0];
+        const cards = [
+            { label: 'Total Productos', value: mine.length, icon: 'inventory_2' },
+            { label: 'Activos', value: activos, icon: 'check_circle' },
+            { label: 'Unidades Vendidas', value: totalSold, icon: 'sell' },
+            { label: 'Más Vendido', value: best ? best.name : '—', icon: 'star' }
+        ];
+        statsBar.innerHTML = cards.map(c => `
+            <div class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-4 flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-xl">${c.icon}</span>
+                <div>
+                    <p class="text-label-sm text-on-surface-variant">${c.label}</p>
+                    <p class="font-bold text-headline-sm text-on-surface text-lg truncate max-w-[120px]">${c.value}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // BLOQUE RENDER LISTADO
+    function renderProducts() {
+        const mine = myProducts();
+        productsList.innerHTML = '';
+        const activeItems = mine.filter(p => p.status === 'active').length;
+        activeCountText.textContent = `${activeItems} Activo${activeItems !== 1 ? 's' : ''}`;
+
+        mine.forEach(product => {
+            const isPaused = product.status === 'paused';
+            const card = document.createElement('article');
+            card.className = `product-card bg-surface-container-lowest rounded-[16px] overflow-hidden border border-outline-variant/50 group flex flex-col ${isPaused ? 'opacity-70' : ''}`;
+            const img = (product.images && product.images[0]) || 'https://picsum.photos/seed/dachi-sin-imagen/400/300';
+            card.innerHTML = `
+                <div class="h-56 w-full overflow-hidden relative">
+                    <img alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${isPaused ? 'grayscale' : ''}" src="${img}"/>
+                    <div class="absolute top-4 left-4 flex gap-2">
+                        <span class="bg-white/95 backdrop-blur-sm text-primary px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest shadow-sm">${product.category}</span>
+                        <span class="bg-white/95 backdrop-blur-sm text-secondary px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest shadow-sm">${product.zone}</span>
+                    </div>
+                    ${isPaused ? '<div class="absolute inset-0 bg-black/20 flex items-center justify-center"><span class="bg-white px-4 py-2 rounded-full font-bold text-sm">PAUSADO</span></div>' : ''}
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-baseline mb-1">
+                        <h3 class="font-headline-sm text-headline-sm text-on-surface">${product.name}</h3>
+                        <p class="text-primary font-bold text-headline-sm">$${parseFloat(product.price).toFixed(2)}</p>
+                    </div>
+                    <p class="text-label-sm text-on-surface-variant mb-3">Stock: ${product.quantity} · Vendidos: ${product.sold || 0}</p>
+                    <p class="text-body-md font-body-md text-on-surface-variant line-clamp-2 mb-8">${product.description}</p>
+                    <div class="mt-auto flex items-center gap-3">
+                        <button class="flex-1 flex items-center justify-center gap-2 py-3 rounded-[8px] border border-outline-variant text-on-surface hover:bg-surface-container-low transition-colors text-label-md font-bold active:scale-95 btn-edit">
+                            <span class="material-symbols-outlined text-[18px]">edit</span> Editar
+                        </button>
+                        <button class="flex-1 flex items-center justify-center gap-2 py-3 rounded-[8px] bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors text-label-md font-bold active:scale-95 btn-toggle">
+                            <span class="material-symbols-outlined text-[18px]">${isPaused ? 'play_arrow' : 'pause'}</span>
+                            <span>${isPaused ? 'Activar' : 'Pausar'}</span>
+                        </button>
+                        <button class="p-3 rounded-[8px] bg-error-container text-error hover:opacity-80 transition-colors btn-delete">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            card.querySelector('.btn-edit').onclick = () => editProduct(product.id);
+            card.querySelector('.btn-toggle').onclick = () => toggleStatus(product.id);
+            card.querySelector('.btn-delete').onclick = () => deleteProduct(product.id);
+            productsList.appendChild(card);
+        });
+        renderStats();
+    }
+
+    window.resetForm = function() {
+        productForm.reset();
+        editIdInput.value = '';
+        formTitle.textContent = 'Publicar Producto';
+        formIcon.textContent = 'add_circle';
+        submitText.textContent = 'Guardar Producto';
+        submitIcon.textContent = 'save';
+        cancelEditBtn.classList.add('hidden');
+        resetImageUpload();
+    };
+
+    function editProduct(id) {
+        const all = getAllProducts();
+        const product = all.find(p => p.id === id);
+        if (!product) return;
+
+        editIdInput.value = product.id;
+        document.getElementById('prodName').value = product.name;
+        document.getElementById('prodPrice').value = product.price;
+        document.getElementById('prodQty').value = product.quantity;
+        document.getElementById('prodCat').value = product.category;
+        document.getElementById('prodZone').value = product.zone;
+        document.getElementById('prodDesc').value = product.description;
+        currentImages = (product.images || []).slice();
+        renderPreviews();
+
+        formTitle.textContent = 'Editar Producto';
+        formIcon.textContent = 'edit';
+        submitText.textContent = 'Actualizar';
+        submitIcon.textContent = 'refresh';
+        cancelEditBtn.classList.remove('hidden');
+        window.scrollTo({ top: document.querySelector('aside').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function toggleStatus(id) {
+        const all = getAllProducts();
+        const product = all.find(p => p.id === id);
+        if (product) {
+            product.status = product.status === 'active' ? 'paused' : 'active';
+            saveAllProducts(all);
+            renderProducts();
+        }
+    }
+
+    function deleteProduct(id) {
+        if (!confirm('¿Eliminar este producto permanentemente?')) return;
+        let all = getAllProducts();
+        all = all.filter(p => p.id !== id);
+        saveAllProducts(all);
+        renderProducts();
+    }
+
+    if (cancelEditBtn) cancelEditBtn.onclick = resetForm;
+
+    productForm.onsubmit = (e) => {
+        e.preventDefault();
+        if (currentImages.length === 0) { alert('Debes subir al menos una foto del producto.'); return; }
+        const id = editIdInput.value;
+        const all = getAllProducts();
+
+        const newProduct = {
+            id: id || Date.now().toString(),
+            name: document.getElementById('prodName').value,
+            price: document.getElementById('prodPrice').value,
+            quantity: parseInt(document.getElementById('prodQty').value),
+            category: document.getElementById('prodCat').value,
+            zone: document.getElementById('prodZone').value,
+            description: document.getElementById('prodDesc').value,
+            images: currentImages,
+            status: id ? all.find(p => p.id === id).status : 'active',
+            producerEmail: session.email,
+            producerName: session.nombre,
+            sold: id ? all.find(p => p.id === id).sold || 0 : 0,
+            ratings: id ? all.find(p => p.id === id).ratings || [] : [],
+            comments: id ? all.find(p => p.id === id).comments || [] : []
+        };
+
+        if (id) {
+            const index = all.findIndex(p => p.id === id);
+            all[index] = newProduct;
+        } else {
+            all.push(newProduct);
+        }
+
+        saveAllProducts(all);
+        renderProducts();
+        resetForm();
+    };
+
+    renderProducts();
+});
+</script>
+</body></html>

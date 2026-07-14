@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DACHI | Catálogo de Productos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#795900","primary": "#003118","surface-container-high": "#e6e9e4",
+                    "inverse-surface": "#2d312e","tertiary-fixed": "#ffdadc","inverse-primary": "#9ed3ac",
+                    "on-primary-container": "#83b691","on-secondary-fixed-variant": "#5c4300","on-primary-fixed-variant": "#1f5032",
+                    "error": "#ba1a1a","surface-dim": "#d8dbd6","on-tertiary-fixed-variant": "#6d363d",
+                    "on-secondary": "#ffffff","outline": "#717971","on-surface-variant": "#414942",
+                    "on-primary": "#ffffff","tertiary-fixed-dim": "#ffb2b9","on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff","on-background": "#191c1a","surface-container-highest": "#e0e3df",
+                    "inverse-on-surface": "#eff2ed","background": "#f7faf5","on-tertiary-container": "#e0979f",
+                    "surface-bright": "#f7faf5","secondary-fixed": "#ffdfa0","primary-container": "#16482b",
+                    "tertiary": "#491a21","on-secondary-container": "#715300","on-tertiary-fixed": "#370c14",
+                    "on-primary-fixed": "#00210e","error-container": "#ffdad6","on-surface": "#191c1a",
+                    "primary-fixed": "#b9efc7","surface": "#f7faf5","surface-variant": "#e0e3df",
+                    "primary-fixed-dim": "#9ed3ac","secondary-fixed-dim": "#f6be39","tertiary-container": "#642f36",
+                    "surface-container-low": "#f1f4f0","on-error-container": "#93000a","secondary-container": "#ffc641",
+                    "surface-container": "#ecefea","outline-variant": "#c1c9bf","on-tertiary": "#ffffff",
+                    "on-secondary-fixed": "#261a00","surface-tint": "#386848"
+            },
+            "borderRadius": {"DEFAULT": "0.25rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+            "spacing": {"stack-md": "16px","margin-desktop": "48px","container-max": "1280px","stack-xl": "64px","gutter": "24px","stack-sm": "8px","base": "8px","stack-lg": "32px","margin-mobile": "16px"},
+            "fontFamily": {"label-md": ["Hanken Grotesk"],"headline-sm": ["\"Source Serif 4\""],"display-lg-mobile": ["\"Source Serif 4\""],"label-sm": ["Hanken Grotesk"],"display-lg": ["\"Source Serif 4\""],"headline-md": ["\"Source Serif 4\""],"body-md": ["Hanken Grotesk"],"body-lg": ["Hanken Grotesk"]},
+            "fontSize": {"label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],"headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],"display-lg-mobile": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "700" }],"label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],"display-lg": ["56px", { "lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700" }],"headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],"body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],"body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]}
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f7faf5; color: #191c1a; scroll-behavior: smooth; }
+        .forest-shadow { box-shadow: 0px 4px 20px rgba(22, 72, 43, 0.04); }
+        .forest-shadow-active { box-shadow: 0px 10px 30px rgba(22, 72, 43, 0.08); }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill-1 { font-variation-settings: 'FILL' 1; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f4f0; }
+        ::-webkit-scrollbar-thumb { background: #c1c9bf; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #717971; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .cart-sidebar { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .cart-sidebar.open { transform: translateX(0); }
+        .mobile-menu { transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
+        #product-detail { transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; opacity: 0; }
+        #product-detail.active { transform: translateY(0); pointer-events: auto; opacity: 1; }
+        .user-menu { transform: translateY(-8px); opacity: 0; pointer-events: none; transition: all .15s ease; }
+        .user-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .star-btn { cursor: pointer; }
+        .modal-overlay { transition: opacity .2s ease; }
+        html.dark body { background-color:#10130f; color:#dfe5dc; }
+        html.dark .glass-container { background: radial-gradient(circle at top left, rgba(185,239,199,0.04), transparent 40%), radial-gradient(circle at bottom right, rgba(255,223,160,0.04), transparent 40%); }
+        html.dark .bg-surface, html.dark .bg-background { background-color:#10130f !important; }
+        html.dark .bg-surface-container-lowest, html.dark .bg-white { background-color:#1c211b !important; }
+        html.dark .bg-surface-container-low { background-color:#20261f !important; }
+        html.dark .bg-surface-container { background-color:#242b23 !important; }
+        html.dark .bg-surface-container-high { background-color:#2b3229 !important; }
+        html.dark .bg-surface-container-highest, html.dark .bg-surface-container-highest\/80 { background-color:#333c30 !important; }
+        html.dark .glass-card, html.dark .glass-effect { background: rgba(28, 33, 27, 0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
+        html.dark .shadow-forest, html.dark .shadow-forest-active, html.dark .forest-shadow, html.dark .forest-shadow-active { box-shadow: 0px 4px 20px rgba(0,0,0,0.35) !important; }
+        html.dark .text-on-surface, html.dark .text-on-background { color:#e5e9e2 !important; }
+        html.dark .text-on-surface-variant { color:#9fab9a !important; }
+        html.dark .text-primary { color:#8fd6a3 !important; }
+        html.dark .text-on-primary { color:#02160c !important; }
+        html.dark .text-secondary { color:#f6be39 !important; }
+        html.dark .bg-primary { background-color:#3a7a55 !important; }
+        html.dark .bg-primary-fixed { background-color:#1e3b28 !important; }
+        html.dark .bg-primary-fixed\/20, html.dark .bg-primary-fixed\/30 { background-color:rgba(143,214,163,0.12) !important; }
+        html.dark .bg-primary-container\/10 { background-color:rgba(143,214,163,0.08) !important; }
+        html.dark .text-on-primary-fixed { color:#dfe5dc !important; }
+        html.dark .bg-secondary-container { background-color:#5c4200 !important; color:#ffdfa0 !important; }
+        html.dark .text-on-secondary-container { color:#ffdfa0 !important; }
+        html.dark .bg-secondary-fixed, html.dark .bg-secondary-fixed\/30 { background-color:rgba(246,190,57,0.18) !important; }
+        html.dark .border-outline-variant { border-color:#333c30 !important; }
+        html.dark .border-outline { border-color:#4a5546 !important; }
+        html.dark .table-row-hover:hover { background-color: rgba(255,255,255,0.04) !important; }
+        html.dark input, html.dark select, html.dark textarea { background-color:#1c211b !important; color:#e5e9e2 !important; border-color:#333c30 !important; }
+        html.dark input::placeholder, html.dark textarea::placeholder { color:#77826f !important; }
+        html.dark .bg-primary-fixed\/10 { background-color: rgba(143,214,163,0.06) !important; }
+        html.dark ::-webkit-scrollbar-track { background:#10130f !important; }
+        html.dark ::-webkit-scrollbar-thumb { background:#333c30 !important; }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden bg-background">
+<!-- BLOQUE NAVBAR -->
+<header class="w-full top-0 sticky z-[60] bg-surface/80 border-b border-outline-variant/30 shadow-sm backdrop-blur-md">
+<div class="flex justify-between items-center px-gutter py-stack-sm max-w-container-max mx-auto h-20">
+<div class="flex items-center gap-4 lg:gap-8">
+<button class="md:hidden p-2 text-on-surface" onclick="toggleMobileMenu()">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<a class="flex items-center gap-3" href="#">
+<img alt="DACHI Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAsOnwK_fdenP-kJ8hQkYtzPQbKxtx76pYFxl0W15bJO4Tk5y0IpfZAehEa37eMOHSSvOMUl7f06RalVDCCQO0Xpu49_vMGdVQcQBzK3CuQuKXjIUp49_15uZ3dFV3QnNwAQEymLhMIeqH02I9PPFfPCrXxxnJPHO26jZdBGPFOl7QaadvagLIoomd9DN25aTqqct2HGeUBrW9XMBllUM5BXcW16Mj7GnFLyT9kw52Mr3Z42kG2n5Xvbg1PRHKvD6sLFMPX4y2Vg"/>
+<span class="font-headline-sm text-headline-sm font-bold text-primary hidden sm:inline">DACHI</span>
+</a>
+<nav class="hidden md:flex gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="home.html">Inicio</a>
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1" href="catalogo.html">Catálogo</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low/50 border border-outline-variant/50 rounded-full focus:ring-1 focus:ring-primary focus:border-primary w-64 text-label-md transition-all" id="navSearch" oninput="applyFilters()" placeholder="Buscar productos..." type="text"/>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-container-low text-on-surface-variant relative transition-colors" onclick="toggleCart()">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md bg-secondary text-on-secondary-fixed px-1.5 py-0.5 rounded-full text-[10px]" id="cart-count">0</span>
+</button>
+<div class="relative">
+<button class="h-10 w-10 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant cursor-pointer flex items-center justify-center font-bold text-primary" id="userAvatarBtn" onclick="toggleUserMenu()">
+<img alt="Foto de perfil" class="avatar-img hidden w-full h-full object-cover" id="userAvatarImg"/>
+<span class="avatar-initial" id="userInitial">?</span>
+</button>
+<div class="user-menu absolute right-0 top-12 w-72 bg-white rounded-2xl border border-outline-variant/50 shadow-xl p-2 z-[70]" id="userMenu">
+<div class="flex items-center gap-3 p-3 border-b border-outline-variant/30 mb-2">
+<div class="w-12 h-12 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant flex items-center justify-center font-bold text-primary flex-none">
+<img alt="Foto de perfil" class="avatar-img hidden w-full h-full object-cover" id="menuAvatarImg"/>
+<span class="avatar-initial" id="menuInitial">?</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate" id="userMenuName">Usuario</p>
+<p class="text-label-sm text-on-surface-variant truncate" id="userMenuEmail"></p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide" id="menuRoleTag">ROL</span>
+</div>
+</div>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="logout()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">swap_horiz</span> Cambiar Cuenta
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openSettingsModal()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">tune</span> Configuración
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openProfileModal()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">person</span> Editar Perfil
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openOrdersModal()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">receipt_long</span> Mis Pedidos
+</button>
+<hr class="border-outline-variant/50 my-1"/>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-error flex items-center gap-3" onclick="logout()">
+<span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
+</button>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- BLOQUE SIDEBAR MOBILE -->
+<aside class="fixed inset-0 z-[100] bg-black/50 transition-opacity hidden" id="mobile-menu-overlay" onclick="toggleMobileMenu()"></aside>
+<div class="fixed top-0 left-0 h-full w-72 bg-surface z-[101] mobile-menu shadow-2xl p-6" id="mobile-menu">
+<div class="flex justify-between items-center mb-10">
+<span class="font-headline-sm text-primary font-bold">DACHI</span>
+<button class="p-1" onclick="toggleMobileMenu()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="flex flex-col gap-4">
+<a class="flex items-center gap-3 p-3 rounded-xl text-on-surface-variant hover:bg-surface-container-low" href="home.html" onclick="toggleMobileMenu()">
+<span class="material-symbols-outlined">home</span> Inicio
+        </a>
+<a class="flex items-center gap-3 p-3 rounded-xl bg-primary/10 text-primary font-bold" href="catalogo.html" onclick="toggleMobileMenu()">
+<span class="material-symbols-outlined">grid_view</span> Catálogo
+        </a>
+</nav>
+</div>
+<main class="max-w-container-max mx-auto">
+<!-- BLOQUE ENCABEZADO CATALOGO -->
+<section class="px-margin-desktop pt-stack-xl pb-stack-md" id="home">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+<div>
+<span class="inline-block px-4 py-1 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full mb-4 uppercase tracking-widest">Catálogo Completo</span>
+<h1 class="font-headline-md text-headline-md text-primary mb-2">Todos los Productos</h1>
+<p class="text-on-surface-variant max-w-md">Explora la selección completa de productores panameños en DACHI.</p>
+</div>
+</div>
+</section>
+<!-- BLOQUE CATALOGO -->
+<section class="px-margin-desktop py-stack-xl" id="catalog">
+<!-- BLOQUE FILTROS -->
+<div class="flex flex-wrap gap-3 mb-10" id="filterBar">
+<select class="bg-surface-container-low border border-outline-variant/50 rounded-xl px-4 py-2 font-label-md text-label-md outline-none focus:border-primary" id="filterCategory" onchange="applyFilters()">
+<option value="">Todas las Categorías</option>
+</select>
+<select class="bg-surface-container-low border border-outline-variant/50 rounded-xl px-4 py-2 font-label-md text-label-md outline-none focus:border-primary" id="filterZone" onchange="applyFilters()">
+<option value="">Todas las Zonas</option>
+</select>
+<button class="text-secondary font-bold text-label-md flex items-center gap-1" onclick="clearFilters()">
+<span class="material-symbols-outlined text-[18px]">filter_alt_off</span> Limpiar
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="product-grid"></div>
+<p class="hidden text-center py-16 text-on-surface-variant" id="noResults">No se encontraron productos con esos filtros.</p>
+</section>
+<!-- BLOQUE SETTINGS -->
+</main>
+<!-- BLOQUE CARRITO -->
+<aside class="fixed inset-0 z-[80] bg-black/40 backdrop-blur-sm transition-opacity hidden" id="cart-overlay" onclick="toggleCart()"></aside>
+<div class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[90] cart-sidebar shadow-2xl flex flex-col" id="cart-sidebar">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<h2 class="font-headline-sm text-primary">Tu Carrito</h2>
+<button class="p-2 hover:bg-surface-container rounded-full" onclick="toggleCart()">
+
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide" id="cart-items">
+<div class="text-center py-20 text-on-surface-variant" id="empty-cart-msg">
+<span class="material-symbols-outlined text-6xl mb-4 opacity-20">shopping_basket</span>
+<p>Tu carrito está vacío</p>
+</div>
+</div>
+<div class="p-6 bg-surface-container-lowest border-t border-outline-variant space-y-4">
+<div class="flex justify-between font-bold text-lg">
+<span>Subtotal</span>
+<span id="cart-total">$0.00</span>
+</div>
+<button class="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary-container transition-all flex items-center justify-center gap-2" id="checkout-btn" onclick="checkout()">
+            Proceder al Pago <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- BLOQUE DETALLE PRODUCTO -->
+<div class="fixed inset-0 bg-white z-[100] overflow-y-auto" id="product-detail">
+<div class="sticky top-0 bg-white/90 backdrop-blur-md z-10 border-b border-outline-variant/10 px-6 py-4 flex justify-between items-center">
+<button class="p-2 hover:bg-surface-container rounded-full transition-colors" onclick="closeProductDetail()">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+<div class="max-w-7xl mx-auto px-6 py-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<div class="lg:col-span-7 flex flex-col md:flex-row gap-4">
+<div class="flex md:flex-col gap-4 order-2 md:order-1 overflow-x-auto md:overflow-y-auto scrollbar-hide h-auto md:max-h-[600px]" id="detail-gallery"></div>
+<div class="flex-1 order-1 md:order-2">
+<img class="w-full aspect-[3/4] object-cover rounded-3xl shadow-xl" id="detail-main-img" src=""/>
+</div>
+</div>
+<div class="lg:col-span-5 space-y-8">
+<div>
+<nav class="text-label-sm text-on-surface-variant flex items-center gap-2 mb-4">
+<span class="text-primary font-bold" id="detail-category">Categoría</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span id="detail-zone">Zona</span>
+</nav>
+<h1 class="font-display-lg text-4xl text-primary mb-2" id="detail-title">Cargando...</h1>
+<div class="flex items-center gap-4 mb-4">
+<span class="font-headline-md text-3xl text-secondary" id="detail-price">$0.00</span>
+<span class="text-on-surface-variant text-sm" id="detail-stock">Disponible: 0</span>
+</div>
+<div class="flex items-center gap-2 mb-2" id="detail-rating"></div>
+<div class="flex items-center gap-1 mb-6" id="detail-rate-input">
+<span class="text-label-sm text-on-surface-variant mr-2">Tu calificación:</span>
+</div>
+<div class="prose prose-sm text-on-surface-variant mb-8" id="detail-description"></div>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="flex items-center border border-outline-variant rounded-xl overflow-hidden">
+<button class="p-3 hover:bg-surface-container" onclick="updateDetailQty(-1)">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<input class="w-12 text-center border-none bg-transparent focus:ring-0" id="detail-qty" readonly type="number" value="1"/>
+<button class="p-3 hover:bg-surface-container" onclick="updateDetailQty(1)">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<button class="flex-1 bg-primary text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary-container transition-all" id="detail-add-btn">
+<span class="material-symbols-outlined">shopping_cart</span> Añadir al Carrito
+                            </button>
+</div>
+</div>
+<!-- BLOQUE COMENTARIOS -->
+<div class="border-t border-outline-variant/30 pt-8">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4">Comentarios</h3>
+<div class="flex gap-2 mb-6">
+<input class="flex-1 bg-surface-container-low border-transparent rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20" id="commentInput" placeholder="Escribe un comentario..." type="text"/>
+<button class="bg-primary text-white px-4 rounded-xl" onclick="submitComment()">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<div class="space-y-4" id="commentsList"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- BLOQUE MODAL PERFIL -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 modal-overlay" id="profileModal">
+<div class="bg-white rounded-[24px] w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Editar Perfil</h3>
+<span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide" id="profileRoleTag">ROL</span>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeProfileModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-stack-md" onsubmit="saveProfile(event)">
+<div class="flex flex-col items-center gap-3 mb-4">
+<div class="w-24 h-24 rounded-full bg-surface-container-low border border-outline-variant overflow-hidden flex items-center justify-center relative">
+<img alt="Foto de perfil" class="hidden w-full h-full object-cover" id="profilePhotoPreview"/>
+<span class="material-symbols-outlined text-outline text-4xl" id="profilePhotoPlaceholder">person</span>
+</div>
+<label class="text-label-sm text-primary font-bold cursor-pointer hover:underline">
+Cambiar fotografía
+<input accept="image/*" class="hidden" onchange="handleProfilePhoto(event)" type="file"/>
+</label>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Nombre Completo</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileNombre" required type="text"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-stack-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Correo</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-low text-on-surface-variant outline-none" disabled id="profileCorreo" type="email"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Teléfono</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileTelefono" placeholder="+507 6000-0000" type="tel"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Dirección</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileDireccion" placeholder="Provincia, corregimiento..." type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Descripción</label>
+<textarea class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white resize-none" id="profileDescripcion" placeholder="Cuéntanos sobre ti..." rows="3"></textarea>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98] mt-2" type="submit">GUARDAR CAMBIOS</button>
+</form>
+</div>
+</div>
+<!-- BLOQUE MODAL CONFIGURACION -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 modal-overlay" id="settingsModal">
+<div class="bg-white rounded-[24px] w-full max-w-md p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-primary">Configuración</h3>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeSettingsModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-stack-lg" onsubmit="saveSettingsModal(event)">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2 ml-1">Tamaño de Fuente</label>
+<select class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary outline-none bg-white" id="settingsFontSize">
+<option value="pequeno">Pequeño</option>
+<option value="mediano">Mediano</option>
+<option value="grande">Grande</option>
+</select>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Modo Oscuro</h4>
+<p class="text-on-surface-variant text-label-sm">Reduce el brillo de la interfaz.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="settingsDarkMode" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98]" type="submit">GUARDAR</button>
+</form>
+</div>
+</div>
+<!-- BLOQUE MODAL PEDIDOS -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] hidden items-center justify-center p-4 modal-overlay" id="ordersModal">
+<div class="bg-white rounded-[24px] w-full max-w-lg max-h-[80vh] overflow-y-auto p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Mis Pedidos</h3>
+<p class="text-on-surface-variant text-label-sm" id="orderCountText">0 pedidos realizados</p>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeOrdersModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="space-y-3" id="ordersList"></div>
+</div>
+</div>
+<!-- BLOQUE LOGICA JS -->
+<script>
+// BLOQUE SESION
+function getSession() {
+    const raw = sessionStorage.getItem('dachi_session') || localStorage.getItem('dachi_session');
+    return raw ? JSON.parse(raw) : null;
+}
+const session = getSession();
+if (!session || session.role !== 'consumidor') {
+    const map = { admin: 'panel.html', productor: 'productos.html', repartidor: 'panel.html', distribuidor: 'panel.html' };
+    window.location.href = (session && map[session.role]) || 'index.html';
+}
+
+// BLOQUE ROLES Y PERFIL
+const ROLE_LABELS = { admin: 'PERFIL DE ADMIN', consumidor: 'PERFIL DE CONSUMIDOR', repartidor: 'PERFIL LOGISTICO', productor: 'PERFIL DE PRODUCTOR', distribuidor: 'PERFIL DE DISTRIBUIDOR' };
+function getPerfil() { return JSON.parse(localStorage.getItem('dachi_perfil_' + session.email) || '{}'); }
+function savePerfil(p) { localStorage.setItem('dachi_perfil_' + session.email, JSON.stringify(p)); }
+function getAjustes() { return JSON.parse(localStorage.getItem('dachi_ajustes_' + session.email) || '{}'); }
+function saveAjustes(a) { localStorage.setItem('dachi_ajustes_' + session.email, JSON.stringify(a)); }
+function applyAjustes() {
+    const a = getAjustes();
+    const sizes = { pequeno: '14px', mediano: '16px', grande: '18px' };
+    document.documentElement.style.fontSize = sizes[a.fontSize] || '16px';
+    document.documentElement.classList.toggle('dark', !!a.darkMode);
+}
+function refreshAvatarUI() {
+    const perfil = getPerfil();
+    const initial = session.nombre.charAt(0).toUpperCase();
+    document.querySelectorAll('.avatar-initial').forEach(el => el.textContent = initial);
+    document.querySelectorAll('.avatar-img').forEach(el => {
+        if (perfil.foto) { el.src = perfil.foto; el.classList.remove('hidden'); }
+        else { el.classList.add('hidden'); }
+    });
+    const roleTag = document.getElementById('menuRoleTag');
+    if (roleTag) roleTag.textContent = ROLE_LABELS[session.role] || '';
+    const nameEl = document.getElementById('userMenuName');
+    if (nameEl) nameEl.textContent = perfil.nombreCompleto || session.nombre;
+    const emailEl = document.getElementById('userMenuEmail');
+    if (emailEl) emailEl.textContent = session.email;
+}
+function openProfileModal() {
+    const menu = document.getElementById('userMenu');
+    if (menu) menu.classList.remove('open');
+    const p = getPerfil();
+    document.getElementById('profileNombre').value = p.nombreCompleto || session.nombre;
+    document.getElementById('profileCorreo').value = session.email;
+    document.getElementById('profileTelefono').value = p.telefono || '';
+    document.getElementById('profileDireccion').value = p.direccion || '';
+    document.getElementById('profileDescripcion').value = p.descripcion || '';
+    document.getElementById('profileRoleTag').textContent = ROLE_LABELS[session.role] || '';
+    const preview = document.getElementById('profilePhotoPreview');
+    preview.removeAttribute('data-newphoto');
+    if (p.foto) { preview.src = p.foto; preview.classList.remove('hidden'); document.getElementById('profilePhotoPlaceholder').classList.add('hidden'); }
+    else { preview.classList.add('hidden'); document.getElementById('profilePhotoPlaceholder').classList.remove('hidden'); }
+    document.getElementById('profileModal').classList.remove('hidden');
+    document.getElementById('profileModal').classList.add('flex');
+}
+function closeProfileModal() {
+    document.getElementById('profileModal').classList.add('hidden');
+    document.getElementById('profileModal').classList.remove('flex');
+}
+function handleProfilePhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        const preview = document.getElementById('profilePhotoPreview');
+        preview.src = ev.target.result;
+        preview.classList.remove('hidden');
+        document.getElementById('profilePhotoPlaceholder').classList.add('hidden');
+        preview.dataset.newphoto = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+function saveProfile(event) {
+    event.preventDefault();
+    const p = getPerfil();
+    p.nombreCompleto = document.getElementById('profileNombre').value.trim();
+    p.telefono = document.getElementById('profileTelefono').value.trim();
+    p.direccion = document.getElementById('profileDireccion').value.trim();
+    p.descripcion = document.getElementById('profileDescripcion').value.trim();
+    const newphoto = document.getElementById('profilePhotoPreview').dataset.newphoto;
+    if (newphoto) p.foto = newphoto;
+    savePerfil(p);
+    refreshAvatarUI();
+    closeProfileModal();
+}
+function openSettingsModal() {
+    const menu = document.getElementById('userMenu');
+    if (menu) menu.classList.remove('open');
+    const a = getAjustes();
+    document.getElementById('settingsFontSize').value = a.fontSize || 'mediano';
+    document.getElementById('settingsDarkMode').checked = !!a.darkMode;
+    document.getElementById('settingsModal').classList.remove('hidden');
+    document.getElementById('settingsModal').classList.add('flex');
+}
+function closeSettingsModal() {
+    document.getElementById('settingsModal').classList.add('hidden');
+    document.getElementById('settingsModal').classList.remove('flex');
+}
+function saveSettingsModal(event) {
+    event.preventDefault();
+    const a = { fontSize: document.getElementById('settingsFontSize').value, darkMode: document.getElementById('settingsDarkMode').checked };
+    saveAjustes(a);
+    applyAjustes();
+    closeSettingsModal();
+}
+
+// BLOQUE DATOS DE PRUEBA (se agregan solo si no existen productos guardados)
+function seedDemoData() {
+    if (localStorage.getItem('dachi_products')) return;
+    const img = (seed) => `https://picsum.photos/seed/${seed}/600/450`;
+    const now = new Date().toLocaleDateString('es-PA');
+    const demoProducts = [
+        { id: 'seed1', name: 'Tomate Chonto Orgánico', price: '1.25', quantity: 80, category: 'Hortalizas', zone: 'Chiriquí', description: 'Tomates chonto cultivados sin pesticidas en las tierras altas de Chiriquí, cosechados semanalmente.', images: [img('tomate1'), img('tomate2')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 34, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:4}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Excelente calidad, muy frescos.',date:now}] },
+        { id: 'seed2', name: 'Café Geisha Especial', price: '18.50', quantity: 25, category: 'Café', zone: 'Chiriquí', description: 'Café Geisha de altura, tueste medio, notas florales y cítricas. Cosecha de Boquete.', images: [img('cafe1'), img('cafe2')], status: 'active', producerEmail: 'boquete@dachi.pa', producerName: 'Café Boquete Dorado', sold: 52, ratings: [{email:'sara@gmail.com',stars:5}], comments: [{email:'maria@gmail.com',nombre:'María González',text:'El mejor café que he probado en Panamá.',date:now}] },
+        { id: 'seed3', name: 'Piña Perolera', price: '2.10', quantity: 60, category: 'Frutas', zone: 'Colón', description: 'Piñas dulces y jugosas, cosechadas en su punto óptimo de maduración.', images: [img('pina1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 21, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: '6.75', quantity: 40, category: 'Cacao', zone: 'Darién', description: 'Cacao criollo fermentado y secado artesanalmente, ideal para chocolatería fina.', images: [img('cacao1'), img('cacao2')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 15, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:5}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Aroma increíble, se nota la calidad.',date:now}] },
+        { id: 'seed5', name: 'Ñame Criollo', price: '0.95', quantity: 100, category: 'Hortalizas', zone: 'Coclé', description: 'Ñame fresco cosechado en Coclé, ideal para sancocho.', images: [img('name1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 44, ratings: [], comments: [] },
+        { id: 'seed6', name: 'Plátano Verde', price: '0.60', quantity: 150, category: 'Frutas', zone: 'Bocas del Toro', description: 'Plátanos verdes de exportación, cultivados en fincas familiares de Bocas del Toro.', images: [img('platano1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 66, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed7', name: 'Miel de Abeja Pura', price: '8.00', quantity: 30, category: 'Artesanal', zone: 'Veraguas', description: 'Miel 100% pura extraída de forma artesanal en apiarios de Veraguas.', images: [img('miel1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 19, ratings: [{email:'sara@gmail.com',stars:5}], comments: [] },
+        { id: 'seed8', name: 'Queso de Aro Artesanal', price: '5.40', quantity: 20, category: 'Especialidad', zone: 'Los Santos', description: 'Queso de aro tradicional, elaborado con leche fresca de Los Santos.', images: [img('queso1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 12, ratings: [], comments: [] },
+        { id: 'seed9', name: 'Naranja Valencia', price: '1.10', quantity: 90, category: 'Frutas', zone: 'Panamá Oeste', description: 'Naranjas jugosas ideales para jugo, cultivadas en Panamá Oeste.', images: [img('naranja1')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 28, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed10', name: 'Yuca Fresca', price: '0.85', quantity: 120, category: 'Hortalizas', zone: 'Herrera', description: 'Yuca fresca recién cosechada, lista para tu mesa.', images: [img('yuca1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 37, ratings: [], comments: [] }
+    ];
+    localStorage.setItem('dachi_products', JSON.stringify(demoProducts));
+}
+seedDemoData();
+function seedDemoOrders() {
+    if (localStorage.getItem('dachi_orders')) return;
+    const demoOrders = [
+        { id: '1000001', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed1', name: 'Tomate Chonto Orgánico', price: 1.25, qty: 4, image: '' }], total: 5.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000002', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed2', name: 'Café Geisha Especial', price: 18.50, qty: 1, image: '' }], total: 18.50, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'fulo@gmail.com' },
+        { id: '1000003', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: 6.75, qty: 2, image: '' }], total: 13.50, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000004', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed6', name: 'Plátano Verde', price: 0.60, qty: 10, image: '' }], total: 6.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000005', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed9', name: 'Naranja Valencia', price: 1.10, qty: 6, image: '' }], total: 6.60, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'jose@gmail.com' }
+    ];
+    localStorage.setItem('dachi_orders', JSON.stringify(demoOrders));
+}
+seedDemoOrders();
+
+// BLOQUE PRODUCTOS
+function getProducts() {
+    return JSON.parse(localStorage.getItem('dachi_products') || '[]');
+}
+function saveProducts(list) {
+    localStorage.setItem('dachi_products', JSON.stringify(list));
+}
+
+let cart = JSON.parse(localStorage.getItem('dachi_cart')) || [];
+let currentDetailId = null;
+
+function init() {
+    applyAjustes();
+    refreshAvatarUI();
+    populateFilters();
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) document.getElementById('navSearch').value = q;
+    renderCatalog();
+    updateCartUI();
+    renderOrders();
+}
+
+// BLOQUE FILTROS
+function populateFilters() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
+    const zones = [...new Set(products.map(p => p.zone).filter(Boolean))];
+    const catSel = document.getElementById('filterCategory');
+    const zoneSel = document.getElementById('filterZone');
+    catSel.innerHTML = '<option value="">Todas las Categorías</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    zoneSel.innerHTML = '<option value="">Todas las Zonas</option>' + zones.map(z => `<option value="${z}">${z}</option>`).join('');
+}
+function clearFilters() {
+    document.getElementById('filterCategory').value = '';
+    document.getElementById('filterZone').value = '';
+    document.getElementById('navSearch').value = '';
+    renderCatalog();
+}
+function applyFilters() { renderCatalog(); }
+
+// BLOQUE RENDER CATALOGO
+function renderCatalog() {
+    const grid = document.getElementById('product-grid');
+    const noResults = document.getElementById('noResults');
+    const cat = document.getElementById('filterCategory').value;
+    const zone = document.getElementById('filterZone').value;
+    const search = (document.getElementById('navSearch').value || '').toLowerCase();
+
+    let products = getProducts().filter(p => p.status === 'active');
+    if (cat) products = products.filter(p => p.category === cat);
+    if (zone) products = products.filter(p => p.zone === zone);
+    if (search) products = products.filter(p => p.name.toLowerCase().includes(search));
+
+    if (products.length === 0) {
+        grid.innerHTML = '';
+        noResults.classList.remove('hidden');
+        return;
+    }
+    noResults.classList.add('hidden');
+
+    grid.innerHTML = products.map(p => {
+        const avgRating = getAvgRating(p);
+        const img = (p.images && p.images[0]) || 'https://picsum.photos/seed/dachi-default/400/300';
+        return `
+        <div class="glass-card rounded-3xl overflow-hidden forest-shadow group hover:forest-shadow-active transition-all flex flex-col cursor-pointer" onclick="openProductDetail('${p.id}')">
+            <div class="h-48 overflow-hidden relative">
+                <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${img}"/>
+                <span class="absolute top-3 left-3 bg-white/90 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">${p.zone || 'Panamá'}</span>
+            </div>
+            <div class="p-6 flex flex-1 flex-col">
+                <h4 class="font-label-md text-label-md text-on-surface mb-1">${p.name}</h4>
+                <p class="text-on-surface-variant text-label-sm mb-2">${p.category || ''}</p>
+                <div class="flex items-center gap-1 mb-4">${starsHtml(avgRating)}<span class="text-label-sm text-on-surface-variant ml-1">(${avgRating.toFixed(1)})</span></div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-primary font-bold">$${parseFloat(p.price).toFixed(2)}</span>
+                    <button class="p-2 bg-surface-container-low text-primary rounded-lg hover:bg-primary hover:text-white transition-all" onclick="event.stopPropagation(); quickAdd('${p.id}')">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function starsHtml(rating) {
+    let s = '';
+    for (let i = 0; i < 5; i++) {
+        s += `<span class="material-symbols-outlined ${i < Math.round(rating) ? 'fill-1' : ''} text-secondary text-sm">star</span>`;
+    }
+    return s;
+}
+function getAvgRating(p) {
+    if (!p.ratings || p.ratings.length === 0) return 0;
+    return p.ratings.reduce((a, r) => a + r.stars, 0) / p.ratings.length;
+}
+
+function quickAdd(id) {
+    const products = getProducts();
+    const p = products.find(prod => prod.id === id);
+    if (!p || p.quantity <= 0) return;
+    addToCart(id, 1);
+}
+
+// BLOQUE DETALLE PRODUCTO
+function openProductDetail(id) {
+    const products = getProducts();
+    const p = products.find(prod => prod.id === id);
+    if (!p) return;
+    currentDetailId = id;
+
+    document.getElementById('detail-title').innerText = p.name;
+    document.getElementById('detail-price').innerText = `$${parseFloat(p.price).toFixed(2)}`;
+    document.getElementById('detail-category').innerText = p.category || 'Producto';
+    document.getElementById('detail-zone').innerText = p.zone || 'Panamá';
+    document.getElementById('detail-description').innerText = p.description;
+    document.getElementById('detail-stock').innerText = `Disponible: ${p.quantity}`;
+    document.getElementById('detail-main-img').src = (p.images && p.images[0]) || 'https://picsum.photos/seed/dachi-detail/500/500';
+    document.getElementById('detail-qty').value = 1;
+
+    const gallery = document.getElementById('detail-gallery');
+    gallery.innerHTML = (p.images || []).map((img, i) => `
+        <img src="${img}" class="w-20 h-24 object-cover rounded-lg cursor-pointer border-2 ${i === 0 ? 'border-primary' : 'border-transparent'}" onclick="setMainImage('${img}', this)"/>
+    `).join('');
+
+    const avg = getAvgRating(p);
+    document.getElementById('detail-rating').innerHTML = `<div class="flex">${starsHtml(avg)}</div><span class="text-label-sm text-on-surface-variant">(${avg.toFixed(1)}) · ${(p.ratings || []).length} calificaciones</span>`;
+
+    const rateInput = document.getElementById('detail-rate-input');
+    rateInput.innerHTML = '<span class="text-label-sm text-on-surface-variant mr-2">Tu calificación:</span>' +
+        [1,2,3,4,5].map(n => `<span class="material-symbols-outlined star-btn text-secondary" onclick="rateProduct('${p.id}', ${n})">star</span>`).join('');
+
+    renderComments(p);
+
+    document.getElementById('detail-add-btn').onclick = () => {
+        const qty = parseInt(document.getElementById('detail-qty').value);
+        if (qty > p.quantity) { alert('No hay suficiente inventario disponible.'); return; }
+        addToCart(p.id, qty);
+        closeProductDetail();
+    };
+
+    document.getElementById('product-detail').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProductDetail() {
+    document.getElementById('product-detail').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function setMainImage(src, thumb) {
+    document.getElementById('detail-main-img').src = src;
+    thumb.parentElement.querySelectorAll('img').forEach(img => img.classList.replace('border-primary', 'border-transparent'));
+    thumb.classList.replace('border-transparent', 'border-primary');
+}
+
+function updateDetailQty(val) {
+    const input = document.getElementById('detail-qty');
+    let current = parseInt(input.value) + val;
+    if (current < 1) current = 1;
+    input.value = current;
+}
+
+// BLOQUE CALIFICACIONES
+function rateProduct(id, stars) {
+    const products = getProducts();
+    const p = products.find(prod => prod.id === id);
+    if (!p) return;
+    p.ratings = p.ratings || [];
+    const existing = p.ratings.find(r => r.email === session.email);
+    if (existing) existing.stars = stars;
+    else p.ratings.push({ email: session.email, stars: stars });
+    saveProducts(products);
+    openProductDetail(id);
+    renderCatalog();
+}
+
+// BLOQUE COMENTARIOS
+function renderComments(p) {
+    const list = document.getElementById('commentsList');
+    const comments = p.comments || [];
+    if (comments.length === 0) {
+        list.innerHTML = '<p class="text-on-surface-variant text-label-sm">Aún no hay comentarios.</p>';
+        return;
+    }
+    list.innerHTML = comments.slice().reverse().map(c => `
+        <div class="bg-surface-container-low rounded-xl p-4">
+            <p class="font-bold text-label-md text-on-surface">${c.nombre}</p>
+            <p class="text-on-surface-variant text-body-md">${c.text}</p>
+            <p class="text-label-sm text-on-surface-variant/60 mt-1">${c.date}</p>
+        </div>
+    `).join('');
+}
+function submitComment() {
+    const input = document.getElementById('commentInput');
+    const text = input.value.trim();
+    if (!text || !currentDetailId) return;
+    const products = getProducts();
+    const p = products.find(prod => prod.id === currentDetailId);
+    p.comments = p.comments || [];
+    p.comments.push({ email: session.email, nombre: session.nombre, text: text, date: new Date().toLocaleDateString('es-PA') });
+    saveProducts(products);
+    input.value = '';
+    renderComments(p);
+}
+
+// BLOQUE CARRITO
+function addToCart(id, qty = 1) {
+    const products = getProducts();
+    const p = products.find(prod => prod.id === id);
+    if (!p) return;
+    const exists = cart.find(item => item.id === id);
+    const currentQty = exists ? exists.qty + qty : qty;
+    if (currentQty > p.quantity) { alert('No hay suficiente inventario disponible.'); return; }
+    if (exists) exists.qty += qty;
+    else cart.push({ id: p.id, name: p.name, price: parseFloat(p.price), image: (p.images && p.images[0]) || '', qty: qty });
+    saveCart();
+    updateCartUI();
+    if (!document.getElementById('cart-sidebar').classList.contains('open')) toggleCart();
+}
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    saveCart();
+    updateCartUI();
+}
+function updateCartUI() {
+    const count = cart.reduce((acc, item) => acc + item.qty, 0);
+    document.getElementById('cart-count').innerText = count;
+    const container = document.getElementById('cart-items');
+    if (cart.length === 0) {
+        container.innerHTML = `<div class="text-center py-20 text-on-surface-variant" id="empty-cart-msg">
+            <span class="material-symbols-outlined text-6xl mb-4 opacity-20">shopping_basket</span>
+            <p>Tu carrito está vacío</p></div>`;
+        document.getElementById('cart-total').innerText = '$0.00';
+        return;
+    }
+    container.innerHTML = cart.map(item => `
+        <div class="flex gap-4 group">
+            <img src="${item.image}" class="w-20 h-24 object-cover rounded-xl"/>
+            <div class="flex-1">
+                <h5 class="font-bold text-on-surface line-clamp-1">${item.name}</h5>
+                <p class="text-label-sm text-on-surface-variant mb-2">${item.qty} x $${item.price.toFixed(2)}</p>
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-primary">$${(item.qty * item.price).toFixed(2)}</span>
+                    <button class="text-error hover:scale-110 transition-transform" onclick="removeFromCart('${item.id}')">
+                        <span class="material-symbols-outlined text-xl">delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+    document.getElementById('cart-total').innerText = `$${total.toFixed(2)}`;
+}
+function saveCart() { localStorage.setItem('dachi_cart', JSON.stringify(cart)); }
+function toggleCart() {
+    document.getElementById('cart-sidebar').classList.toggle('open');
+    document.getElementById('cart-overlay').classList.toggle('hidden');
+}
+
+// BLOQUE CHECKOUT
+function checkout() {
+    if (cart.length === 0) return;
+    const products = getProducts();
+    for (const item of cart) {
+        const p = products.find(prod => prod.id === item.id);
+        if (!p || p.quantity < item.qty) {
+            alert(`Inventario insuficiente para ${item.name}.`);
+            return;
+        }
+    }
+    for (const item of cart) {
+        const p = products.find(prod => prod.id === item.id);
+        p.quantity -= item.qty;
+        p.sold = (p.sold || 0) + item.qty;
+    }
+    saveProducts(products);
+
+    const orders = JSON.parse(localStorage.getItem('dachi_orders') || '[]');
+    const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+    orders.push({
+        id: Date.now().toString(),
+        buyerEmail: session.email,
+        buyerName: session.nombre,
+        items: cart,
+        total: total,
+        date: new Date().toLocaleString('es-PA'),
+        status: 'pendiente'
+    });
+    localStorage.setItem('dachi_orders', JSON.stringify(orders));
+
+    cart = [];
+    saveCart();
+    updateCartUI();
+    renderCatalog();
+    renderOrders();
+    toggleCart();
+    alert('¡Pedido realizado con éxito! Puedes ver el estado en Mis Pedidos.');
+}
+
+// BLOQUE PEDIDOS
+function renderOrders() {
+    const orders = JSON.parse(localStorage.getItem('dachi_orders') || '[]').filter(o => o.buyerEmail === session.email);
+    document.getElementById('orderCountText').innerText = `${orders.length} pedido${orders.length !== 1 ? 's' : ''} realizado${orders.length !== 1 ? 's' : ''}`;
+    document.getElementById('ordersList').innerHTML = orders.slice().reverse().map(o => `
+        <div class="bg-white rounded-xl p-4 border border-outline-variant/30 flex justify-between items-center">
+            <div>
+                <p class="font-bold text-label-md">${o.items.length} producto(s) · $${o.total.toFixed(2)}</p>
+                <p class="text-label-sm text-on-surface-variant">${o.date}</p>
+            </div>
+            <span class="text-label-sm font-bold text-secondary uppercase">${o.status}</span>
+        </div>
+    `).join('') || '<p class="text-on-surface-variant text-label-sm">No tienes pedidos aún.</p>';
+}
+function openOrdersModal() {
+    document.getElementById('userMenu').classList.remove('open');
+    renderOrders();
+    document.getElementById('ordersModal').classList.remove('hidden');
+    document.getElementById('ordersModal').classList.add('flex');
+}
+function closeOrdersModal() {
+    document.getElementById('ordersModal').classList.add('hidden');
+    document.getElementById('ordersModal').classList.remove('flex');
+}
+
+// BLOQUE MENU USUARIO
+function toggleUserMenu() { document.getElementById('userMenu').classList.toggle('open'); }
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('userMenu');
+    const btn = document.getElementById('userAvatarBtn');
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove('open');
+});
+function logout() {
+    sessionStorage.removeItem('dachi_session');
+    localStorage.removeItem('dachi_session');
+    window.location.href = 'index.html';
+}
+
+// BLOQUE MENU MOBILE
+function toggleMobileMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+    document.getElementById('mobile-menu-overlay').classList.toggle('hidden');
+}
+
+window.onload = init;
+</script>
+</body></html>

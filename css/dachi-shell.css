@@ -1,0 +1,36 @@
+.dachi-sidebar-transition {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dachi-user-menu {
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.dachi-user-menu.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+html.dark .dachi-shell-surface {
+    background-color: #1c211b !important;
+}
+
+html.dark .dachi-shell-top {
+    background-color: #10130f !important;
+}
+
+html.dark .dachi-shell-brand {
+    color: #8fd6a3 !important;
+}
+
+html.dark .dachi-shell-border {
+    border-color: #414941 !important;
+}
+
+html.dark .dachi-shell-muted {
+    color: #aeb7ad !important;
+}
