@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DACHI | Panel de Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#003118","primary-container": "#16482b","on-primary-container": "#83b691",
+                        "primary-fixed": "#b9efc7","primary-fixed-dim": "#9ed3ac","on-primary-fixed": "#00210e",
+                        "on-primary-fixed-variant": "#1f5032","secondary": "#795900","secondary-container": "#ffc641",
+                        "on-secondary-container": "#715300","secondary-fixed": "#ffdfa0","secondary-fixed-dim": "#f6be39",
+                        "on-secondary-fixed": "#261a00","tertiary": "#491a21","tertiary-container": "#642f36",
+                        "on-tertiary-container": "#e0979f","tertiary-fixed": "#ffdadc","tertiary-fixed-dim": "#ffb2b9",
+                        "on-tertiary-fixed": "#370c14","on-tertiary-fixed-variant": "#6d363d","surface": "#f7faf5",
+                        "surface-dim": "#d8dbd6","surface-bright": "#f7faf5","surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f1f4f0","surface-container": "#ecefea","surface-container-high": "#e6e9e4",
+                        "surface-container-highest": "#e0e3df","on-surface": "#191c1a","on-surface-variant": "#414942",
+                        "outline": "#717971","outline-variant": "#c1c9bf","background": "#f7faf5","on-background": "#191c1a",
+                        "error": "#ba1a1a","error-container": "#ffdad6","on-error": "#ffffff","on-error-container": "#93000a",
+                        "inverse-surface": "#2d312e","inverse-on-surface": "#eff2ed","inverse-primary": "#9ed3ac","surface-tint": "#386848"
+                    },
+                    "borderRadius": {"DEFAULT": "0.25rem","lg": "0.5rem","xl": "0.75rem","full": "9999px"},
+                    "spacing": {"stack-sm": "8px","stack-md": "16px","margin-mobile": "16px","stack-lg": "32px","stack-xl": "64px","container-max": "1280px","gutter": "24px","base": "8px","margin-desktop": "48px"},
+                    "fontFamily": {"headline-sm": ["\"Source Serif 4\""],"label-md": ["Hanken Grotesk"],"display-lg-mobile": ["\"Source Serif 4\""],"body-lg": ["Hanken Grotesk"],"headline-md": ["\"Source Serif 4\""],"display-lg": ["\"Source Serif 4\""],"body-md": ["Hanken Grotesk"],"label-sm": ["Hanken Grotesk"]},
+                    "fontSize": {"headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],"label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],"display-lg-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "700"}],"body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],"headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],"display-lg": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700"}],"body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],"label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]}
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .shadow-forest { box-shadow: 0px 4px 20px rgba(22, 72, 43, 0.04); }
+        .shadow-forest-active { box-shadow: 0px 10px 30px rgba(22, 72, 43, 0.08); }
+        .table-row-hover:hover { background-color: rgba(241, 244, 240, 0.5); }
+        .sidebar-transition { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .glass-container { background: radial-gradient(circle at top left, rgba(185, 239, 199, 0.15), transparent 40%), radial-gradient(circle at bottom right, rgba(255, 223, 160, 0.15), transparent 40%); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f7faf5; }
+        ::-webkit-scrollbar-thumb { background: #c1c9bf; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #717971; }
+        body { background-color: #f7faf5; }
+        .user-menu { transform: translateY(-8px); opacity: 0; pointer-events: none; transition: all .15s ease; }
+        .user-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .modal-overlay { transition: opacity .2s ease; }
+        html.dark body { background-color:#10130f; color:#dfe5dc; }
+        html.dark .glass-container { background: radial-gradient(circle at top left, rgba(185,239,199,0.04), transparent 40%), radial-gradient(circle at bottom right, rgba(255,223,160,0.04), transparent 40%); }
+        html.dark .bg-surface, html.dark .bg-background { background-color:#10130f !important; }
+        html.dark .bg-surface-container-lowest, html.dark .bg-white { background-color:#1c211b !important; }
+        html.dark .bg-surface-container-low { background-color:#20261f !important; }
+        html.dark .bg-surface-container { background-color:#242b23 !important; }
+        html.dark .bg-surface-container-high { background-color:#2b3229 !important; }
+        html.dark .bg-surface-container-highest, html.dark .bg-surface-container-highest\/80 { background-color:#333c30 !important; }
+        html.dark .glass-card { background: rgba(28, 33, 27, 0.75) !important; border-color: rgba(255,255,255,0.06) !important; }
+        html.dark .shadow-forest, html.dark .shadow-forest-active, html.dark .forest-shadow, html.dark .forest-shadow-active { box-shadow: 0px 4px 20px rgba(0,0,0,0.35) !important; }
+        html.dark .text-on-surface, html.dark .text-on-background { color:#e5e9e2 !important; }
+        html.dark .text-on-surface-variant { color:#9fab9a !important; }
+        html.dark .text-primary { color:#8fd6a3 !important; }
+        html.dark .text-on-primary { color:#02160c !important; }
+        html.dark .text-secondary { color:#f6be39 !important; }
+        html.dark .bg-primary { background-color:#3a7a55 !important; }
+        html.dark .bg-primary-fixed { background-color:#1e3b28 !important; }
+        html.dark .bg-primary-fixed\/20, html.dark .bg-primary-fixed\/30 { background-color:rgba(143,214,163,0.12) !important; }
+        html.dark .bg-primary-container\/10 { background-color:rgba(143,214,163,0.08) !important; }
+        html.dark .text-on-primary-fixed { color:#dfe5dc !important; }
+        html.dark .bg-secondary-container { background-color:#5c4200 !important; color:#ffdfa0 !important; }
+        html.dark .text-on-secondary-container { color:#ffdfa0 !important; }
+        html.dark .bg-secondary-fixed, html.dark .bg-secondary-fixed\/30 { background-color:rgba(246,190,57,0.18) !important; }
+        html.dark .border-outline-variant { border-color:#333c30 !important; }
+        html.dark .border-outline { border-color:#4a5546 !important; }
+        html.dark .table-row-hover:hover { background-color: rgba(255,255,255,0.04) !important; }
+        html.dark input, html.dark select, html.dark textarea { background-color:#1c211b !important; color:#e5e9e2 !important; border-color:#333c30 !important; }
+        html.dark input::placeholder, html.dark textarea::placeholder { color:#77826f !important; }
+        html.dark .bg-primary-fixed\/10 { background-color: rgba(143,214,163,0.06) !important; }
+        html.dark ::-webkit-scrollbar-track { background:#10130f !important; }
+        html.dark ::-webkit-scrollbar-thumb { background:#333c30 !important; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen glass-container">
+<!-- BLOQUE SIDEBAR OVERLAY -->
+<div class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<!-- BLOQUE SIDEBAR -->
+<aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest border-r border-outline-variant z-[70] -translate-x-full sidebar-transition flex flex-col" id="sidebar">
+<div class="p-gutter flex items-center justify-between border-b border-outline-variant h-16">
+<div class="flex items-center gap-2">
+<img alt="DACHI Logo" class="h-8 w-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAsOnwK_fdenP-kJ8hQkYtzPQbKxtx76pYFxl0W15bJO4Tk5y0IpfZAehEa37eMOHSSvOMUl7f06RalVDCCQO0Xpu49_vMGdVQcQBzK3CuQuKXjIUp49_15uZ3dFV3QnNwAQEymLhMIeqH02I9PPFfPCrXxxnJPHO26jZdBGPFOl7QaadvagLIoomd9DN25aTqqct2HGeUBrW9XMBllUM5BXcW16Mj7GnFLyT9kw52Mr3Z42kG2n5Xvbg1PRHKvD6sLFMPX4y2Vg"/>
+<span class="font-headline-sm text-primary text-[20px]">DACHI</span>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="toggleSidebar()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="p-4 space-y-2 flex-grow" id="sidebarNav"></nav>
+<div class="p-4 border-t border-outline-variant">
+<button class="w-full flex items-center gap-4 p-3 rounded-xl text-error hover:bg-error-container/40 transition-all" onclick="logout()">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md">Cerrar Sesión</span>
+</button>
+</div>
+</aside>
+<!-- BLOQUE NAVBAR -->
+<nav class="bg-surface/80 backdrop-blur-md w-full top-0 sticky z-50 border-b border-outline-variant shadow-sm">
+<div class="flex justify-between items-center px-gutter py-stack-sm max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-stack-md">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors" onclick="toggleSidebar()">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<img alt="DACHI Logo" class="h-10 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAsOnwK_fdenP-kJ8hQkYtzPQbKxtx76pYFxl0W15bJO4Tk5y0IpfZAehEa37eMOHSSvOMUl7f06RalVDCCQO0Xpu49_vMGdVQcQBzK3CuQuKXjIUp49_15uZ3dFV3QnNwAQEymLhMIeqH02I9PPFfPCrXxxnJPHO26jZdBGPFOl7QaadvagLIoomd9DN25aTqqct2HGeUBrW9XMBllUM5BXcW16Mj7GnFLyT9kw52Mr3Z42kG2n5Xvbg1PRHKvD6sLFMPX4y2Vg"/>
+<span class="font-headline-sm text-primary hidden sm:inline">DACHI</span>
+</div>
+<div class="flex items-center gap-3 relative">
+<span class="font-label-md text-label-md text-on-surface-variant hidden sm:inline" id="panelUserName"></span>
+<button class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden flex items-center justify-center font-bold text-primary cursor-pointer" id="userAvatarBtn" onclick="toggleUserMenu()">
+<img alt="Foto de perfil" class="avatar-img hidden w-full h-full object-cover" id="panelUserAvatarImg"/>
+<span class="avatar-initial" id="panelUserAvatar">?</span>
+</button>
+<div class="user-menu absolute right-0 top-12 w-72 bg-white rounded-2xl border border-outline-variant/50 shadow-xl p-2 z-[200]" id="userMenu">
+<div class="flex items-center gap-3 p-3 border-b border-outline-variant/30 mb-2">
+<div class="w-12 h-12 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant flex items-center justify-center font-bold text-primary flex-none">
+<img alt="Foto de perfil" class="avatar-img hidden w-full h-full object-cover" id="menuAvatarImg"/>
+<span class="avatar-initial" id="menuInitial">?</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md text-on-surface truncate" id="userMenuName">Usuario</p>
+<p class="text-label-sm text-on-surface-variant truncate" id="userMenuEmail"></p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide" id="menuRoleTag">ROL</span>
+</div>
+</div>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="logout()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">swap_horiz</span> Cambiar Cuenta
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openSettingsModal()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">tune</span> Configuración
+</button>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openProfileModal()">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">person</span> Editar Perfil
+</button>
+<hr class="border-outline-variant/50 my-1"/>
+<button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-error flex items-center gap-3" onclick="logout()">
+<span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg relative z-10">
+<div class="flex flex-col md:flex-row md:justify-between md:items-end mb-stack-lg gap-4">
+<div>
+<h1 class="font-display-lg text-headline-md text-primary" id="panelTitle">Panel de Control</h1>
+<p class="text-on-surface-variant font-body-md mt-1" id="roleSubtitle"></p>
+</div>
+</div>
+
+<!-- BLOQUE ADMIN: DASHBOARD -->
+<section class="space-y-stack-xl hidden" id="sec-dashboard">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-primary-fixed/30 flex items-center justify-center text-primary mb-6"><span class="material-symbols-outlined font-bold">inventory_2</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Productos</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiProducts">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-secondary-fixed/30 flex items-center justify-center text-secondary mb-6"><span class="material-symbols-outlined font-bold">group</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Usuarios</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiUsers">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-6"><span class="material-symbols-outlined font-bold">local_shipping</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Pedidos Totales</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiOrders">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-primary-container/10 flex items-center justify-center border border-primary-container/20 text-primary mb-6"><span class="material-symbols-outlined font-bold">payments</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Ingresos</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiRevenue">$0.00</h2>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<div class="lg:col-span-2 glass-card rounded-[32px] shadow-forest overflow-hidden flex flex-col">
+<div class="px-gutter py-6 flex justify-between items-center">
+<h3 class="font-headline-sm text-primary text-[22px]">Pedidos Recientes</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30 backdrop-blur-sm">
+<tr>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Pedido</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Cliente</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Estado</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="recentOrdersBody"></tbody>
+</table>
+</div>
+</div>
+<div class="bg-primary-container text-on-primary-container p-gutter rounded-[32px] flex flex-col shadow-xl border border-primary relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10"><span class="material-symbols-outlined text-[120px]">monitoring</span></div>
+<div class="relative z-10">
+<h3 class="font-headline-sm text-white text-[22px] mb-1">Calidad y Reputación</h3>
+<p class="font-body-md text-primary-fixed-dim/80 text-[14px]">Basado en calificaciones de consumidores</p>
+</div>
+<div class="mt-8 space-y-6 relative z-10">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-label-sm font-bold text-white">Calificación promedio</span>
+<span class="font-bold text-primary-fixed" id="avgRatingValue">0.0</span>
+</div>
+<div class="w-full h-2.5 bg-black/30 rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed transition-all duration-700" id="avgRatingBar" style="width:0%"></div>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-white/10 p-4 rounded-2xl border border-white/20">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed/20 flex items-center justify-center text-secondary-fixed"><span class="material-symbols-outlined">forum</span></div>
+<div class="text-[13px]">
+<p class="font-bold text-white" id="commentCountText">0 comentarios</p>
+<p class="text-primary-fixed/70">Registrados en el catálogo</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE ADMIN: USUARIOS -->
+<section class="space-y-stack-lg hidden" id="sec-usuarios">
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Usuarios Registrados</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30">
+<tr>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Nombre</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Correo</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Rol</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Estado</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md text-center">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="usersBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE ADMIN: PRODUCTOS -->
+<section class="space-y-stack-lg hidden" id="sec-productos">
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Moderación de Productos</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30">
+<tr>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Producto</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Productor</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Precio</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Calificación</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Estado</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md text-center">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="productsAdminBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE ADMIN: COMENTARIOS -->
+<section class="space-y-stack-lg hidden" id="sec-comentarios">
+<div class="glass-card rounded-[32px] shadow-forest p-gutter">
+<h3 class="font-headline-sm text-primary text-[22px] mb-6">Comentarios de Consumidores</h3>
+<div class="space-y-4" id="commentsAdminList"></div>
+</div>
+</section>
+
+<!-- BLOQUE ADMIN: LOGISTICA -->
+<section class="space-y-stack-lg hidden" id="sec-logistica-admin">
+<div class="glass-card rounded-[32px] shadow-forest p-gutter">
+<h3 class="font-headline-sm text-primary text-[22px] mb-6">Monitoreo de Entregas</h3>
+<div class="space-y-4" id="logisticaAdminList"></div>
+</div>
+</section>
+
+<!-- BLOQUE ADMIN: MAPA DE RUTAS -->
+<section class="space-y-stack-lg hidden" id="sec-mapa">
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-gutter items-start">
+<div class="xl:col-span-2 glass-card rounded-[32px] shadow-forest p-gutter">
+<div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+<h3 class="font-headline-sm text-primary text-[22px]">Mapa de Zonas y Rutas</h3>
+<button class="text-label-sm font-bold text-primary flex items-center gap-1 hidden" id="mapClearZone" onclick="selectMapZone(null)">
+<span class="material-symbols-outlined text-[18px]">close</span> Ver todas las zonas
+</button>
+</div>
+<p class="text-on-surface-variant text-label-sm mb-4">Mapa real de Google Maps. Haz clic en una zona para ver sus rutas próximas.</p>
+<div class="rounded-[24px] overflow-hidden border border-outline-variant/30" id="mapaContainer" style="height:420px;"></div>
+<p class="text-[11px] text-on-surface-variant mt-2 hidden" id="mapaKeyNotice">Este es un mapa de referencia. Para activar pines interactivos reales, agrega tu clave de Google Maps en la constante <code>GOOGLE_MAPS_API_KEY</code> dentro del código.</p>
+<div class="flex flex-wrap gap-2 mt-4" id="mapaZonaChips"></div>
+<div class="flex flex-wrap gap-3 mt-4" id="mapaLeyenda"></div>
+</div>
+<div class="glass-card rounded-[32px] shadow-forest p-gutter flex flex-col max-h-[560px]">
+<h3 class="font-headline-sm text-primary text-[20px] mb-1" id="mapaListTitle">Próximas Rutas</h3>
+<p class="text-on-surface-variant text-label-sm mb-4" id="mapaListSubtitle">Todas las zonas</p>
+<div class="space-y-3 overflow-y-auto pr-1" id="mapaRutasList"></div>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE REPARTIDOR: DISPONIBLES -->
+<section class="space-y-stack-lg hidden" id="sec-disponibles">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-primary flex items-center gap-3">
+<span class="material-symbols-outlined text-primary bg-primary-fixed/20 p-2 rounded-xl">explore</span> Entregas Disponibles
+</h3>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter" id="availableDeliveriesList"></div>
+<p class="hidden text-center py-16 text-on-surface-variant" id="noAvailable">No hay entregas disponibles por el momento.</p>
+</section>
+
+<!-- BLOQUE REPARTIDOR: ACTIVA -->
+<section class="space-y-stack-lg hidden" id="sec-activa">
+<h3 class="font-headline-sm text-primary flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary bg-primary-fixed/20 p-2 rounded-xl">package_2</span> Mi Entrega Activa
+</h3>
+<div id="activeDeliveryContainer"></div>
+</section>
+
+<!-- BLOQUE REPARTIDOR: HISTORIAL -->
+<section class="space-y-stack-lg hidden" id="sec-historial">
+<h3 class="font-headline-sm text-primary flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary bg-primary-fixed/20 p-2 rounded-xl">history</span> Historial de Entregas
+</h3>
+<div class="space-y-4" id="historyList"></div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: DASHBOARD -->
+<section class="space-y-stack-xl hidden" id="dist-dashboard">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-primary-fixed/30 flex items-center justify-center text-primary mb-6"><span class="material-symbols-outlined font-bold">inventory_2</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Productos Disponibles</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiInventario">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-secondary-fixed/30 flex items-center justify-center text-secondary mb-6"><span class="material-symbols-outlined font-bold">agriculture</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Productores Asociados</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiProductores">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-fixed/30 flex items-center justify-center text-tertiary mb-6"><span class="material-symbols-outlined font-bold">local_shipping</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Pedidos en Proceso</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiPedidosProceso">0</h2>
+</div>
+<div class="glass-card p-6 rounded-[24px] shadow-forest">
+<div class="w-12 h-12 rounded-2xl bg-primary-container/10 flex items-center justify-center border border-primary-container/20 text-primary mb-6"><span class="material-symbols-outlined font-bold">payments</span></div>
+<p class="text-label-sm uppercase tracking-widest text-on-surface-variant font-bold">Valor de Inventario</p>
+<h2 class="text-headline-md font-bold text-primary" id="kpiValorInventario">$0.00</h2>
+</div>
+</div>
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Pedidos Recientes en Proceso</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30 backdrop-blur-sm">
+<tr>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Pedido</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Zona</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Cliente</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Estado</th>
+<th class="px-gutter py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-[11px]">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="distribuidorOrdersBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: INVENTARIO -->
+<section class="space-y-stack-lg hidden" id="dist-inventario">
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Inventario Disponible por Productor</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30">
+<tr>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Producto</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Productor</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Zona</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Categoría</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Cantidad</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Precio</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Valor Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="inventarioBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: PRODUCTORES -->
+<section class="space-y-stack-lg hidden" id="dist-productores">
+<div class="glass-card rounded-[32px] shadow-forest overflow-hidden">
+<div class="px-gutter py-6"><h3 class="font-headline-sm text-primary text-[22px]">Productores Asociados</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30">
+<tr>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Productor</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Correo</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Productos Activos</th>
+<th class="px-gutter py-4 text-[11px] uppercase tracking-wider text-on-surface-variant font-label-md">Unidades Disponibles</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="productoresBody"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- BLOQUE DISTRIBUIDOR: PEDIDOS -->
+<section class="space-y-stack-lg hidden" id="dist-pedidos">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-primary flex items-center gap-3">
+<span class="material-symbols-outlined text-primary bg-primary-fixed/20 p-2 rounded-xl">local_shipping</span> Pedidos en Movimiento
+</h3>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter" id="pedidosDistribuidorList"></div>
+<p class="hidden text-center py-16 text-on-surface-variant" id="noPedidosDistribuidor">No hay pedidos en proceso por el momento.</p>
+</section>
+
+</main>
+<footer class="bg-surface-container-highest/40 backdrop-blur-md w-full mt-stack-xl border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-stack-lg w-full max-w-container-max mx-auto">
+<div class="mb-stack-md md:mb-0">
+<div class="flex items-center gap-2 mb-2">
+<img alt="DACHI Logo" class="h-8 w-auto grayscale opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAsOnwK_fdenP-kJ8hQkYtzPQbKxtx76pYFxl0W15bJO4Tk5y0IpfZAehEa37eMOHSSvOMUl7f06RalVDCCQO0Xpu49_vMGdVQcQBzK3CuQuKXjIUp49_15uZ3dFV3QnNwAQEymLhMIeqH02I9PPFfPCrXxxnJPHO26jZdBGPFOl7QaadvagLIoomd9DN25aTqqct2HGeUBrW9XMBllUM5BXcW16Mj7GnFLyT9kw52Mr3Z42kG2n5Xvbg1PRHKvD6sLFMPX4y2Vg"/>
+<span class="font-bold text-outline uppercase tracking-widest text-[14px]">DACHI</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-[13px]">© 2024 DACHI. Cultivando confianza.</p>
+</div>
+</div>
+</footer>
+<!-- BLOQUE MODAL PERFIL -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[300] hidden items-center justify-center p-4 modal-overlay" id="profileModal">
+<div class="bg-white rounded-[24px] w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Editar Perfil</h3>
+<span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide" id="profileRoleTag">ROL</span>
+</div>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeProfileModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-stack-md" onsubmit="saveProfile(event)">
+<div class="flex flex-col items-center gap-3 mb-4">
+<div class="w-24 h-24 rounded-full bg-surface-container-low border border-outline-variant overflow-hidden flex items-center justify-center relative">
+<img alt="Foto de perfil" class="hidden w-full h-full object-cover" id="profilePhotoPreview"/>
+<span class="material-symbols-outlined text-outline text-4xl" id="profilePhotoPlaceholder">person</span>
+</div>
+<label class="text-label-sm text-primary font-bold cursor-pointer hover:underline">
+Cambiar fotografía
+<input accept="image/*" class="hidden" onchange="handleProfilePhoto(event)" type="file"/>
+</label>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Nombre Completo</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileNombre" required type="text"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-stack-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Correo</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant bg-surface-container-low text-on-surface-variant outline-none" disabled id="profileCorreo" type="email"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Teléfono</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileTelefono" placeholder="+507 6000-0000" type="tel"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Dirección</label>
+<input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="profileDireccion" placeholder="Provincia, corregimiento..." type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Descripción</label>
+<textarea class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white resize-none" id="profileDescripcion" placeholder="Cuéntanos sobre ti..." rows="3"></textarea>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98] mt-2" type="submit">GUARDAR CAMBIOS</button>
+</form>
+</div>
+</div>
+<!-- BLOQUE MODAL CONFIGURACION -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[300] hidden items-center justify-center p-4 modal-overlay" id="settingsModal">
+<div class="bg-white rounded-[24px] w-full max-w-md p-6 sm:p-8">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-primary">Configuración</h3>
+<button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeSettingsModal()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-stack-lg" onsubmit="saveSettingsModal(event)">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2 ml-1">Tamaño de Fuente</label>
+<select class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary outline-none bg-white" id="settingsFontSize">
+<option value="pequeno">Pequeño</option>
+<option value="mediano">Mediano</option>
+<option value="grande">Grande</option>
+</select>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Modo Oscuro</h4>
+<p class="text-on-surface-variant text-label-sm">Reduce el brillo de la interfaz.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="settingsDarkMode" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98]" type="submit">GUARDAR</button>
+</form>
+</div>
+</div>
+<!-- BLOQUE LOGICA JS -->
+<script>
+// BLOQUE SESION
+function getSession() {
+    const raw = sessionStorage.getItem('dachi_session') || localStorage.getItem('dachi_session');
+    return raw ? JSON.parse(raw) : null;
+}
+const session = getSession();
+if (!session || (session.role !== 'admin' && session.role !== 'repartidor' && session.role !== 'distribuidor')) {
+    const map = { productor: 'productos.html', consumidor: 'home.html' };
+    window.location.href = (session && map[session.role]) || 'index.html';
+}
+function logout() {
+    sessionStorage.removeItem('dachi_session');
+    localStorage.removeItem('dachi_session');
+    window.location.href = 'index.html';
+}
+
+// BLOQUE DATOS BASE
+const DEMO_USERS = {
+    'corea@gmail.com': { role: 'admin', nombre: 'Corea' },
+    'sara@gmail.com': { role: 'consumidor', nombre: 'Sara' },
+    'maria@gmail.com': { role: 'consumidor', nombre: 'María González' },
+    'fulo@gmail.com': { role: 'repartidor', nombre: 'Fulo' },
+    'jose@gmail.com': { role: 'repartidor', nombre: 'José Pérez' },
+    'ar@gmail.com': { role: 'productor', nombre: 'Ar' },
+    'roble@dachi.pa': { role: 'productor', nombre: 'Finca Los Robles' },
+    'boquete@dachi.pa': { role: 'productor', nombre: 'Café Boquete Dorado' },
+    'darien@dachi.pa': { role: 'productor', nombre: 'Cacao Darién Orgánico' },
+    'distribuidora@dachi.pa': { role: 'distribuidor', nombre: 'Distribuidora Istmo' }
+};
+function getProducts() { return JSON.parse(localStorage.getItem('dachi_products') || '[]'); }
+function saveProducts(list) { localStorage.setItem('dachi_products', JSON.stringify(list)); }
+function getOrders() { return JSON.parse(localStorage.getItem('dachi_orders') || '[]'); }
+function saveOrders(list) { localStorage.setItem('dachi_orders', JSON.stringify(list)); }
+
+// BLOQUE DATOS DE PRUEBA (idempotente: solo siembra si no hay datos guardados)
+function seedDemoData() {
+    if (localStorage.getItem('dachi_products')) return;
+    const img = (seed) => `https://picsum.photos/seed/${seed}/600/450`;
+    const now = new Date().toLocaleDateString('es-PA');
+    const demoProducts = [
+        { id: 'seed1', name: 'Tomate Chonto Orgánico', price: '1.25', quantity: 80, category: 'Hortalizas', zone: 'Chiriquí', description: 'Tomates chonto cultivados sin pesticidas en las tierras altas de Chiriquí, cosechados semanalmente.', images: [img('tomate1'), img('tomate2')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 34, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:4}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Excelente calidad, muy frescos.',date:now}] },
+        { id: 'seed2', name: 'Café Geisha Especial', price: '18.50', quantity: 25, category: 'Café', zone: 'Chiriquí', description: 'Café Geisha de altura, tueste medio, notas florales y cítricas. Cosecha de Boquete.', images: [img('cafe1'), img('cafe2')], status: 'active', producerEmail: 'boquete@dachi.pa', producerName: 'Café Boquete Dorado', sold: 52, ratings: [{email:'sara@gmail.com',stars:5}], comments: [{email:'maria@gmail.com',nombre:'María González',text:'El mejor café que he probado en Panamá.',date:now}] },
+        { id: 'seed3', name: 'Piña Perolera', price: '2.10', quantity: 60, category: 'Frutas', zone: 'Colón', description: 'Piñas dulces y jugosas, cosechadas en su punto óptimo de maduración.', images: [img('pina1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 21, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: '6.75', quantity: 40, category: 'Cacao', zone: 'Darién', description: 'Cacao criollo fermentado y secado artesanalmente, ideal para chocolatería fina.', images: [img('cacao1'), img('cacao2')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 15, ratings: [{email:'sara@gmail.com',stars:5},{email:'maria@gmail.com',stars:5}], comments: [{email:'sara@gmail.com',nombre:'Sara',text:'Aroma increíble, se nota la calidad.',date:now}] },
+        { id: 'seed5', name: 'Ñame Criollo', price: '0.95', quantity: 100, category: 'Hortalizas', zone: 'Coclé', description: 'Ñame fresco cosechado en Coclé, ideal para sancocho.', images: [img('name1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 44, ratings: [], comments: [] },
+        { id: 'seed6', name: 'Plátano Verde', price: '0.60', quantity: 150, category: 'Frutas', zone: 'Bocas del Toro', description: 'Plátanos verdes de exportación, cultivados en fincas familiares de Bocas del Toro.', images: [img('platano1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 66, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed7', name: 'Miel de Abeja Pura', price: '8.00', quantity: 30, category: 'Artesanal', zone: 'Veraguas', description: 'Miel 100% pura extraída de forma artesanal en apiarios de Veraguas.', images: [img('miel1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 19, ratings: [{email:'sara@gmail.com',stars:5}], comments: [] },
+        { id: 'seed8', name: 'Queso de Aro Artesanal', price: '5.40', quantity: 20, category: 'Especialidad', zone: 'Los Santos', description: 'Queso de aro tradicional, elaborado con leche fresca de Los Santos.', images: [img('queso1')], status: 'active', producerEmail: 'roble@dachi.pa', producerName: 'Finca Los Robles', sold: 12, ratings: [], comments: [] },
+        { id: 'seed9', name: 'Naranja Valencia', price: '1.10', quantity: 90, category: 'Frutas', zone: 'Panamá Oeste', description: 'Naranjas jugosas ideales para jugo, cultivadas en Panamá Oeste.', images: [img('naranja1')], status: 'active', producerEmail: 'darien@dachi.pa', producerName: 'Cacao Darién Orgánico', sold: 28, ratings: [{email:'maria@gmail.com',stars:4}], comments: [] },
+        { id: 'seed10', name: 'Yuca Fresca', price: '0.85', quantity: 120, category: 'Hortalizas', zone: 'Herrera', description: 'Yuca fresca recién cosechada, lista para tu mesa.', images: [img('yuca1')], status: 'active', producerEmail: 'ar@gmail.com', producerName: 'Ar', sold: 37, ratings: [], comments: [] }
+    ];
+    localStorage.setItem('dachi_products', JSON.stringify(demoProducts));
+}
+function seedDemoOrders() {
+    if (localStorage.getItem('dachi_orders')) return;
+    const demoOrders = [
+        { id: '1000001', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed1', name: 'Tomate Chonto Orgánico', price: 1.25, qty: 4, image: '' }], total: 5.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000002', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed2', name: 'Café Geisha Especial', price: 18.50, qty: 1, image: '' }], total: 18.50, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'fulo@gmail.com' },
+        { id: '1000003', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed4', name: 'Cacao en Grano Fino de Aroma', price: 6.75, qty: 2, image: '' }], total: 13.50, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000004', buyerEmail: 'maria@gmail.com', buyerName: 'María González', items: [{ id: 'seed6', name: 'Plátano Verde', price: 0.60, qty: 10, image: '' }], total: 6.00, date: new Date().toLocaleString('es-PA'), status: 'pendiente' },
+        { id: '1000005', buyerEmail: 'sara@gmail.com', buyerName: 'Sara', items: [{ id: 'seed9', name: 'Naranja Valencia', price: 1.10, qty: 6, image: '' }], total: 6.60, date: new Date().toLocaleString('es-PA'), status: 'en camino', repartidorEmail: 'jose@gmail.com' }
+    ];
+    localStorage.setItem('dachi_orders', JSON.stringify(demoOrders));
+}
+seedDemoData();
+seedDemoOrders();
+function getRegisteredUsers() { return JSON.parse(localStorage.getItem('dachi_usuarios') || '{}'); }
+function saveRegisteredUsers(data) { localStorage.setItem('dachi_usuarios', JSON.stringify(data)); }
+
+// BLOQUE ROLES Y PERFIL
+const ROLE_LABELS = { admin: 'PERFIL DE ADMIN', consumidor: 'PERFIL DE CONSUMIDOR', repartidor: 'PERFIL LOGISTICO', productor: 'PERFIL DE PRODUCTOR', distribuidor: 'PERFIL DE DISTRIBUIDOR' };
+function getPerfil() { return JSON.parse(localStorage.getItem('dachi_perfil_' + session.email) || '{}'); }
+function savePerfil(p) { localStorage.setItem('dachi_perfil_' + session.email, JSON.stringify(p)); }
+function getAjustes() { return JSON.parse(localStorage.getItem('dachi_ajustes_' + session.email) || '{}'); }
+function saveAjustes(a) { localStorage.setItem('dachi_ajustes_' + session.email, JSON.stringify(a)); }
+function applyAjustes() {
+    const a = getAjustes();
+    const sizes = { pequeno: '14px', mediano: '16px', grande: '18px' };
+    document.documentElement.style.fontSize = sizes[a.fontSize] || '16px';
+    document.documentElement.classList.toggle('dark', !!a.darkMode);
+}
+function refreshAvatarUI() {
+    const perfil = getPerfil();
+    const initial = session.nombre.charAt(0).toUpperCase();
+    document.querySelectorAll('.avatar-initial').forEach(el => el.textContent = initial);
+    document.querySelectorAll('.avatar-img').forEach(el => {
+        if (perfil.foto) { el.src = perfil.foto; el.classList.remove('hidden'); }
+        else { el.classList.add('hidden'); }
+    });
+    const roleTag = document.getElementById('menuRoleTag');
+    if (roleTag) roleTag.textContent = ROLE_LABELS[session.role] || '';
+    const nameEl = document.getElementById('userMenuName');
+    if (nameEl) nameEl.textContent = perfil.nombreCompleto || session.nombre;
+    const emailEl = document.getElementById('userMenuEmail');
+    if (emailEl) emailEl.textContent = session.email;
+}
+function toggleUserMenu() { document.getElementById('userMenu').classList.toggle('open'); }
+document.addEventListener('click', (e) => {
+    const menu = document.getElementById('userMenu');
+    const btn = document.getElementById('userAvatarBtn');
+    if (menu && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove('open');
+});
+function openProfileModal() {
+    document.getElementById('userMenu').classList.remove('open');
+    const p = getPerfil();
+    document.getElementById('profileNombre').value = p.nombreCompleto || session.nombre;
+    document.getElementById('profileCorreo').value = session.email;
+    document.getElementById('profileTelefono').value = p.telefono || '';
+    document.getElementById('profileDireccion').value = p.direccion || '';
+    document.getElementById('profileDescripcion').value = p.descripcion || '';
+    document.getElementById('profileRoleTag').textContent = ROLE_LABELS[session.role] || '';
+    const preview = document.getElementById('profilePhotoPreview');
+    preview.removeAttribute('data-newphoto');
+    if (p.foto) { preview.src = p.foto; preview.classList.remove('hidden'); document.getElementById('profilePhotoPlaceholder').classList.add('hidden'); }
+    else { preview.classList.add('hidden'); document.getElementById('profilePhotoPlaceholder').classList.remove('hidden'); }
+    document.getElementById('profileModal').classList.remove('hidden');
+    document.getElementById('profileModal').classList.add('flex');
+}
+function closeProfileModal() {
+    document.getElementById('profileModal').classList.add('hidden');
+    document.getElementById('profileModal').classList.remove('flex');
+}
+function handleProfilePhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        const preview = document.getElementById('profilePhotoPreview');
+        preview.src = ev.target.result;
+        preview.classList.remove('hidden');
+        document.getElementById('profilePhotoPlaceholder').classList.add('hidden');
+        preview.dataset.newphoto = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+function saveProfile(event) {
+    event.preventDefault();
+    const p = getPerfil();
+    p.nombreCompleto = document.getElementById('profileNombre').value.trim();
+    p.telefono = document.getElementById('profileTelefono').value.trim();
+    p.direccion = document.getElementById('profileDireccion').value.trim();
+    p.descripcion = document.getElementById('profileDescripcion').value.trim();
+    const newphoto = document.getElementById('profilePhotoPreview').dataset.newphoto;
+    if (newphoto) p.foto = newphoto;
+    savePerfil(p);
+    refreshAvatarUI();
+    closeProfileModal();
+}
+function openSettingsModal() {
+    document.getElementById('userMenu').classList.remove('open');
+    const a = getAjustes();
+    document.getElementById('settingsFontSize').value = a.fontSize || 'mediano';
+    document.getElementById('settingsDarkMode').checked = !!a.darkMode;
+    document.getElementById('settingsModal').classList.remove('hidden');
+    document.getElementById('settingsModal').classList.add('flex');
+}
+function closeSettingsModal() {
+    document.getElementById('settingsModal').classList.add('hidden');
+    document.getElementById('settingsModal').classList.remove('flex');
+}
+function saveSettingsModal(event) {
+    event.preventDefault();
+    const a = { fontSize: document.getElementById('settingsFontSize').value, darkMode: document.getElementById('settingsDarkMode').checked };
+    saveAjustes(a);
+    applyAjustes();
+    closeSettingsModal();
+}
+
+function allUsersList() {
+    const registered = getRegisteredUsers();
+    const list = [];
+    Object.entries(DEMO_USERS).forEach(([email, u]) => list.push({ email, nombre: u.nombre, role: u.role, demo: true, status: 'activo' }));
+    Object.entries(registered).forEach(([email, u]) => list.push({ email, nombre: u.nombre, role: u.role, demo: false, status: u.suspended ? 'suspendido' : 'activo' }));
+    return list;
+}
+
+// BLOQUE NAVEGACION SIDEBAR
+const NAV_ADMIN = [
+    { id: 'sec-dashboard', label: 'Dashboard', icon: 'dashboard' },
+    { id: 'sec-usuarios', label: 'Usuarios', icon: 'group' },
+    { id: 'sec-productos', label: 'Productos', icon: 'inventory_2' },
+    { id: 'sec-comentarios', label: 'Comentarios', icon: 'forum' },
+    { id: 'sec-logistica-admin', label: 'Logística', icon: 'local_shipping' },
+    { id: 'sec-mapa', label: 'Mapa de Rutas', icon: 'map' }
+];
+const NAV_REPARTIDOR = [
+    { id: 'sec-disponibles', label: 'Entregas Disponibles', icon: 'explore' },
+    { id: 'sec-activa', label: 'Mi Entrega Activa', icon: 'package_2' },
+    { id: 'sec-historial', label: 'Historial', icon: 'history' }
+];
+const NAV_DISTRIBUIDOR = [
+    { id: 'dist-dashboard', label: 'Dashboard', icon: 'dashboard' },
+    { id: 'dist-inventario', label: 'Inventario', icon: 'inventory_2' },
+    { id: 'dist-productores', label: 'Productores', icon: 'agriculture' },
+    { id: 'dist-pedidos', label: 'Pedidos', icon: 'local_shipping' }
+];
+
+function buildSidebar(items) {
+    const nav = document.getElementById('sidebarNav');
+    nav.innerHTML = items.map((it, i) => `
+        <a class="nav-item flex items-center gap-4 p-3 rounded-xl transition-all cursor-pointer ${i === 0 ? 'bg-primary text-on-primary shadow-lg shadow-primary/20' : 'hover:bg-primary-fixed/20 text-on-surface-variant hover:text-primary'}" data-target="${it.id}" onclick="showSection('${it.id}', this)">
+            <span class="material-symbols-outlined">${it.icon}</span>
+            <span class="font-label-md">${it.label}</span>
+        </a>
+    `).join('');
+}
+function showSection(id, el) {
+    document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    document.querySelectorAll('.nav-item').forEach(a => a.classList.remove('bg-primary', 'text-on-primary', 'shadow-lg', 'shadow-primary/20'));
+    document.querySelectorAll('.nav-item').forEach(a => a.classList.add('text-on-surface-variant'));
+    if (el) el.classList.add('bg-primary', 'text-on-primary', 'shadow-lg', 'shadow-primary/20');
+    if (window.innerWidth < 1024) toggleSidebar();
+}
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const isHidden = sidebar.classList.contains('-translate-x-full');
+    if (isHidden) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// BLOQUE INIT
+function init() {
+    applyAjustes();
+    document.getElementById('panelUserName').textContent = session.nombre;
+    refreshAvatarUI();
+
+    if (session.role === 'admin') {
+        document.getElementById('panelTitle').textContent = 'Panel de Administración';
+        document.getElementById('roleSubtitle').textContent = 'Monitoreo global de la plataforma DACHI.';
+        buildSidebar(NAV_ADMIN);
+        showSection('sec-dashboard');
+        renderAdminDashboard();
+        renderAdminUsers();
+        renderAdminProducts();
+        renderAdminComments();
+        renderAdminLogistics();
+        initMapaReal();
+    } else if (session.role === 'repartidor') {
+        document.getElementById('panelTitle').textContent = 'Panel de Logística';
+        document.getElementById('roleSubtitle').textContent = 'Gestiona tus entregas de campo a mesa.';
+        buildSidebar(NAV_REPARTIDOR);
+        showSection('sec-disponibles');
+        renderAvailableDeliveries();
+        renderActiveDelivery();
+        renderHistory();
+    } else {
+        document.getElementById('panelTitle').textContent = 'Panel de Distribución';
+        document.getElementById('roleSubtitle').textContent = 'Coordina inventario y pedidos entre productores y consumidores.';
+        buildSidebar(NAV_DISTRIBUIDOR);
+        showSection('dist-dashboard');
+        renderDistribuidorDashboard();
+        renderInventario();
+        renderProductores();
+        renderPedidosDistribuidor();
+    }
+}
+
+// BLOQUE ADMIN: DASHBOARD
+function renderAdminDashboard() {
+    const products = getProducts();
+    const users = allUsersList();
+    const orders = getOrders();
+    const revenue = orders.reduce((a, o) => a + o.total, 0);
+
+    document.getElementById('kpiProducts').textContent = products.length;
+    document.getElementById('kpiUsers').textContent = users.length;
+    document.getElementById('kpiOrders').textContent = orders.length;
+    document.getElementById('kpiRevenue').textContent = `$${revenue.toFixed(2)}`;
+
+    const allRatings = products.flatMap(p => p.ratings || []);
+    const avg = allRatings.length ? allRatings.reduce((a, r) => a + r.stars, 0) / allRatings.length : 0;
+    document.getElementById('avgRatingValue').textContent = avg.toFixed(1);
+    document.getElementById('avgRatingBar').style.width = `${(avg / 5) * 100}%`;
+    const totalComments = products.reduce((a, p) => a + ((p.comments || []).length), 0);
+    document.getElementById('commentCountText').textContent = `${totalComments} comentarios`;
+
+    const tbody = document.getElementById('recentOrdersBody');
+    const statusColor = { pendiente: 'bg-surface-container-highest/80 text-on-surface-variant', 'en camino': 'bg-secondary-container/80 text-on-secondary-container', entregado: 'bg-primary-fixed/80 text-on-primary-fixed' };
+    tbody.innerHTML = orders.slice().reverse().slice(0, 8).map(o => `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-primary">#${o.id.slice(-6)}</td>
+            <td class="px-gutter py-5">${o.buyerName}</td>
+            <td class="px-gutter py-5"><span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase ${statusColor[o.status] || statusColor.pendiente}">${o.status}</span></td>
+            <td class="px-gutter py-5 font-bold text-primary">$${o.total.toFixed(2)}</td>
+        </tr>
+    `).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="4">Sin pedidos aún.</td></tr>';
+}
+
+// BLOQUE ADMIN: USUARIOS
+function renderAdminUsers() {
+    const users = allUsersList();
+    const tbody = document.getElementById('usersBody');
+    tbody.innerHTML = users.map(u => `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-on-surface">${u.nombre}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${u.email}</td>
+            <td class="px-gutter py-5"><span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase bg-primary-fixed/40 text-on-primary-fixed-variant">${u.role}</span></td>
+            <td class="px-gutter py-5"><span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase ${u.status === 'activo' ? 'bg-primary-fixed/60 text-on-primary-fixed' : 'bg-error-container text-error'}">${u.status}</span></td>
+            <td class="px-gutter py-5 text-center">
+                ${u.demo ? '<span class="text-label-sm text-on-surface-variant/60">Cuenta demo</span>' : `<button class="px-4 py-2 rounded-full text-label-sm font-bold ${u.status === 'activo' ? 'bg-error-container text-error' : 'bg-primary-fixed/60 text-on-primary-fixed'}" onclick="toggleUserStatus('${u.email}')">${u.status === 'activo' ? 'Suspender' : 'Activar'}</button>`}
+            </td>
+        </tr>
+    `).join('');
+}
+function toggleUserStatus(email) {
+    const users = getRegisteredUsers();
+    if (!users[email]) return;
+    users[email].suspended = !users[email].suspended;
+    saveRegisteredUsers(users);
+    renderAdminUsers();
+}
+
+// BLOQUE ADMIN: PRODUCTOS
+function renderAdminProducts() {
+    const products = getProducts();
+    const tbody = document.getElementById('productsAdminBody');
+    tbody.innerHTML = products.map(p => {
+        const avg = (p.ratings && p.ratings.length) ? (p.ratings.reduce((a, r) => a + r.stars, 0) / p.ratings.length) : 0;
+        return `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-on-surface">${p.name}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.producerName || '—'}</td>
+            <td class="px-gutter py-5 font-bold text-primary">$${parseFloat(p.price).toFixed(2)}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${avg.toFixed(1)} ★ (${(p.ratings || []).length})</td>
+            <td class="px-gutter py-5"><span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase ${p.status === 'active' ? 'bg-primary-fixed/60 text-on-primary-fixed' : 'bg-error-container text-error'}">${p.status === 'active' ? 'activo' : 'bajado'}</span></td>
+            <td class="px-gutter py-5 text-center flex gap-2 justify-center">
+                <button class="px-3 py-2 rounded-full text-label-sm font-bold bg-surface-container-high text-on-surface" onclick="toggleProductStatus('${p.id}')">${p.status === 'active' ? 'Bajar' : 'Activar'}</button>
+                <button class="px-3 py-2 rounded-full text-label-sm font-bold bg-error-container text-error" onclick="deleteProductAdmin('${p.id}')">Eliminar</button>
+            </td>
+        </tr>`;
+    }).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="6">No hay productos registrados.</td></tr>';
+}
+function toggleProductStatus(id) {
+    const products = getProducts();
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    p.status = p.status === 'active' ? 'paused' : 'active';
+    saveProducts(products);
+    renderAdminProducts();
+    renderAdminDashboard();
+}
+function deleteProductAdmin(id) {
+    if (!confirm('¿Eliminar este producto de la plataforma?')) return;
+    let products = getProducts();
+    products = products.filter(p => p.id !== id);
+    saveProducts(products);
+    renderAdminProducts();
+    renderAdminDashboard();
+}
+
+// BLOQUE ADMIN: COMENTARIOS
+function renderAdminComments() {
+    const products = getProducts();
+    const list = document.getElementById('commentsAdminList');
+    const all = [];
+    products.forEach(p => (p.comments || []).forEach(c => all.push({ ...c, productName: p.id, prodName: p.name })));
+    all.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    list.innerHTML = all.map(c => `
+        <div class="bg-white rounded-xl p-4 border border-outline-variant/30 flex justify-between items-start gap-4">
+            <div>
+                <p class="font-bold text-on-surface">${c.nombre} <span class="text-label-sm text-on-surface-variant font-normal">sobre "${c.prodName}"</span></p>
+                <p class="text-on-surface-variant">${c.text}</p>
+                <p class="text-label-sm text-on-surface-variant/60 mt-1">${c.date}</p>
+            </div>
+            <button class="px-3 py-2 rounded-full text-label-sm font-bold bg-error-container text-error whitespace-nowrap" onclick="deleteComment('${c.productName}', '${c.date}', '${c.email}')">Eliminar</button>
+        </div>
+    `).join('') || '<p class="text-on-surface-variant">No hay comentarios registrados.</p>';
+}
+function deleteComment(productId, date, email) {
+    const products = getProducts();
+    const p = products.find(x => x.id === productId);
+    if (!p) return;
+    p.comments = (p.comments || []).filter(c => !(c.date === date && c.email === email));
+    saveProducts(products);
+    renderAdminComments();
+}
+
+// BLOQUE ADMIN: MAPA DE RUTAS
+// BLOQUE MAPA REAL DE GOOGLE MAPS
+// Para pines interactivos reales, obtén una clave gratuita en https://console.cloud.google.com/google/maps-apis
+// (Maps JavaScript API) y pégala aquí abajo. Sin clave, se muestra un mapa real de Panamá en modo de referencia.
+const GOOGLE_MAPS_API_KEY = '';
+const ZONE_COORDS = {
+    'Bocas del Toro': { lat: 9.3400, lng: -82.2500 },
+    'Chiriquí': { lat: 8.4300, lng: -82.4300 },
+    'Veraguas': { lat: 8.1000, lng: -80.9800 },
+    'Coclé': { lat: 8.5200, lng: -80.3600 },
+    'Herrera': { lat: 7.9700, lng: -80.4300 },
+    'Los Santos': { lat: 7.7700, lng: -80.2800 },
+    'Colón': { lat: 9.3590, lng: -79.9010 },
+    'Panamá Oeste': { lat: 8.8800, lng: -79.7800 },
+    'Darién': { lat: 8.4100, lng: -78.1500 }
+};
+let mapaZonaActiva = null;
+let googleMap = null;
+let mapaMarkers = {};
+let mapaModoReal = false;
+
+function zoneOrderStats() {
+    const orders = getOrders();
+    const products = getProducts();
+    const stats = {};
+    Object.keys(ZONE_COORDS).forEach(z => stats[z] = { pendiente: 0, enCamino: 0, total: 0, orders: [] });
+    orders.forEach(o => {
+        if (o.status !== 'pendiente' && o.status !== 'en camino') return;
+        const firstProduct = products.find(p => p.id === o.items[0].id);
+        const zone = (firstProduct && firstProduct.zone) || null;
+        if (!zone || !stats[zone]) return;
+        stats[zone].total++;
+        if (o.status === 'pendiente') stats[zone].pendiente++;
+        else stats[zone].enCamino++;
+        stats[zone].orders.push({ order: o, product: firstProduct });
+    });
+    return stats;
+}
+
+function initMapaReal() {
+    const container = document.getElementById('mapaContainer');
+    if (!container) return;
+    if (!GOOGLE_MAPS_API_KEY) {
+        container.innerHTML = '<iframe src="https://www.google.com/maps?q=Panama&z=7&output=embed" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+        document.getElementById('mapaKeyNotice').classList.remove('hidden');
+        mapaModoReal = false;
+        renderMapaRutas();
+        return;
+    }
+    window.__onGoogleMapsReady = function () {
+        googleMap = new google.maps.Map(container, {
+            center: { lat: 8.55, lng: -80.5 },
+            zoom: 7,
+            mapTypeControl: false,
+            streetViewControl: false
+        });
+        mapaModoReal = true;
+        renderMapaRutas();
+    };
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=__onGoogleMapsReady`;
+    script.async = true;
+    document.head.appendChild(script);
+}
+
+function renderMapaRutas() {
+    const stats = zoneOrderStats();
+    const maxTotal = Math.max(1, ...Object.values(stats).map(s => s.total));
+
+    if (mapaModoReal && googleMap) {
+        Object.entries(ZONE_COORDS).forEach(([zone, pos]) => {
+            const s = stats[zone];
+            const active = s.total > 0;
+            const isSelected = mapaZonaActiva === zone;
+            const scale = 8 + (s.total / maxTotal) * 10;
+            const icon = {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: scale,
+                fillColor: active ? '#2E5339' : '#B7C4B8',
+                fillOpacity: 1,
+                strokeColor: isSelected ? '#D9A441' : '#FFFFFF',
+                strokeWeight: isSelected ? 4 : 2
+            };
+            if (!mapaMarkers[zone]) {
+                const marker = new google.maps.Marker({ position: pos, map: googleMap, label: s.total > 0 ? { text: String(s.total), color: '#fff', fontWeight: 'bold', fontSize: '11px' } : null, title: zone, icon });
+                marker.addListener('click', () => selectMapZone(zone));
+                mapaMarkers[zone] = marker;
+            } else {
+                mapaMarkers[zone].setIcon(icon);
+                mapaMarkers[zone].setLabel(s.total > 0 ? { text: String(s.total), color: '#fff', fontWeight: 'bold', fontSize: '11px' } : null);
+            }
+        });
+    }
+
+    const chips = document.getElementById('mapaZonaChips');
+    if (chips) {
+        chips.innerHTML = Object.keys(ZONE_COORDS).map(zone => {
+            const s = stats[zone];
+            const isSelected = mapaZonaActiva === zone;
+            const active = s.total > 0;
+            return `<button onclick="selectMapZone('${zone.replace(/'/g, "\\'")}')" class="px-3 py-1.5 rounded-full text-label-sm font-bold border transition-all ${isSelected ? 'bg-primary text-on-primary border-primary' : active ? 'bg-primary-fixed/20 text-primary border-primary/30 hover:bg-primary-fixed/40' : 'bg-surface-container-low text-on-surface-variant border-outline-variant/40'}">${zone}${s.total > 0 ? ` · ${s.total}` : ''}</button>`;
+        }).join('');
+    }
+
+    const leyenda = document.getElementById('mapaLeyenda');
+    if (leyenda) {
+        leyenda.innerHTML = `
+            <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-primary inline-block"></span> Con rutas próximas</div>
+            <div class="flex items-center gap-2 text-label-sm text-on-surface-variant"><span class="w-3 h-3 rounded-full bg-outline-variant inline-block"></span> Sin rutas activas</div>
+        `;
+    }
+
+    renderMapaListado(stats);
+}
+
+function selectMapZone(zone) {
+    mapaZonaActiva = mapaZonaActiva === zone ? null : zone;
+    document.getElementById('mapClearZone').classList.toggle('hidden', !mapaZonaActiva);
+    renderMapaRutas();
+}
+
+function renderMapaListado(stats) {
+    const list = document.getElementById('mapaRutasList');
+    const title = document.getElementById('mapaListSubtitle');
+    let entries = [];
+    if (mapaZonaActiva) {
+        title.textContent = mapaZonaActiva;
+        entries = stats[mapaZonaActiva] ? stats[mapaZonaActiva].orders : [];
+    } else {
+        title.textContent = 'Todas las zonas';
+        Object.values(stats).forEach(s => entries.push(...s.orders));
+    }
+
+    if (entries.length === 0) {
+        list.innerHTML = '<p class="text-on-surface-variant text-label-sm py-8 text-center">No hay rutas próximas registradas.</p>';
+        return;
+    }
+
+    list.innerHTML = entries.map(({ order, product }) => {
+        const statusStyle = order.status === 'pendiente' ? 'bg-surface-container-highest text-on-surface-variant' : 'bg-secondary-container text-on-secondary-container';
+        const itemsSummary = order.items.map(i => `${i.qty}x ${i.name}`).join(', ');
+        return `
+        <div class="bg-white rounded-xl p-4 border border-outline-variant/30">
+            <div class="flex justify-between items-start mb-2">
+                <div>
+                    <p class="font-bold text-primary">#${order.id.slice(-6)}</p>
+                    <p class="text-label-sm text-on-surface-variant">${product ? product.zone : 'Zona desconocida'} · ${product ? product.producerName : ''}</p>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase ${statusStyle}">${order.status}</span>
+            </div>
+            <p class="text-label-sm text-on-surface-variant mb-1">${itemsSummary}</p>
+            <p class="text-label-sm text-on-surface-variant">Cliente: ${order.buyerName}</p>
+        </div>`;
+    }).join('');
+}
+function renderAdminLogistics() {
+    const orders = getOrders().filter(o => o.status !== 'pendiente' || o.repartidorEmail);
+    const active = getOrders();
+    const list = document.getElementById('logisticaAdminList');
+    list.innerHTML = active.map(o => `
+        <div class="bg-white rounded-xl p-4 border border-outline-variant/30 flex justify-between items-center flex-wrap gap-2">
+            <div>
+                <p class="font-bold text-primary">#${o.id.slice(-6)} · ${o.buyerName}</p>
+                <p class="text-label-sm text-on-surface-variant">${o.repartidorEmail ? 'Repartidor: ' + o.repartidorEmail : 'Sin asignar'}</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase bg-surface-container-high text-on-surface-variant">${o.status}</span>
+        </div>
+    `).join('') || '<p class="text-on-surface-variant">No hay entregas registradas.</p>';
+}
+
+// BLOQUE REPARTIDOR: DISPONIBLES
+function renderAvailableDeliveries() {
+    const orders = getOrders();
+    const products = getProducts();
+    const pending = orders.filter(o => o.status === 'pendiente' && !o.repartidorEmail);
+    const container = document.getElementById('availableDeliveriesList');
+    const noAvailable = document.getElementById('noAvailable');
+
+    if (pending.length === 0) {
+        container.innerHTML = '';
+        noAvailable.classList.remove('hidden');
+        return;
+    }
+    noAvailable.classList.add('hidden');
+
+    container.innerHTML = pending.map(o => {
+        const firstItemProduct = products.find(p => p.id === o.items[0].id);
+        const origin = firstItemProduct ? `${firstItemProduct.producerName} · ${firstItemProduct.zone}` : 'Productor DACHI';
+        const itemsSummary = o.items.map(i => `${i.qty}x ${i.name}`).join(', ');
+        return `
+        <div class="glass-card border-l-4 border-l-secondary p-gutter rounded-[28px] shadow-forest hover:shadow-forest-active transition-all">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <span class="text-[10px] font-bold text-on-secondary-container bg-secondary-fixed px-3 py-1 rounded-full uppercase tracking-widest">Pedido</span>
+                    <h4 class="font-headline-sm mt-3 text-[20px]">#${o.id.slice(-6)}</h4>
+                </div>
+                <div class="text-right">
+                    <span class="block text-label-sm text-on-surface-variant mb-1">Pago</span>
+                    <span class="font-bold text-primary text-headline-sm">$${o.total.toFixed(2)}</span>
+                </div>
+            </div>
+            <div class="space-y-4 mb-8">
+                <div class="flex items-start gap-4 text-on-surface-variant bg-surface-container-low/30 p-3 rounded-xl">
+                    <span class="material-symbols-outlined text-primary mt-0.5">agriculture</span>
+                    <div><p class="font-label-md text-on-surface leading-tight">Origen</p><p class="text-[12px]">${origin}</p></div>
+                </div>
+                <div class="flex items-start gap-4 text-on-surface-variant bg-surface-container-low/30 p-3 rounded-xl">
+                    <span class="material-symbols-outlined text-primary mt-0.5">location_on</span>
+                    <div><p class="font-label-md text-on-surface leading-tight">Destino</p><p class="text-[12px]">${o.buyerName} (${o.buyerEmail})</p></div>
+                </div>
+                <div class="flex items-center gap-4 text-on-surface-variant p-3">
+                    <span class="material-symbols-outlined text-primary">inventory</span>
+                    <span class="font-label-md">${itemsSummary}</span>
+                </div>
+            </div>
+            <button class="w-full py-4 bg-primary text-white rounded-2xl font-label-md hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2" onclick="assignDelivery('${o.id}')">
+                <span class="material-symbols-outlined">add_circle</span> Asignarme esta entrega
+            </button>
+        </div>`;
+    }).join('');
+}
+function assignDelivery(orderId) {
+    const orders = getOrders();
+    const o = orders.find(x => x.id === orderId);
+    if (!o) return;
+    o.repartidorEmail = session.email;
+    o.status = 'en camino';
+    saveOrders(orders);
+    renderAvailableDeliveries();
+    renderActiveDelivery();
+}
+
+// BLOQUE REPARTIDOR: ACTIVA
+function renderActiveDelivery() {
+    const orders = getOrders();
+    const products = getProducts();
+    const active = orders.find(o => o.repartidorEmail === session.email && o.status === 'en camino');
+    const container = document.getElementById('activeDeliveryContainer');
+
+    if (!active) {
+        container.innerHTML = `
+        <div class="text-center py-12 px-6 bg-surface-container/30 rounded-[28px] border-2 border-dashed border-outline-variant">
+            <span class="material-symbols-outlined text-outline text-[48px] mb-4">task</span>
+            <p class="font-headline-sm text-outline-variant">Sin entregas activas</p>
+            <p class="text-label-md text-on-surface-variant/60">Selecciona una del listado para comenzar.</p>
+        </div>`;
+        return;
+    }
+
+    const firstItemProduct = products.find(p => p.id === active.items[0].id);
+    const origin = firstItemProduct ? `${firstItemProduct.producerName} · ${firstItemProduct.zone}` : 'Productor DACHI';
+    const itemsSummary = active.items.map(i => `${i.qty}x ${i.name}`).join(', ');
+
+    container.innerHTML = `
+        <div class="glass-card border-2 border-primary p-gutter rounded-[28px] shadow-forest-active relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4">
+                <span class="px-3 py-1 rounded-full bg-primary text-white text-[10px] font-bold uppercase tracking-widest">En curso</span>
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-14 h-14 bg-primary-fixed/40 rounded-2xl flex items-center justify-center shadow-inner">
+                    <span class="material-symbols-outlined text-primary text-[32px]">directions_bike</span>
+                </div>
+                <div>
+                    <h4 class="font-bold text-primary text-[20px]">#${active.id.slice(-6)}</h4>
+                    <p class="text-label-md text-on-surface-variant">Cliente: ${active.buyerName}</p>
+                </div>
+            </div>
+            <div class="bg-surface-container-low/30 p-5 rounded-2xl mb-4 border border-outline-variant/30">
+                <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Origen (recogida)</p>
+                <p class="font-body-md font-bold text-primary">${origin}</p>
+            </div>
+            <div class="bg-surface-container-low/30 p-5 rounded-2xl mb-4 border border-outline-variant/30">
+                <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Destino (entrega)</p>
+                <p class="font-body-md font-bold text-primary">${active.buyerName} — ${active.buyerEmail}</p>
+            </div>
+            <div class="bg-surface-container-low/30 p-5 rounded-2xl mb-8 border border-outline-variant/30">
+                <p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Contenido del pedido</p>
+                <p class="font-body-md font-bold text-primary">${itemsSummary}</p>
+            </div>
+            <button class="w-full py-3.5 bg-primary text-white rounded-2xl font-label-md shadow-lg shadow-primary/20 hover:opacity-90 transition-all flex items-center justify-center gap-2" onclick="confirmDelivery('${active.id}')">
+                <span class="material-symbols-outlined text-[20px]">check</span> Confirmar Entrega
+            </button>
+        </div>`;
+}
+function confirmDelivery(orderId) {
+    const orders = getOrders();
+    const o = orders.find(x => x.id === orderId);
+    if (!o) return;
+    o.status = 'entregado';
+    saveOrders(orders);
+    renderActiveDelivery();
+    renderHistory();
+}
+
+// BLOQUE REPARTIDOR: HISTORIAL
+function renderHistory() {
+    const orders = getOrders().filter(o => o.repartidorEmail === session.email && o.status === 'entregado');
+    const list = document.getElementById('historyList');
+    list.innerHTML = orders.slice().reverse().map(o => `
+        <div class="bg-white rounded-xl p-4 border border-outline-variant/30 flex justify-between items-center">
+            <div>
+                <p class="font-bold text-primary">#${o.id.slice(-6)} · ${o.buyerName}</p>
+                <p class="text-label-sm text-on-surface-variant">${o.date}</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase bg-primary-fixed/60 text-on-primary-fixed">Entregado</span>
+        </div>
+    `).join('') || '<p class="text-on-surface-variant">Aún no has completado entregas.</p>';
+}
+
+// BLOQUE DISTRIBUIDOR: DASHBOARD
+function renderDistribuidorDashboard() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const orders = getOrders().filter(o => o.status === 'pendiente' || o.status === 'en camino');
+    const producerEmails = new Set(products.map(p => p.producerEmail));
+    const valorInventario = products.reduce((a, p) => a + (parseFloat(p.price) * p.quantity), 0);
+
+    document.getElementById('kpiInventario').textContent = products.length;
+    document.getElementById('kpiProductores').textContent = producerEmails.size;
+    document.getElementById('kpiPedidosProceso').textContent = orders.length;
+    document.getElementById('kpiValorInventario').textContent = `$${valorInventario.toFixed(2)}`;
+
+    const statusColor = { pendiente: 'bg-surface-container-highest/80 text-on-surface-variant', 'en camino': 'bg-secondary-container/80 text-on-secondary-container' };
+    const tbody = document.getElementById('distribuidorOrdersBody');
+    tbody.innerHTML = orders.slice().reverse().slice(0, 8).map(o => {
+        const firstProduct = getProducts().find(p => p.id === o.items[0].id);
+        return `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-primary">#${o.id.slice(-6)}</td>
+            <td class="px-gutter py-5">${firstProduct ? firstProduct.zone : '—'}</td>
+            <td class="px-gutter py-5">${o.buyerName}</td>
+            <td class="px-gutter py-5"><span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase ${statusColor[o.status] || statusColor.pendiente}">${o.status}</span></td>
+            <td class="px-gutter py-5 font-bold text-primary">$${o.total.toFixed(2)}</td>
+        </tr>`;
+    }).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="5">Sin pedidos en proceso.</td></tr>';
+}
+
+// BLOQUE DISTRIBUIDOR: INVENTARIO
+function renderInventario() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const tbody = document.getElementById('inventarioBody');
+    tbody.innerHTML = products.map(p => `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-on-surface">${p.name}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.producerName || '—'}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.zone || '—'}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.category || '—'}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${p.quantity}</td>
+            <td class="px-gutter py-5 font-bold text-primary">$${parseFloat(p.price).toFixed(2)}</td>
+            <td class="px-gutter py-5 font-bold text-primary">$${(parseFloat(p.price) * p.quantity).toFixed(2)}</td>
+        </tr>
+    `).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="7">No hay inventario disponible.</td></tr>';
+}
+
+// BLOQUE DISTRIBUIDOR: PRODUCTORES
+function renderProductores() {
+    const products = getProducts().filter(p => p.status === 'active');
+    const byProducer = {};
+    products.forEach(p => {
+        const key = p.producerEmail || 'desconocido';
+        if (!byProducer[key]) byProducer[key] = { nombre: p.producerName || 'Productor', count: 0, unidades: 0 };
+        byProducer[key].count++;
+        byProducer[key].unidades += p.quantity;
+    });
+    const tbody = document.getElementById('productoresBody');
+    tbody.innerHTML = Object.entries(byProducer).map(([email, d]) => `
+        <tr class="table-row-hover transition-colors">
+            <td class="px-gutter py-5 font-bold text-on-surface">${d.nombre}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${email}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${d.count}</td>
+            <td class="px-gutter py-5 text-on-surface-variant">${d.unidades}</td>
+        </tr>
+    `).join('') || '<tr><td class="px-gutter py-5 text-on-surface-variant" colspan="4">No hay productores con inventario activo.</td></tr>';
+}
+
+// BLOQUE DISTRIBUIDOR: PEDIDOS EN MOVIMIENTO
+function renderPedidosDistribuidor() {
+    const orders = getOrders().filter(o => o.status === 'pendiente' || o.status === 'en camino');
+    const products = getProducts();
+    const container = document.getElementById('pedidosDistribuidorList');
+    const noPedidos = document.getElementById('noPedidosDistribuidor');
+
+    if (orders.length === 0) {
+        container.innerHTML = '';
+        noPedidos.classList.remove('hidden');
+        return;
+    }
+    noPedidos.classList.add('hidden');
+
+    container.innerHTML = orders.slice().reverse().map(o => {
+        const firstProduct = products.find(p => p.id === o.items[0].id);
+        const origin = firstProduct ? `${firstProduct.producerName} · ${firstProduct.zone}` : 'Productor DACHI';
+        const itemsSummary = o.items.map(i => `${i.qty}x ${i.name}`).join(', ');
+        const statusStyle = o.status === 'pendiente' ? 'bg-surface-container-highest text-on-surface-variant' : 'bg-secondary-container text-on-secondary-container';
+        return `
+        <div class="glass-card border-l-4 border-l-primary p-gutter rounded-[28px] shadow-forest">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <span class="text-[10px] font-bold text-on-secondary-container bg-secondary-fixed px-3 py-1 rounded-full uppercase tracking-widest">Pedido</span>
+                    <h4 class="font-headline-sm mt-3 text-[20px] text-primary">#${o.id.slice(-6)}</h4>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase ${statusStyle}">${o.status}</span>
+            </div>
+            <div class="space-y-2 text-label-sm text-on-surface-variant">
+                <p><span class="font-bold text-on-surface">Origen:</span> ${origin}</p>
+                <p><span class="font-bold text-on-surface">Destino:</span> ${o.buyerName}</p>
+                <p><span class="font-bold text-on-surface">Contenido:</span> ${itemsSummary}</p>
+                <p><span class="font-bold text-on-surface">Total:</span> $${o.total.toFixed(2)}</p>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+window.onload = init;
+</script>
+</body>
+</html>

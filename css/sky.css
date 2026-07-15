@@ -1,0 +1,18 @@
+/* BLOQUE SIDEBAR - NAV LINKS */
+#sidebarNav .nav-link { background: transparent !important; color: rgba(255, 255, 255, 0.65) !important; padding: 9px 16px !important; margin: 0 8px; border-left: none; border-radius: 10px !important; box-shadow: none !important; }
+#sidebarNav .nav-link:hover { background: rgba(255, 255, 255, 0.06) !important; color: white !important; }
+#sidebarNav .nav-link.nav-item-active { background: rgba(255, 255, 255, 0.14) !important; color: white !important; box-shadow: none !important; }
+
+/* BLOQUE MENU FLOTANTE (usuario/notificaciones) */
+.user-menu { transform: translateY(-10px); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.user-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+/* BLOQUE TARJETA GLASS */
+.glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+
+/* BLOQUE TRANSICION SIDEBAR */
+.sidebar-transition { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* BLOQUE SCROLLBAR PERSONALIZADO */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
