@@ -15,9 +15,23 @@ class AdminUsuarioController implements AdminControllerInterface
         $this->session = $session;
         $accion = $get['accion'] ?? ($post['accion'] ?? 'dashboard');
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $accion === 'cambiar_estado_producto') {
-            $this->ajaxCambiarEstadoProducto($post);
-            return;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($accion === 'cambiar_estado_producto') {
+                $this->ajaxCambiarEstadoProducto($post);
+                return;
+            }
+            if ($accion === 'crear_usuario') {
+                $this->ajaxCrearUsuario($post);
+                return;
+            }
+            if ($accion === 'editar_usuario') {
+                $this->ajaxEditarUsuario($post);
+                return;
+            }
+            if ($accion === 'eliminar_usuario') {
+                $this->ajaxEliminarUsuario($post);
+                return;
+            }
         }
 
         if ($accion === 'ver_productor') {
@@ -101,6 +115,37 @@ class AdminUsuarioController implements AdminControllerInterface
         }
 
         $resultado = $this->service->cambiarEstadoProducto($id, $estado, $motivo);
+        echo json_encode($resultado);
+    }
+
+    private function ajaxCrearUsuario(array $post): void
+    {
+        header('Content-Type: application/json');
+        $resultado = $this->service->crearUsuario($post);
+        echo json_encode($resultado);
+    }
+
+    private function ajaxEditarUsuario(array $post): void
+    {
+        header('Content-Type: application/json');
+        $id = (int)($post['id'] ?? 0);
+        if ($id <= 0) {
+            echo json_encode(['status' => 'error', 'message' => 'ID de usuario inválido']);
+            return;
+        }
+        $resultado = $this->service->actualizarUsuario($id, $post);
+        echo json_encode($resultado);
+    }
+
+    private function ajaxEliminarUsuario(array $post): void
+    {
+        header('Content-Type: application/json');
+        $id = (int)($post['id'] ?? 0);
+        if ($id <= 0) {
+            echo json_encode(['status' => 'error', 'message' => 'ID de usuario inválido']);
+            return;
+        }
+        $resultado = $this->service->eliminarUsuario($id);
         echo json_encode($resultado);
     }
 

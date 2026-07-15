@@ -11,7 +11,7 @@ class AdminUsuarioService
 
     public function obtenerProductores(string $busqueda = ''): array
     {
-        $sql = "SELECT u.id, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
+        $sql = "SELECT u.id, u.id_rol, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
                        u.fecha_registro, u.ubicacion_finca, u.ultimo_acceso,
                        (SELECT COUNT(*) FROM productos p WHERE p.id_usuario = u.id) AS total_productos
                 FROM usuarios u
@@ -193,6 +193,113 @@ class AdminUsuarioService
         }
 
         return $stats;
+    }
+
+    public function crearUsuario(array $data): array
+    {
+        $idRol = (int)($data['id_rol'] ?? 0);
+        $nombre = trim($data['nombre'] ?? '');
+        $apellido = trim($data['apellido'] ?? '');
+        $correo = trim($data['correo'] ?? '');
+        $telefono = trim($data['telefono'] ?? '');
+        $password = $data['password'] ?? '';
+
+        if ($idRol < 1 || $idRol > 4) {
+            return ['status' => 'error', 'message' => 'Rol inválido'];
+        }
+        if ($nombre === '' || $apellido === '' || $correo === '' || $password === '') {
+            return ['status' => 'error', 'message' => 'Campos obligatorios: nombre, apellido, correo, contraseña'];
+        }
+        if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            return ['status' => 'error', 'message' => 'Correo electrónico inválido'];
+        }
+
+        $check = $this->conn->prepare("SELECT id FROM usuarios WHERE correo = ?");
+        $check->bind_param('s', $correo);
+        $check->execute();
+        if ($check->get_result()->fetch_assoc()) {
+            $check->close();
+            return ['status' => 'error', 'message' => 'El correo ya está registrado'];
+        }
+        $check->close();
+
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->conn->prepare(
+            "INSERT INTO usuarios (id_rol, nombre, apellido, correo, contraseña, telefono, estado)
+             VALUES (?, ?, ?, ?, ?, ?, 'activo')"
+        );
+        $stmt->bind_param('isssss', $idRol, $nombre, $apellido, $correo, $hash, $telefono);
+        $stmt->execute();
+        $id = $stmt->insert_id;
+        $stmt->close();
+
+        if ($id <= 0) {
+            return ['status' => 'error', 'message' => 'Error al crear el usuario'];
+        }
+
+        return ['status' => 'success', 'message' => 'Usuario creado correctamente', 'id' => $id];
+    }
+
+    public function actualizarUsuario(int $id, array $data): array
+    {
+        $nombre = trim($data['nombre'] ?? '');
+        $apellido = trim($data['apellido'] ?? '');
+        $correo = trim($data['correo'] ?? '');
+        $telefono = trim($data['telefono'] ?? '');
+        $password = $data['password'] ?? '';
+
+        if ($nombre === '' || $apellido === '' || $correo === '') {
+            return ['status' => 'error', 'message' => 'Campos obligatorios: nombre, apellido, correo'];
+        }
+        if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            return ['status' => 'error', 'message' => 'Correo electrónico inválido'];
+        }
+
+        $check = $this->conn->prepare("SELECT id FROM usuarios WHERE correo = ? AND id != ?");
+        $check->bind_param('si', $correo, $id);
+        $check->execute();
+        if ($check->get_result()->fetch_assoc()) {
+            $check->close();
+            return ['status' => 'error', 'message' => 'El correo ya está en uso por otro usuario'];
+        }
+        $check->close();
+
+        if ($password !== '') {
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $this->conn->prepare(
+                "UPDATE usuarios SET nombre=?, apellido=?, correo=?, telefono=?, contraseña=? WHERE id=?"
+            );
+            $stmt->bind_param('sssssi', $nombre, $apellido, $correo, $telefono, $hash, $id);
+        } else {
+            $stmt = $this->conn->prepare(
+                "UPDATE usuarios SET nombre=?, apellido=?, correo=?, telefono=? WHERE id=?"
+            );
+            $stmt->bind_param('ssssi', $nombre, $apellido, $correo, $telefono, $id);
+        }
+        $stmt->execute();
+        $afectado = $stmt->affected_rows;
+        $stmt->close();
+
+        if ($afectado === 0) {
+            return ['status' => 'error', 'message' => 'Usuario no encontrado o sin cambios'];
+        }
+
+        return ['status' => 'success', 'message' => 'Usuario actualizado correctamente'];
+    }
+
+    public function eliminarUsuario(int $id): array
+    {
+        $stmt = $this->conn->prepare("UPDATE usuarios SET estado='inactivo' WHERE id=?");
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $afectado = $stmt->affected_rows;
+        $stmt->close();
+
+        if ($afectado === 0) {
+            return ['status' => 'error', 'message' => 'Usuario no encontrado'];
+        }
+
+        return ['status' => 'success', 'message' => 'Usuario desactivado correctamente'];
     }
 
     public function obtenerHistorialActividad(int $idUsuario): array

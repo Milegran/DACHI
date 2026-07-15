@@ -1046,5 +1046,178 @@ function dismissAllNotifications() {
 .animate-slide-up { animation: slideUp 0.3s ease-out; }
 </style>
 
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[400] hidden items-center justify-center p-4 modal-overlay" id="createUserModal">
+    <div class="bg-white rounded-[24px] w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h3 class="font-headline-sm text-headline-sm text-primary" id="createUserTitle">Nuevo Usuario</h3>
+                <p class="text-body-sm text-secondary mt-1">Complete los datos del nuevo usuario.</p>
+            </div>
+            <button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeCreateUserModal()" type="button">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form class="space-y-stack-md" id="createUserForm" onsubmit="return false;">
+            <input type="hidden" name="accion" value="crear_usuario" />
+            <input type="hidden" name="id_rol" id="createUserIdRol" value="2" />
+            <input type="hidden" name="id" id="createUserEditId" value="" />
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Nombre <span class="text-error">*</span></label>
+                    <input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="createUserName" required type="text" />
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Apellido <span class="text-error">*</span></label>
+                    <input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="createUserApellido" required type="text" />
+                </div>
+            </div>
+            <div>
+                <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Correo electrónico <span class="text-error">*</span></label>
+                <input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="createUserCorreo" required type="email" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Teléfono</label>
+                    <input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="createUserTelefono" type="tel" />
+                </div>
+                <div>
+                    <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">Rol <span class="text-error">*</span></label>
+                    <select class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="createUserRol">
+                        <option value="2">Productor / Agricultor</option>
+                        <option value="3">Logístico / Transportista</option>
+                        <option value="1">Consumidor</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 ml-1">
+                    Contraseña <span class="text-error" id="passwordRequired">*</span>
+                    <span class="text-xs text-on-surface-variant" id="passwordOptional" style="display:none">(dejar vacío para mantener)</span>
+                </label>
+                <input class="w-full px-4 py-3 rounded-xl border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none bg-white" id="createUserPassword" type="password" />
+            </div>
+            <div class="hidden p-3 rounded-xl bg-error/20 text-error text-sm font-medium" id="createUserError"></div>
+            <button class="w-full bg-primary text-white py-4 rounded-xl font-label-bold text-label-bold hover:bg-primary-dark transition-all active:scale-[0.98]" type="submit" id="createUserSubmitBtn">CREAR USUARIO</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function openCreateUserModal(defaultRol) {
+    document.getElementById('createUserTitle').textContent = 'Nuevo Usuario';
+    document.getElementById('createUserForm').accion.value = 'crear_usuario';
+    document.getElementById('createUserEditId').value = '';
+    document.getElementById('createUserIdRol').value = defaultRol || 2;
+    document.getElementById('createUserRol').value = defaultRol || 2;
+    document.getElementById('createUserName').value = '';
+    document.getElementById('createUserApellido').value = '';
+    document.getElementById('createUserCorreo').value = '';
+    document.getElementById('createUserTelefono').value = '';
+    document.getElementById('createUserPassword').value = '';
+    document.getElementById('createUserPassword').required = true;
+    document.getElementById('passwordRequired').style.display = 'inline';
+    document.getElementById('passwordOptional').style.display = 'none';
+    document.getElementById('createUserError').classList.add('hidden');
+    document.getElementById('createUserSubmitBtn').textContent = 'CREAR USUARIO';
+    document.getElementById('createUserRol').disabled = false;
+    document.getElementById('createUserModal').classList.remove('hidden');
+    document.getElementById('createUserModal').classList.add('flex');
+}
+
+function openEditUserModal(data) {
+    document.getElementById('createUserTitle').textContent = 'Editar Usuario';
+    document.getElementById('createUserForm').accion.value = 'editar_usuario';
+    document.getElementById('createUserEditId').value = data.id;
+    document.getElementById('createUserIdRol').value = data.id_rol || 2;
+    document.getElementById('createUserRol').value = data.id_rol || 2;
+    document.getElementById('createUserName').value = data.nombre || '';
+    document.getElementById('createUserApellido').value = data.apellido || '';
+    document.getElementById('createUserCorreo').value = data.correo || '';
+    document.getElementById('createUserTelefono').value = data.telefono || '';
+    document.getElementById('createUserPassword').value = '';
+    document.getElementById('createUserPassword').required = false;
+    document.getElementById('passwordRequired').style.display = 'none';
+    document.getElementById('passwordOptional').style.display = 'inline';
+    document.getElementById('createUserError').classList.add('hidden');
+    document.getElementById('createUserSubmitBtn').textContent = 'GUARDAR CAMBIOS';
+    document.getElementById('createUserRol').disabled = true;
+    document.getElementById('createUserModal').classList.remove('hidden');
+    document.getElementById('createUserModal').classList.add('flex');
+}
+
+function closeCreateUserModal() {
+    document.getElementById('createUserModal').classList.add('hidden');
+    document.getElementById('createUserModal').classList.remove('flex');
+}
+
+document.getElementById('createUserForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    var id = document.getElementById('createUserEditId').value;
+    if (id) formData.set('id', id);
+    formData.set('id_rol', document.getElementById('createUserRol').value);
+    formData.set('nombre', document.getElementById('createUserName').value.trim());
+    formData.set('apellido', document.getElementById('createUserApellido').value.trim());
+    formData.set('correo', document.getElementById('createUserCorreo').value.trim());
+    formData.set('telefono', document.getElementById('createUserTelefono').value.trim());
+    formData.set('password', document.getElementById('createUserPassword').value);
+
+    var submitBtn = document.getElementById('createUserSubmitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Guardando...';
+
+    fetch('admin.php', { method: 'POST', body: formData })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            submitBtn.disabled = false;
+            if (data.status === 'success') {
+                storeNotification(data.message, 'success');
+                closeCreateUserModal();
+                location.reload();
+            } else {
+                var errBox = document.getElementById('createUserError');
+                errBox.textContent = data.message || 'Error al guardar';
+                errBox.classList.remove('hidden');
+                submitBtn.textContent = id ? 'GUARDAR CAMBIOS' : 'CREAR USUARIO';
+            }
+        })
+        .catch(function() {
+            submitBtn.disabled = false;
+            submitBtn.textContent = id ? 'GUARDAR CAMBIOS' : 'CREAR USUARIO';
+            var errBox = document.getElementById('createUserError');
+            errBox.textContent = 'Error de conexión';
+            errBox.classList.remove('hidden');
+        });
+});
+
+function openDeleteUserModal(id, nombre) {
+    openConfirmModal(
+        'Eliminar usuario',
+        '¿Estás seguro de desactivar a ' + nombre + '?',
+        'warning', 'bg-error/20 text-error',
+        'ELIMINAR', 'bg-error hover:bg-red-700',
+        function() {
+            closeConfirmModal();
+            var formData = new FormData();
+            formData.append('accion', 'eliminar_usuario');
+            formData.append('id', id);
+            fetch('admin.php', { method: 'POST', body: formData })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.status === 'success') {
+                        storeNotification(data.message, 'success');
+                        location.reload();
+                    } else {
+                        storeNotification(data.message || 'Error al eliminar', 'error');
+                    }
+                })
+                .catch(function() {
+                    storeNotification('Error de conexión', 'error');
+                });
+        }
+    );
+}
+</script>
+
 </body>
 </html>

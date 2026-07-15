@@ -11,7 +11,7 @@ class AdminLogisticaService
 
     public function obtenerLogisticos(string $busqueda = ''): array
     {
-        $sql = "SELECT u.id, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
+        $sql = "SELECT u.id, u.id_rol, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
                        u.fecha_registro, u.ultimo_acceso,
                        (SELECT COUNT(*) FROM entregas e WHERE e.id_repartidor = u.id) AS total_entregas
                 FROM usuarios u

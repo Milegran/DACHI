@@ -11,7 +11,7 @@ class AdminConsumidorService
 
     public function obtenerConsumidores(string $busqueda = ''): array
     {
-        $sql = "SELECT u.id, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
+        $sql = "SELECT u.id, u.id_rol, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
                        u.fecha_registro, u.ultimo_acceso,
                        (SELECT COUNT(*) FROM pedidos p WHERE p.id_consumer = u.id) AS total_compras,
                        (SELECT COALESCE(SUM(p.total_compra), 0) FROM pedidos p WHERE p.id_consumer = u.id) AS monto_total

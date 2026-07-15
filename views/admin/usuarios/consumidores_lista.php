@@ -11,6 +11,10 @@ $montoTotal = array_sum(array_column($consumidores, 'monto_total'));
         <p class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Gestión de Usuarios</p>
         <h2 class="font-headline-lg text-headline-lg text-primary">Consumidores</h2>
     </div>
+    <button onclick="openCreateUserModal(1)" class="px-5 py-2.5 bg-primary text-white rounded-full font-semibold hover:bg-primary-dark transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">add</span>
+        Nuevo Usuario
+    </button>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-stack-lg">
@@ -114,11 +118,23 @@ $montoTotal = array_sum(array_column($consumidores, 'monto_total'));
                                 </span>
                             </td>
                             <td class="px-6 py-stack-md text-center">
-                                <a href="admin.php?accion=ver_consumidor&id=<?= (int)$c['id'] ?>"
-                                    class="px-4 py-1.5 rounded-lg bg-surface-container text-secondary font-label-bold text-label-sm hover:bg-primary hover:text-white transition-all inline-flex items-center gap-1.5">
-                                    <span class="material-symbols-outlined text-[18px]">visibility</span>
-                                    Ver perfil
-                                </a>
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <a href="admin.php?accion=ver_consumidor&id=<?= (int)$c['id'] ?>"
+                                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-primary hover:text-white transition-all"
+                                        title="Ver perfil">
+                                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                    </a>
+                                    <button onclick='openEditUserModal(<?= json_encode($c, JSON_HEX_TAG | JSON_HEX_AMP) ?>)'
+                                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-primary hover:text-white transition-all"
+                                        title="Editar usuario">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </button>
+                                    <button onclick="openDeleteUserModal(<?= (int)$c['id'] ?>, '<?= htmlspecialchars(($c['nombre'] ?? '') . ' ' . ($c['apellido'] ?? ''), ENT_QUOTES, 'UTF-8') ?>')"
+                                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-error hover:text-white transition-all"
+                                        title="Eliminar usuario">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>
