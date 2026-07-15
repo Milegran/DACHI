@@ -1192,10 +1192,10 @@ document.getElementById('createUserForm').addEventListener('submit', function(e)
 
 function openDeleteUserModal(id, nombre) {
     openConfirmModal(
-        'Eliminar usuario',
-        '¿Estás seguro de desactivar a ' + nombre + '?',
-        'warning', 'bg-error/20 text-error',
-        'ELIMINAR', 'bg-error hover:bg-red-700',
+        'Desactivar usuario',
+        '¿Estás seguro de desactivar a ' + nombre + '? El usuario quedará inactivo y no podrá acceder a la plataforma.',
+        'block', 'bg-error/20 text-error',
+        'DESACTIVAR', 'bg-error hover:bg-red-700',
         function() {
             closeConfirmModal();
             var formData = new FormData();
@@ -1208,7 +1208,7 @@ function openDeleteUserModal(id, nombre) {
                         storeNotification(data.message, 'success');
                         location.reload();
                     } else {
-                        storeNotification(data.message || 'Error al eliminar', 'error');
+                        storeNotification(data.message || 'Error al desactivar', 'error');
                     }
                 })
                 .catch(function() {

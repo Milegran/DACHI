@@ -9,7 +9,7 @@ class AdminLogisticaService
         $this->conn = $conn;
     }
 
-    public function obtenerLogisticos(string $busqueda = ''): array
+    public function obtenerLogisticos(string $busqueda = '', bool $soloInactivos = false): array
     {
         $sql = "SELECT u.id, u.id_rol, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
                        u.fecha_registro, u.ultimo_acceso,
@@ -17,13 +17,17 @@ class AdminLogisticaService
                 FROM usuarios u
                 WHERE u.id_rol = 3";
 
+        if ($soloInactivos) {
+            $sql .= " AND u.estado = 'inactivo'";
+        }
+
         if ($busqueda !== '') {
             $busqueda = '%' . $busqueda . '%';
             $sql .= " AND (u.nombre LIKE ? OR u.apellido LIKE ? OR u.correo LIKE ?)";
-            $stmt = $this->conn->prepare($sql . " ORDER BY u.id DESC");
+            $stmt = $this->conn->prepare($sql . " ORDER BY u.estado = 'inactivo' ASC, u.id DESC");
             $stmt->bind_param('sss', $busqueda, $busqueda, $busqueda);
         } else {
-            $stmt = $this->conn->prepare($sql . " ORDER BY u.id DESC");
+            $stmt = $this->conn->prepare($sql . " ORDER BY u.estado = 'inactivo' ASC, u.id DESC");
         }
 
         $stmt->execute();

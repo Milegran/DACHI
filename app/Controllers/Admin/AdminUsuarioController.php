@@ -44,7 +44,7 @@ class AdminUsuarioController implements AdminControllerInterface
             return;
         }
 
-        $this->listarProductores($get['busqueda'] ?? '');
+        $this->listarProductores($get['busqueda'] ?? '', ($get['inactivos'] ?? '') === '1');
     }
 
     public function renderListaProductores(string $busqueda = ''): void
@@ -78,13 +78,14 @@ class AdminUsuarioController implements AdminControllerInterface
         ]);
     }
 
-    private function listarProductores(string $busqueda): void
+    private function listarProductores(string $busqueda, bool $soloInactivos = false): void
     {
-        $productores = $this->service->obtenerProductores($busqueda);
+        $productores = $this->service->obtenerProductores($busqueda, $soloInactivos);
         $this->renderView('admin/usuarios/productores_lista', [
             'productores' => $productores,
             'busqueda' => $busqueda,
-            'submodulo' => 'productores'
+            'submodulo' => 'productores',
+            'mostrandoInactivos' => $soloInactivos
         ]);
     }
 

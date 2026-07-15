@@ -24,16 +24,17 @@ class AdminLogisticaController implements AdminControllerInterface
             return;
         }
 
-        $this->listarLogisticos($get['busqueda'] ?? '');
+        $this->listarLogisticos($get['busqueda'] ?? '', ($get['inactivos'] ?? '') === '1');
     }
 
-    private function listarLogisticos(string $busqueda): void
+    private function listarLogisticos(string $busqueda, bool $soloInactivos = false): void
     {
-        $logisticos = $this->service->obtenerLogisticos($busqueda);
+        $logisticos = $this->service->obtenerLogisticos($busqueda, $soloInactivos);
         $this->renderView('admin/usuarios/logistica_lista', [
             'logisticos' => $logisticos,
             'busqueda' => $busqueda,
-            'submodulo' => 'logistica'
+            'submodulo' => 'logistica',
+            'mostrandoInactivos' => $soloInactivos
         ]);
     }
 

@@ -62,11 +62,16 @@ $montoTotal = array_sum(array_column($consumidores, 'monto_total'));
             Buscar
         </button>
         <?php if (!empty($busqueda)): ?>
-            <a href="admin.php?accion=listar_consumidores" class="px-4 py-2.5 rounded-full border border-outline-variant text-muted hover:bg-surface-container-low transition-colors flex items-center gap-1">
+            <a href="admin.php?accion=listar_consumidores<?= ($mostrandoInactivos ?? false) ? '&inactivos=1' : '' ?>" class="px-4 py-2.5 rounded-full border border-outline-variant text-muted hover:bg-surface-container-low transition-colors flex items-center gap-1">
                 <span class="material-symbols-outlined text-[18px]">close</span>
                 Limpiar
             </a>
         <?php endif; ?>
+        <a href="admin.php?accion=listar_consumidores<?= ($mostrandoInactivos ?? false) ? '' : '&inactivos=1' ?>"
+            class="px-4 py-2.5 rounded-full border transition-all flex items-center gap-1.5 text-sm font-semibold <?= ($mostrandoInactivos ?? false) ? 'bg-primary text-white border-primary' : 'border-outline-variant text-secondary hover:bg-surface-container-low' ?>">
+            <span class="material-symbols-outlined text-[18px]">block</span>
+            Inactivos
+        </a>
     </div>
 </form>
 
@@ -131,8 +136,8 @@ $montoTotal = array_sum(array_column($consumidores, 'monto_total'));
                                     </button>
                                     <button onclick="openDeleteUserModal(<?= (int)$c['id'] ?>, '<?= htmlspecialchars(($c['nombre'] ?? '') . ' ' . ($c['apellido'] ?? ''), ENT_QUOTES, 'UTF-8') ?>')"
                                         class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-error hover:text-white transition-all"
-                                        title="Eliminar usuario">
-                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                        title="Desactivar usuario">
+                                        <span class="material-symbols-outlined text-[18px]">block</span>
                                     </button>
                                 </div>
                             </td>

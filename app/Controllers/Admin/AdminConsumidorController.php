@@ -20,16 +20,17 @@ class AdminConsumidorController implements AdminControllerInterface
             return;
         }
 
-        $this->listarConsumidores($get['busqueda'] ?? '');
+        $this->listarConsumidores($get['busqueda'] ?? '', ($get['inactivos'] ?? '') === '1');
     }
 
-    private function listarConsumidores(string $busqueda): void
+    private function listarConsumidores(string $busqueda, bool $soloInactivos = false): void
     {
-        $consumidores = $this->service->obtenerConsumidores($busqueda);
+        $consumidores = $this->service->obtenerConsumidores($busqueda, $soloInactivos);
         $this->renderView('admin/usuarios/consumidores_lista', [
             'consumidores' => $consumidores,
             'busqueda' => $busqueda,
-            'submodulo' => 'consumidores'
+            'submodulo' => 'consumidores',
+            'mostrandoInactivos' => $soloInactivos
         ]);
     }
 

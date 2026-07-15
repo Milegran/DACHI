@@ -9,7 +9,7 @@ class AdminUsuarioService
         $this->conn = $conn;
     }
 
-    public function obtenerProductores(string $busqueda = ''): array
+    public function obtenerProductores(string $busqueda = '', bool $soloInactivos = false): array
     {
         $sql = "SELECT u.id, u.id_rol, u.nombre, u.apellido, u.correo, u.telefono, u.estado,
                        u.fecha_registro, u.ubicacion_finca, u.ultimo_acceso,
@@ -17,13 +17,17 @@ class AdminUsuarioService
                 FROM usuarios u
                 WHERE u.id_rol = 2";
 
+        if ($soloInactivos) {
+            $sql .= " AND u.estado = 'inactivo'";
+        }
+
         if ($busqueda !== '') {
             $busqueda = '%' . $busqueda . '%';
             $sql .= " AND (u.nombre LIKE ? OR u.apellido LIKE ? OR u.correo LIKE ?)";
-            $stmt = $this->conn->prepare($sql . " ORDER BY u.id DESC");
+            $stmt = $this->conn->prepare($sql . " ORDER BY u.estado = 'inactivo' ASC, u.id DESC");
             $stmt->bind_param('sss', $busqueda, $busqueda, $busqueda);
         } else {
-            $stmt = $this->conn->prepare($sql . " ORDER BY u.id DESC");
+            $stmt = $this->conn->prepare($sql . " ORDER BY u.estado = 'inactivo' ASC, u.id DESC");
         }
 
         $stmt->execute();
@@ -296,10 +300,10 @@ class AdminUsuarioService
         $stmt->close();
 
         if ($afectado === 0) {
-            return ['status' => 'error', 'message' => 'Usuario no encontrado'];
-        }
+        return ['status' => 'error', 'message' => 'Usuario no encontrado'];
+    }
 
-        return ['status' => 'success', 'message' => 'Usuario desactivado correctamente'];
+    return ['status' => 'success', 'message' => 'Usuario desactivado correctamente. Ya no podrá acceder a la plataforma.'];
     }
 
     public function obtenerHistorialActividad(int $idUsuario): array
