@@ -30,20 +30,14 @@ $conn->close();
     <link href="../../css/dachi-brand.css" rel="stylesheet" />
     <link href="../../css/dachi-botanical.css" rel="stylesheet" />
 </head>
-<body class="dachi-app bg-background text-on-background font-body-md min-h-screen glass-container">
+<body class="dachi-app bg-background text-on-background font-body-md min-h-screen glass-container flex flex-col">
 <?php require_once __DIR__ . '/producer_layout_start.php'; ?>
-            <header class="mb-8 flex items-center justify-between rounded-2xl border border-[#e1e3e4] bg-white p-6 shadow-sm">
                 <div>
-                    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#404942]">Bienvenido</p>
+                    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#404942]">Le damos la Bienvenida <?= htmlspecialchars(ucfirst($contexto['usuario']['nombre'] ?? $contexto['nombre'] ?? 'Productor'), ENT_QUOTES, 'UTF-8') ?></p>
                     <h2 class="text-3xl font-bold text-[#004528]">
                         <?= htmlspecialchars(($contexto['usuario']['nombre'] ?? 'Productor') . ' ' . ($contexto['usuario']['apellido'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
                     </h2>
-                    <p class="mt-1 text-[#506856]">Cuenta activa: <?= htmlspecialchars(ucfirst($contexto['rolActual']), ENT_QUOTES, 'UTF-8') ?></p>
                 </div>
-                <div class="rounded-full border border-[#004528] bg-[#f3f4f5] px-4 py-2 text-sm font-semibold text-[#004528]">
-                    <?= htmlspecialchars($contexto['usuario']['correo'] ?? 'correo@dachi.com', ENT_QUOTES, 'UTF-8') ?>
-                </div>
-            </header>
 
             <section class="mb-8 grid gap-4 md:grid-cols-4">
                 <div class="rounded-2xl border border-[#e1e3e4] bg-white p-5 shadow-sm">
