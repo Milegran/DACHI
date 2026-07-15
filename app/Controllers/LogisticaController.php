@@ -117,7 +117,7 @@ class LogisticaController implements LogisticaControllerInterface
         echo 'ok';
     }
 
-    //BLOQUE DATOS PEDIDOS (con estado_detallado real y datos completos para el detalle)
+    //BLOQUE DATOS PEDIDOS 
     public function obtenerPedidos()
     {
         $pedidos = [];
