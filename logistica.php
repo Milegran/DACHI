@@ -176,6 +176,23 @@ $ctrl = new LogisticaAuditDecorator(new LogisticaAuthDecorator($ctrlBase), $conn
 // BLOQUE ACCIONES 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
     header('Content-Type: text/plain');
+
+    // BLOQUE PERFIL
+    if ($_POST['accion'] === 'guardar_perfil') {
+        $nombre = trim($_POST['nombre'] ?? '');
+        $apellido = trim($_POST['apellido'] ?? '');
+        $telefono = trim($_POST['telefono'] ?? '');
+        $stmt = $conn->prepare("UPDATE usuarios SET nombre=?, apellido=?, telefono=? WHERE id=?");
+        $stmt->bind_param('sssi', $nombre, $apellido, $telefono, $usuarioActual['id']);
+        $stmt->execute();
+        $stmt->close();
+        $_SESSION['usuario']['nombre'] = $nombre;
+        $_SESSION['usuario']['apellido'] = $apellido;
+        $_SESSION['usuario']['telefono'] = $telefono;
+        echo 'ok';
+        exit;
+    }
+
     $ctrl->manejarAccion($_POST, $usuarioActual);
     exit;
 }
