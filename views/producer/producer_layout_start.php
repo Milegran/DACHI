@@ -18,19 +18,19 @@ $currentFile = basename($_SERVER['PHP_SELF']);
     <nav class="p-4 space-y-2 flex-grow" id="sidebarNav">
         <a href="productor_tablero.php" class="flex items-center gap-3 rounded-xl px-4 py-3 <?= $currentFile === 'productor_tablero.php' ? 'bg-primary-container text-on-primary-container' : 'text-on-surface hover:bg-surface-container-low' ?>">
             <span class="material-symbols-outlined">dashboard</span>
-            Tablero
+            <span class="sidebar-label">Tablero</span>
         </a>
         <a href="productor_prod.php" class="flex items-center gap-3 rounded-xl px-4 py-3 <?= $currentFile === 'productor_prod.php' ? 'bg-primary-container text-on-primary-container' : 'text-on-surface hover:bg-surface-container-low' ?>">
             <span class="material-symbols-outlined">inventory_2</span>
-            Mis productos
+            <span class="sidebar-label">Mis productos</span>
         </a>
         <a href="pedidos.php" class="flex items-center gap-3 rounded-xl px-4 py-3 <?= $currentFile === 'pedidos.php' ? 'bg-primary-container text-on-primary-container' : 'text-on-surface hover:bg-surface-container-low' ?>">
             <span class="material-symbols-outlined">shopping_cart</span>
-            Pedidos
+            <span class="sidebar-label">Pedidos</span>
         </a>
         <a href="reclamos.php" class="flex items-center gap-3 rounded-xl px-4 py-3 <?= $currentFile === 'reclamos.php' ? 'bg-primary-container text-on-primary-container' : 'text-on-surface hover:bg-surface-container-low' ?>">
             <span class="material-symbols-outlined">report_problem</span>
-            Reclamaciones
+            <span class="sidebar-label">Reclamaciones</span>
         </a>
     </nav>
     <div class="p-4 border-t border-outline-variant">
@@ -49,7 +49,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             <img alt="DACHI" class="dachi-topbar-logo" src="../../img/LG.png" />
         </div>
         <div class="flex-1"></div>
-        <div class="dachi-topbar-actions flex items-center gap-1 sm:gap-2 relative flex-none">
+        <div class="dachi-topbar-actions flex items-center gap-1 sm:gap-2 relative flex-none mr-2">
             <span class="dachi-topbar-divider hidden sm:block"></span>
             <div class="hidden md:block text-right mr-1">
                 <span class="font-semibold text-sm text-on-surface block" id="panelUserName"><?= $producerUserName ?></span>
@@ -58,7 +58,7 @@ $currentFile = basename($_SERVER['PHP_SELF']);
             <button class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden flex items-center justify-center font-bold text-primary cursor-pointer" id="userAvatarBtn" onclick="toggleUserMenu()" title="Abrir perfil" type="button">
                 <span class="avatar-initial" id="panelUserAvatar"><?= strtoupper(substr($producerUserName, 0, 1)) ?></span>
             </button>
-            <div class="user-menu absolute right-0 top-12 w-72 bg-white rounded-2xl border border-outline-variant/50 shadow-xl p-2 z-[200] hidden" id="userMenu">
+            <div class="user-menu absolute right-0 top-12 w-72 bg-white rounded-2xl border border-outline-variant/50 shadow-xl p-2 z-[200]" id="userMenu">
                 <div class="flex items-center gap-3 p-3 border-b border-outline-variant/30 mb-2">
                     <div class="w-12 h-12 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant flex items-center justify-center font-bold text-primary flex-none">
                         <span class="avatar-initial"><?= strtoupper(substr($producerUserName, 0, 1)) ?></span>
@@ -69,10 +69,19 @@ $currentFile = basename($_SERVER['PHP_SELF']);
                         <span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide"><?= $producerUserRole ?></span>
                     </div>
                 </div>
+                <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="logout()" type="button">
+                    <span class="material-symbols-outlined text-[18px] text-on-surface-variant">swap_horiz</span>
+                    Cambiar Cuenta
+                </button>
+                <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openSettingsModal()" type="button">
+                    <span class="material-symbols-outlined text-[18px] text-on-surface-variant">tune</span>
+                    Configuración
+                </button>
                 <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-on-surface flex items-center gap-3" onclick="openProfileModal()" type="button">
                     <span class="material-symbols-outlined text-[18px] text-on-surface-variant">person</span>
-                    Perfil
+                    Editar Perfil
                 </button>
+                <hr class="border-outline-variant/50 my-1" />
                 <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-label-md font-label-md text-error flex items-center gap-3" onclick="logout()" type="button">
                     <span class="material-symbols-outlined text-[18px]">logout</span>
                     Cerrar Sesión
@@ -81,4 +90,4 @@ $currentFile = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 </nav>
-<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg relative z-10">
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg relative z-10 flex-1">
