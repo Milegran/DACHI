@@ -1217,6 +1217,34 @@ function openDeleteUserModal(id, nombre) {
         }
     );
 }
+
+function openActivateUserModal(id, nombre) {
+    openConfirmModal(
+        'Activar usuario',
+        '¿Estás seguro de activar a ' + nombre + '? El usuario podrá acceder nuevamente a la plataforma.',
+        'check_circle', 'bg-green-50 text-green-700',
+        'ACTIVAR', 'bg-green-700 hover:bg-green-800',
+        function() {
+            closeConfirmModal();
+            var formData = new FormData();
+            formData.append('accion', 'activar_usuario');
+            formData.append('id', id);
+            fetch('admin.php', { method: 'POST', body: formData })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.status === 'success') {
+                        storeNotification(data.message, 'success');
+                        location.reload();
+                    } else {
+                        storeNotification(data.message || 'Error al activar', 'error');
+                    }
+                })
+                .catch(function() {
+                    storeNotification('Error de conexión', 'error');
+                });
+        }
+    );
+}
 </script>
 
 </body>

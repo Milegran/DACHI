@@ -147,11 +147,19 @@ $pctExito = $entregasTotales > 0 ? round(($exitosasTotales / $entregasTotales) *
                                         title="Editar usuario">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </button>
-                                    <button onclick="openDeleteUserModal(<?= (int)$l['id'] ?>, '<?= htmlspecialchars(($l['nombre'] ?? '') . ' ' . ($l['apellido'] ?? ''), ENT_QUOTES, 'UTF-8') ?>')"
-                                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-error hover:text-white transition-all"
-                                        title="Desactivar usuario">
-                                        <span class="material-symbols-outlined text-[18px]">block</span>
-                                    </button>
+                                    <?php if (($l['estado'] ?? 'activo') === 'activo'): ?>
+                                        <button onclick="openDeleteUserModal(<?= (int)$l['id'] ?>, '<?= htmlspecialchars(($l['nombre'] ?? '') . ' ' . ($l['apellido'] ?? ''), ENT_QUOTES, 'UTF-8') ?>')"
+                                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-error hover:text-white transition-all"
+                                            title="Desactivar usuario">
+                                            <span class="material-symbols-outlined text-[18px]">block</span>
+                                        </button>
+                                    <?php else: ?>
+                                        <button onclick="openActivateUserModal(<?= (int)$l['id'] ?>, '<?= htmlspecialchars(($l['nombre'] ?? '') . ' ' . ($l['apellido'] ?? ''), ENT_QUOTES, 'UTF-8') ?>')"
+                                            class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-secondary hover:bg-green-700 hover:text-white transition-all"
+                                            title="Activar usuario">
+                                            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>

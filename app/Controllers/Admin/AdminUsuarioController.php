@@ -32,6 +32,10 @@ class AdminUsuarioController implements AdminControllerInterface
                 $this->ajaxEliminarUsuario($post);
                 return;
             }
+            if ($accion === 'activar_usuario') {
+                $this->ajaxActivarUsuario($post);
+                return;
+            }
         }
 
         if ($accion === 'ver_productor') {
@@ -147,6 +151,18 @@ class AdminUsuarioController implements AdminControllerInterface
             return;
         }
         $resultado = $this->service->eliminarUsuario($id);
+        echo json_encode($resultado);
+    }
+
+    private function ajaxActivarUsuario(array $post): void
+    {
+        header('Content-Type: application/json');
+        $id = (int)($post['id'] ?? 0);
+        if ($id <= 0) {
+            echo json_encode(['status' => 'error', 'message' => 'ID de usuario inválido']);
+            return;
+        }
+        $resultado = $this->service->activarUsuario($id);
         echo json_encode($resultado);
     }
 

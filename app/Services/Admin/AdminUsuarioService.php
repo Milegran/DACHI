@@ -300,10 +300,25 @@ class AdminUsuarioService
         $stmt->close();
 
         if ($afectado === 0) {
-        return ['status' => 'error', 'message' => 'Usuario no encontrado'];
+            return ['status' => 'error', 'message' => 'Usuario no encontrado'];
+        }
+
+        return ['status' => 'success', 'message' => 'Usuario desactivado correctamente.'];
     }
 
-    return ['status' => 'success', 'message' => 'Usuario desactivado correctamente. Ya no podrá acceder a la plataforma.'];
+    public function activarUsuario(int $id): array
+    {
+        $stmt = $this->conn->prepare("UPDATE usuarios SET estado='activo' WHERE id=?");
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $afectado = $stmt->affected_rows;
+        $stmt->close();
+
+        if ($afectado === 0) {
+            return ['status' => 'error', 'message' => 'Usuario no encontrado'];
+        }
+
+        return ['status' => 'success', 'message' => 'Usuario activado correctamente. Ya puede acceder a la plataforma.'];
     }
 
     public function obtenerHistorialActividad(int $idUsuario): array
