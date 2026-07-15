@@ -1115,6 +1115,19 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
 
         <!-- BLOQUE CONSUMIDOR: INICIO -->
         <section class="space-y-stack-lg hidden" id="consumer-dashboard">
+            <div class="consumer-brand-banner" aria-labelledby="dachiCommitmentTitle" role="region">
+                <div class="consumer-brand-banner-content">
+                    <p class="consumer-brand-banner-eyebrow">DACHI &middot; DEL CAMPO A TU MESA</p>
+                    <h2 id="dachiCommitmentTitle">Cultivamos confianza en cada entrega</h2>
+                    <p>Detr&aacute;s de cada producto hay dedicaci&oacute;n, manos expertas y el compromiso de quienes trabajan cada d&iacute;a para llevar calidad paname&ntilde;a hasta tu hogar.</p>
+                    <div class="consumer-brand-values" aria-label="Valores DACHI">
+                        <span><span class="material-symbols-outlined">handshake</span> Compromiso</span>
+                        <span><span class="material-symbols-outlined">verified</span> Calidad</span>
+                        <span><span class="material-symbols-outlined">groups</span> Trabajo en equipo</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="consumer-offers-section" aria-labelledby="consumerOffersTitle" role="region">
                 <div class="consumer-catalog-heading">
                     <div>
