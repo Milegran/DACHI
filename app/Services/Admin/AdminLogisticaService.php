@@ -129,6 +129,154 @@ class AdminLogisticaService
         return $actividad;
     }
 
+    public function obtenerKPIsLogisticos(): array
+    {
+        $result = $this->conn->query(
+            "SELECT
+                COALESCE(estado_detallado, 'pendiente') AS estado,
+                COUNT(*) AS total
+             FROM pedidos
+             GROUP BY estado_detallado"
+        );
+        $kpis = [
+            'en_transito' => 0, 'pendiente' => 0, 'entregado' => 0,
+            'cancelado' => 0, 'en_preparacion' => 0, 'tiempo_promedio' => 0
+        ];
+        while ($row = $result->fetch_assoc()) {
+            $estado = $row['estado'];
+            if (isset($kpis[$estado])) {
+                $kpis[$estado] = (int)$row['total'];
+            }
+        }
+        $resTiempo = $this->conn->query(
+            "SELECT ROUND(AVG(TIMESTAMPDIFF(MINUTE, p.fecha, p.fecha_entrega))) AS minutos
+             FROM pedidos p
+             WHERE p.estado_detallado = 'entregado' AND p.fecha_entrega IS NOT NULL"
+        );
+        $rowTiempo = $resTiempo->fetch_assoc();
+        $kpis['tiempo_promedio'] = (int)($rowTiempo['minutos'] ?? 0);
+        return $kpis;
+    }
+
+    public function obtenerRendimientoLogistas(): array
+    {
+        $result = $this->conn->query(
+            "SELECT
+                u.id, u.nombre, u.apellido,
+                COUNT(e.id) AS total_entregas,
+                SUM(CASE WHEN p.estado_detallado = 'entregado' THEN 1 ELSE 0 END) AS entregas_exitosas,
+                SUM(CASE WHEN p.estado_detallado = 'cancelado' THEN 1 ELSE 0 END) AS entregas_canceladas,
+                ROUND(AVG(TIMESTAMPDIFF(MINUTE, p.fecha, p.fecha_entrega))) AS tiempo_promedio
+             FROM usuarios u
+             LEFT JOIN entregas e ON u.id = e.id_repartidor
+             LEFT JOIN pedidos p ON e.id_pedidos = p.id
+             WHERE u.id_rol = 3
+             GROUP BY u.id
+             ORDER BY total_entregas DESC"
+        );
+        $logistas = [];
+        while ($row = $result->fetch_assoc()) {
+            $total = (int)$row['total_entregas'];
+            $exitosas = (int)$row['entregas_exitosas'];
+            $row['porcentaje_exito'] = $total > 0 ? round(($exitosas / $total) * 100, 1) : 0;
+            $row['calificacion'] = $this->obtenerCalificacionLogistica((int)$row['id']);
+            $row['incidencias'] = $this->contarIncidenciasLogista((int)$row['id']);
+            $logistas[] = $row;
+        }
+        return $logistas;
+    }
+
+    public function obtenerEntregasPorProvincia(): array
+    {
+        $result = $this->conn->query(
+            "SELECT
+                d.provincia,
+                COUNT(e.id) AS total_entregas,
+                SUM(CASE WHEN p.estado_detallado = 'entregado' THEN 1 ELSE 0 END) AS entregadas,
+                SUM(CASE WHEN p.estado_detallado = 'cancelado' THEN 1 ELSE 0 END) AS canceladas
+             FROM entregas e
+             JOIN pedidos p ON e.id_pedidos = p.id
+             JOIN direccion d ON e.id_direccion = d.id
+             WHERE d.provincia IS NOT NULL AND d.provincia != ''
+             GROUP BY d.provincia
+             ORDER BY total_entregas DESC"
+        );
+        $provincias = [];
+        while ($row = $result->fetch_assoc()) {
+            $provincias[] = $row;
+        }
+        return $provincias;
+    }
+
+    public function obtenerIncidencias(): array
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT
+                p.id AS pedido_id, p.fecha, p.notas AS motivo,
+                COALESCE(p.estado_detallado, 'pendiente') AS estado,
+                CONCAT(u.nombre, ' ', u.apellido) AS consumidor,
+                CONCAT(lg.nombre, ' ', lg.apellido) AS logista
+             FROM pedidos p
+             JOIN usuarios u ON p.id_consumer = u.id
+             LEFT JOIN entregas e ON p.id = e.id_pedidos
+             LEFT JOIN usuarios lg ON e.id_repartidor = lg.id
+             WHERE p.notas IS NOT NULL AND p.notas != ''
+             ORDER BY p.fecha DESC
+             LIMIT 50"
+        );
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $incidencias = [];
+        while ($row = $result->fetch_assoc()) {
+            $incidencias[] = $row;
+        }
+        $stmt->close();
+        return $incidencias;
+    }
+
+    public function obtenerEntregasActivas(): array
+    {
+        $result = $this->conn->query(
+            "SELECT
+                p.id AS pedido_id, p.fecha,
+                CONCAT(u.nombre, ' ', u.apellido) AS consumidor,
+                d.provincia AS zona,
+                CONCAT(lg.nombre, ' ', lg.apellido) AS logista,
+                CASE WHEN e.id_repartidor IS NOT NULL
+                     THEN TIMESTAMPDIFF(MINUTE, p.fecha, NOW())
+                     ELSE NULL
+                END AS minutos_transcurridos
+             FROM pedidos p
+             JOIN usuarios u ON p.id_consumer = u.id
+             LEFT JOIN entregas e ON p.id = e.id_pedidos
+             LEFT JOIN usuarios lg ON e.id_repartidor = lg.id
+             LEFT JOIN direccion d ON e.id_direccion = d.id
+             WHERE p.estado_detallado = 'en_transito'
+             ORDER BY p.fecha DESC
+             LIMIT 20"
+        );
+        $activas = [];
+        while ($row = $result->fetch_assoc()) {
+            $activas[] = $row;
+        }
+        return $activas;
+    }
+
+    private function contarIncidenciasLogista(int $idLogistico): int
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT COUNT(*) AS total
+             FROM pedidos p
+             JOIN entregas e ON p.id = e.id_pedidos
+             WHERE e.id_repartidor = ? AND p.notas IS NOT NULL AND p.notas != ''"
+        );
+        $stmt->bind_param('i', $idLogistico);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        return (int)($row['total'] ?? 0);
+    }
+
     private function contarEntregasTotales(int $idLogistico): int
     {
         $stmt = $this->conn->prepare("SELECT COUNT(*) AS total FROM entregas WHERE id_repartidor = ?");

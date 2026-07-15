@@ -2,10 +2,10 @@
 //BLOQUE CONTROLADOR DE LOGISTICA
 class LogisticaController implements LogisticaControllerInterface
 {
-    private $conn;
-    private $sistema;
+    private mysqli $conn;
+    private SistemaDachiFacade $sistema;
 
-    public function __construct($conn, $sistema)
+    public function __construct(mysqli $conn, SistemaDachiFacade $sistema)
     {
         $this->conn = $conn;
         $this->sistema = $sistema;

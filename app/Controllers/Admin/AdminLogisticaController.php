@@ -19,6 +19,10 @@ class AdminLogisticaController implements AdminControllerInterface
             $this->verLogistico((int)($get['id'] ?? 0));
             return;
         }
+        if ($accion === 'logistica_dashboard') {
+            $this->logisticaDashboard();
+            return;
+        }
 
         $this->listarLogisticos($get['busqueda'] ?? '');
     }
@@ -52,6 +56,23 @@ class AdminLogisticaController implements AdminControllerInterface
             'entregas' => $entregas,
             'historial' => $historial,
             'submodulo' => 'logistica'
+        ]);
+    }
+
+    private function logisticaDashboard(): void
+    {
+        $kpis = $this->service->obtenerKPIsLogisticos();
+        $rendimiento = $this->service->obtenerRendimientoLogistas();
+        $provincias = $this->service->obtenerEntregasPorProvincia();
+        $incidencias = $this->service->obtenerIncidencias();
+        $activas = $this->service->obtenerEntregasActivas();
+        $this->renderView('admin/logistica/dashboard', [
+            'kpis' => $kpis,
+            'rendimiento' => $rendimiento,
+            'provincias' => $provincias,
+            'incidencias' => $incidencias,
+            'activas' => $activas,
+            'submodulo' => 'logistica_dashboard'
         ]);
     }
 

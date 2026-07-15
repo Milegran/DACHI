@@ -484,7 +484,7 @@ if(localStorage.getItem('dachiAdminDarkMode')==='1')document.documentElement.cla
                 <span class="material-symbols-outlined nav-icon">payments</span>
                 <span class="text-sm font-medium sidebar-label">Pagos y Comisiones</span>
             </a>
-            <a href="#" class="nav-item flex items-center gap-4 p-3 rounded-xl text-white/30 pointer-events-none opacity-40">
+            <a href="admin.php?accion=logistica_dashboard" class="nav-item flex items-center gap-4 p-3 rounded-xl text-white/80 transition-all hover:translate-x-0.5 <?= ($submodulo ?? '') === 'logistica_dashboard' ? 'active-pill' : '' ?>">
                 <span class="material-symbols-outlined nav-icon">map</span>
                 <span class="text-sm font-medium sidebar-label">Panel de Logística</span>
             </a>

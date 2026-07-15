@@ -33,7 +33,7 @@ $app = new App($conn);
 
 $accion = $_GET['accion'] ?? ($_POST['accion'] ?? 'dashboard');
 
-$prefixesLogistica = ['listar_logisticos', 'ver_logistico'];
+$prefixesLogistica = ['listar_logisticos', 'ver_logistico', 'logistica_dashboard'];
 $prefixesConsumidor = ['listar_consumidores', 'ver_consumidor'];
 $prefixesProductor = ['listar_productores', 'ver_productor'];
 $prefixesProducto = ['listar_productos', 'cambiar_estado_producto', 'crear_producto', 'editar_producto'];

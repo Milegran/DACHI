@@ -2,8 +2,8 @@
 // BLOQUE CONEXION - PATRON DE DISEÑO: SINGLETON
 class BD
 {
-    private static $instancia = null;
-    private $conn;
+    private static ?BD $instancia = null;
+    private mysqli $conn;
 
     private function __construct()
     {
