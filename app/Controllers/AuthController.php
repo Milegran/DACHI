@@ -44,13 +44,23 @@ class AuthController
     }
 
     public function startSession(array $response, array &$session): array
-    {
-        if ($response['status'] === 'success' && isset($response['usuario'])) {
-            $session['usuario'] = $response['usuario'];
-            unset($response['usuario']);
-            $response['redirect'] = 'index.php';
-        }
+{
+    if ($response['status'] === 'success' && isset($response['usuario'])) {
+        // Normalizamos el rol directamente en el array antes de guardarlo en la sesión
+        $response['usuario']['nom_rol'] = strtolower(trim($response['usuario']['nom_rol'] ?? ''));
+        
+        $session['usuario'] = $response['usuario'];
+        unset($response['usuario']);
 
-        return $response;
+        $rol = $session['usuario']['nom_rol'];
+        $response['redirect'] = match ($rol) {
+            'administrador', 'admin' => 'admin.php',
+            'logistico' => 'logistica.php',
+            'productor' => 'views/producer/productor_tablero.php',
+            default => 'panel.php'
+        };
     }
+
+    return $response;
+}
 }

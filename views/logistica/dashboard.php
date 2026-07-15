@@ -64,14 +64,7 @@
         html.dark .border-outline-variant\/50 { border-color: rgba(148,158,143,0.15) !important; }
         html.dark .hover\:bg-surface-container-low:hover { background-color: #262c24 !important; }
         html.dark ::-webkit-scrollbar-thumb { background: #33513e !important; }
-        html.dark #sidebar { background-color: #12160f !important; border-color: rgba(255,255,255,0.06) !important; }
-        html.dark #sidebarBrandText { color: #9ed3ac !important; }
-        html.dark #sidebarNav .nav-link,
-        html.dark #sidebarFooter .nav-link:not(.text-error) { color: #cfd6cb !important; }
-        html.dark #sidebarNav .nav-link:hover { background: rgba(255,255,255,0.06) !important; color: #fff !important; }
-        html.dark #sidebarNav .nav-link.nav-item-active { background: rgba(158,211,172,0.18) !important; color: #9ed3ac !important; }
-        html.dark #sidebarCollapseBtn,
-        html.dark #sidebarExpandBtn { border-color: rgba(255,255,255,0.15) !important; color: #cfd6cb !important; }
+        html.dark #sidebarNav .nav-link { color: rgba(185,239,199,0.7) !important; }
         html.dark .bg-surface\/60 { background-color: rgba(16,20,15,0.75) !important; }
         html.dark .text-primary { color: #9ed3ac !important; }
         html.dark .text-primary\/60,
@@ -86,36 +79,21 @@
     <!-- BLOQUE SIDEBAR OVERLAY -->
     <div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden transition-opacity" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <!-- BLOQUE SIDEBAR -->
-    <aside class="fixed left-0 top-0 h-full w-72 bg-white border-r border-outline-variant/20 z-[70] -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col shadow-2xl" id="sidebar">
-        <div class="p-6 flex items-center justify-between gap-2" id="sidebarHeader">
-            <div class="flex items-center gap-2 min-w-0" id="sidebarLogoWrap">
-                <img alt="Logo DACHI" class="h-10 object-contain shrink-0" src="img/Navbar.png" />
-                <p class="text-primary font-bold text-[10px] uppercase tracking-widest opacity-80 leading-tight" id="sidebarBrandText">Panel de<br>Logística</p>
-            </div>
-            <button class="hidden lg:flex w-8 h-8 items-center justify-center rounded-lg border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container-low transition-all shrink-0" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" title="Ocultar menú" type="button">
-                <span class="material-symbols-outlined text-[18px]">keyboard_double_arrow_left</span>
-            </button>
+    <aside class="fixed left-0 top-0 h-full w-72 bg-primary border-r border-primary-container z-[70] -translate-x-full lg:translate-x-0 sidebar-transition flex flex-col shadow-2xl" id="sidebar">
+        <div class="p-6 flex flex-col items-center gap-1">
+            <img alt="Logo DACHI" class="h-14 object-contain" src="img/Navbar.png" />
+            <p class="text-secondary font-medium text-[10px] mt-1 uppercase tracking-widest opacity-80">Panel de Logística</p>
         </div>
         <nav class="flex-grow overflow-y-auto custom-scrollbar space-y-0.5 mt-2" id="sidebarNav">
             <!-- Populado por JS -->
         </nav>
-        <div class="p-4 border-t border-outline-variant/10" id="sidebarFooter">
-            <a class="nav-link w-full flex items-center gap-3 group" href="logistica.php?logout=1">
-                <span class="material-symbols-outlined text-[19px]">logout</span>
-                <span class="font-label-md font-bold text-[13px] nav-label">Cerrar Sesión</span>
-            </a>
-        </div>
     </aside>
     <!-- WRAPPER -->
-    <div class="lg:ml-72 transition-all duration-300" id="mainWrapper">
+    <div class="lg:ml-72 transition-all duration-300">
         <!-- BLOQUE NAVBAR -->
         <nav class="bg-surface/60 backdrop-blur-xl sticky top-0 z-50 border-b border-outline-variant/30 h-[80px] flex items-center gap-3 px-6 lg:px-12">
             <button class="lg:hidden p-2 rounded-2xl bg-primary-container/10 text-primary flex-none" onclick="toggleSidebar()">
                 <span class="material-symbols-outlined">menu</span>
-            </button>
-
-            <button class="w-9 h-9 items-center justify-center rounded-xl border border-outline-variant/30 text-on-surface-variant hover:bg-primary-container hover:text-white transition-all flex-none" id="sidebarExpandBtn" onclick="toggleSidebarCollapse()" title="Mostrar menú" type="button">
-                <span class="material-symbols-outlined text-[18px]">keyboard_double_arrow_right</span>
             </button>
 
             <img alt="DACHI" class="h-[52px] w-auto object-contain flex-none" src="img/LG.png" />
@@ -133,12 +111,12 @@
             <div class="flex-1 md:hidden"></div>
 
             <div class="flex items-center gap-2 sm:gap-3 flex-none">
-                <button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all" onclick="toggleDarkModeQuick()" title="Modo oscuro" type="button">
+                <button class="w-11 h-11 flex items-center justify-center rounded-2xl bg-surface-container-high text-on-surface-variant hover:bg-primary-container hover:text-white transition-all" onclick="toggleDarkModeQuick()" title="Modo oscuro" type="button">
                     <span class="material-symbols-outlined">dark_mode</span>
                 </button>
 
                 <div class="relative">
-                    <button class="relative w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all" id="notificationButton" onclick="toggleNotificationMenu()">
+                    <button class="relative w-11 h-11 flex items-center justify-center rounded-2xl bg-surface-container-high text-on-surface-variant hover:bg-primary-container hover:text-white transition-all" id="notificationButton" onclick="toggleNotificationMenu()">
                         <span class="material-symbols-outlined">notifications</span>
                         <?php if ($notificationCount > 0): ?>
                         <span class="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 bg-error text-white text-[10px] font-bold flex items-center justify-center rounded-full px-1 ring-2 ring-surface"><?= $notificationCount ?></span>
@@ -155,48 +133,47 @@
                     </div>
                 </div>
 
-                <button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all" onclick="openSettingsModal()" title="Configuración" type="button">
+                <button class="w-11 h-11 flex items-center justify-center rounded-2xl bg-surface-container-high text-on-surface-variant hover:bg-primary-container hover:text-white transition-all" onclick="openSettingsModal()" title="Configuración" type="button">
                     <span class="material-symbols-outlined">settings</span>
                 </button>
 
                 <div class="h-8 w-[1px] bg-outline-variant/30 mx-1 hidden sm:block"></div>
 
-                <div class="hidden md:block text-right mr-1">
-                    <span class="font-semibold text-sm text-on-surface block" id="panelUserName"><?= htmlspecialchars($usuarioActual['nombre'] ?? '') ?></span>
-                    <small class="text-on-surface-variant text-xs">Logístico</small>
-                </div>
-
                 <div class="relative">
-                    <button class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden flex items-center justify-center font-bold text-primary cursor-pointer" id="userAvatarBtn" onclick="toggleUserMenu()" title="Abrir perfil" type="button">
-                        <span class="avatar-initial"><?= strtoupper(substr($usuarioActual['nombre'] ?? '', 0, 1)) ?></span>
-                    </button>
-                    <div class="user-menu absolute right-0 top-12 w-72 bg-white dark:bg-surface-container-highest rounded-2xl border border-outline-variant/50 shadow-xl p-2 z-[200]" id="userMenu">
-                        <div class="flex items-center gap-3 p-3 border-b border-outline-variant/30 mb-2">
-                            <div class="w-12 h-12 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant flex items-center justify-center font-bold text-primary flex-none">
-                                <span class="avatar-initial"><?= strtoupper(substr($usuarioActual['nombre'] ?? '', 0, 1)) ?></span>
+                    <div class="flex items-center gap-3 cursor-pointer group" id="userAvatarBtn" onclick="toggleUserMenu()">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-[14px] font-bold text-on-surface leading-tight" id="panelUserName"><?= htmlspecialchars($usuarioActual['nombre'] ?? '') ?></p>
+                            <span class="text-[11px] text-on-surface-variant font-medium uppercase tracking-wider">Logístico</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl border-2 border-primary bg-primary-fixed/20 flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                            <span class="avatar-initial font-bold text-primary text-[20px]"><?= strtoupper(substr($usuarioActual['nombre'] ?? '', 0, 1)) ?></span>
+                        </div>
+                    </div>
+                    <div class="user-menu absolute right-0 top-14 w-72 bg-white dark:bg-surface-container-highest rounded-[32px] border border-outline-variant/30 shadow-2xl p-6 z-[200]" id="userMenu">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-white">
+                                <span class="avatar-initial font-bold text-[24px]"><?= strtoupper(substr($usuarioActual['nombre'] ?? '', 0, 1)) ?></span>
                             </div>
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold text-on-surface truncate" id="userMenuName"><?= htmlspecialchars(trim(($usuarioActual['nombre'] ?? '') . ' ' . ($usuarioActual['apellido'] ?? ''))) ?></p>
-                                <p class="text-xs text-on-surface-variant truncate" id="userMenuEmail"><?= htmlspecialchars($usuarioActual['correo'] ?? '') ?></p>
-                                <span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide">LOGÍSTICO</span>
+                            <div>
+                                <p class="font-bold text-on-surface" id="userMenuName"><?= htmlspecialchars(trim(($usuarioActual['nombre'] ?? '') . ' ' . ($usuarioActual['apellido'] ?? ''))) ?></p>
+                                <p class="text-[12px] text-on-surface-variant truncate w-40" id="userMenuEmail"><?= htmlspecialchars($usuarioActual['correo'] ?? '') ?></p>
                             </div>
                         </div>
-                        <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-sm text-on-surface flex items-center gap-3" onclick="location.href='logistica.php?logout=1'">
-                            <span class="material-symbols-outlined text-[18px] text-on-surface-variant">swap_horiz</span>
-                            Cambiar Cuenta
-                        </button>
-                        <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-sm text-on-surface flex items-center gap-3" onclick="openSettingsModal()">
-                            <span class="material-symbols-outlined text-[18px] text-on-surface-variant">tune</span>
-                            Configuración
-                        </button>
-                        <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-sm text-on-surface flex items-center gap-3" onclick="openProfileModal()">
-                            <span class="material-symbols-outlined text-[18px] text-on-surface-variant">person</span>
-                            Editar Perfil
-                        </button>
-                        <hr class="border-outline-variant/50 my-1" />
-                        <a class="flex items-center gap-3 w-full text-left px-3 py-2 rounded-lg hover:bg-surface-container-low text-sm text-error transition-all" href="logistica.php?logout=1">
-                            <span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
-                        </a>
+                        <div class="space-y-1">
+                            <button class="w-full text-left px-4 py-3 rounded-2xl hover:bg-surface-container-low flex items-center gap-3 transition-colors text-[14px] font-medium" onclick="location.href='logistica.php?logout=1'">
+                                <span class="material-symbols-outlined text-on-surface-variant">swap_horiz</span> Cambiar Cuenta
+                            </button>
+                            <button class="w-full text-left px-4 py-3 rounded-2xl hover:bg-surface-container-low flex items-center gap-3 transition-colors text-[14px] font-medium" onclick="openProfileModal()">
+                                <span class="material-symbols-outlined text-on-surface-variant">person_edit</span> Editar Perfil
+                            </button>
+                            <button class="w-full text-left px-4 py-3 rounded-2xl hover:bg-surface-container-low flex items-center gap-3 transition-colors text-[14px] font-medium" onclick="openSettingsModal()">
+                                <span class="material-symbols-outlined text-on-surface-variant">settings</span> Configuración
+                            </button>
+                            <div class="h-[1px] bg-outline-variant/30 my-3"></div>
+                            <a class="w-full text-left px-4 py-3 rounded-2xl hover:bg-error-container/20 text-error flex items-center gap-3 transition-colors text-[14px] font-bold" href="logistica.php?logout=1">
+                                <span class="material-symbols-outlined">logout</span> Salir
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -574,17 +551,11 @@
 
         function buildSidebar() {
             document.getElementById('sidebarNav').innerHTML = NAV_LOGISTICA.map((item, i) => `
-                <button onclick="showSection('${item.id}', this)" title="${item.label}" class="nav-link w-full flex items-center gap-3 transition-all group ${i === 0 ? 'nav-item-active' : ''}">
+                <button onclick="showSection('${item.id}', this)" class="nav-link w-full flex items-center gap-3 text-primary-fixed/70 hover:text-white transition-all group ${i === 0 ? 'nav-item-active' : ''}">
                     <span class="material-symbols-outlined text-[19px] transition-transform group-hover:scale-110">${item.icon}</span>
-                    <span class="font-label-md font-bold text-[13px] nav-label">${item.label}</span>
+                    <span class="font-label-md font-bold text-[13px]">${item.label}</span>
                 </button>
             `).join('');
-        }
-
-        // BLOQUE COLAPSAR/MOSTRAR SIDEBAR (solo escritorio)
-        function toggleSidebarCollapse() {
-            const colapsado = document.documentElement.classList.toggle('sidebar-mini');
-            localStorage.setItem('dachiSidebarMini', colapsado ? '1' : '0');
         }
 
         function toggleUserMenu() {
@@ -919,9 +890,6 @@
         }
 
         window.onload = () => {
-            if (localStorage.getItem('dachiSidebarMini') === '1') {
-                document.documentElement.classList.add('sidebar-mini');
-            }
             buildSidebar();
             renderData();
 

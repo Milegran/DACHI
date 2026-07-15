@@ -26,6 +26,7 @@ if (isset($_SESSION['usuario'])) {
     $redirect = match ($rolSesion) {
         'administrador' => 'admin.php',
         'logistico' => 'logistica.php',
+        'productor' => 'views/producer/productor_tablero.php',
         default => 'panel.php'
     };
     header("Location: $redirect");
