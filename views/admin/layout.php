@@ -306,6 +306,119 @@
         html.dark #confirmModal .text-secondary,
         html.dark #detailsPanel .text-secondary { color: #a5aea7 !important; }
         html.dark #detailsPanel { background: #1c211b !important; }
+
+        /* --- DARK MODE: Admin Dashboard (clases duplicadas de dachi-botanical.css) --- */
+
+        /* Backgrounds */
+        html.dark .bg-surface { background-color: #0f1512 !important; }
+        html.dark .bg-surface\/80 { background-color: rgba(15,21,18,0.85) !important; }
+        html.dark .bg-surface-low { background-color: #151d19 !important; }
+        html.dark .bg-surface-low\/50 { background-color: rgba(21,29,25,0.5) !important; }
+        html.dark .bg-surface-lowest { background-color: #18211c !important; }
+        html.dark .bg-surface-container { background-color: #1a231e !important; }
+        html.dark .bg-surface-container-low { background-color: #1c211b !important; }
+        html.dark .bg-surface-container-low\/50 { background-color: rgba(26,35,30,0.5) !important; }
+        html.dark .bg-surface-container-low\/60 { background-color: rgba(26,35,30,0.6) !important; }
+        html.dark .bg-surface-container-highest { background-color: #28342d !important; }
+        html.dark .bg-primary-fixed { background-color: #245f45 !important; }
+        html.dark .bg-primary-container { background-color: #1a4d38 !important; }
+        html.dark .bg-primary-container\/40 { background-color: rgba(26,77,56,0.4) !important; }
+        html.dark .bg-primary-container\/30 { background-color: rgba(26,77,56,0.3) !important; }
+        html.dark .bg-success-badge-bg { background-color: rgba(197,234,223,0.2) !important; }
+        html.dark .bg-outline-muted { background-color: rgba(174,187,179,0.14) !important; }
+        html.dark .bg-error-container { background-color: rgba(147,0,10,0.25) !important; }
+        html.dark .bg-error-container\/20 { background-color: rgba(147,0,10,0.2) !important; }
+        html.dark .bg-error-container\/40 { background-color: rgba(147,0,10,0.4) !important; }
+        html.dark .bg-error\/20 { background-color: rgba(255,180,171,0.2) !important; }
+        html.dark .bg-secondary-fixed\/40 { background-color: rgba(174,187,179,0.4) !important; }
+        html.dark .bg-white { background-color: #18211c !important; }
+
+        /* Text */
+        html.dark .text-primary { color: #83db9f !important; }
+        html.dark .text-primary-fixed { color: #c5eadf !important; }
+        html.dark .text-primary-fixed-dim { color: #aacec3 !important; }
+        html.dark .text-primary-fixed-dim\/70 { color: rgba(170,206,195,0.7) !important; }
+        html.dark .text-primary-fixed-dim\/80 { color: rgba(170,206,195,0.8) !important; }
+        html.dark .text-secondary { color: #aebbb3 !important; }
+        html.dark .text-on-surface { color: #e7eee9 !important; }
+        html.dark .text-on-surface-variant { color: #9fab9a !important; }
+        html.dark .text-muted { color: #aebbb3 !important; }
+        html.dark .text-muted\/60 { color: rgba(174,187,179,0.6) !important; }
+        html.dark .text-outline { color: #8c9a92 !important; }
+        html.dark .text-outline\/40 { color: rgba(140,154,146,0.4) !important; }
+        html.dark .text-error { color: #ffb4ab !important; }
+        html.dark .text-on-error-container { color: #ffb4ab !important; }
+        html.dark .text-success-badge-text { color: #c5eadf !important; }
+        html.dark .text-on-primary-container { color: #c5eadf !important; }
+
+        /* Borders */
+        html.dark .border-outline-muted { border-color: rgba(174,187,179,0.14) !important; }
+        html.dark .border-outline-variant { border-color: #34443b !important; }
+        html.dark .border-outline-variant\/30 { border-color: rgba(52,68,59,0.3) !important; }
+        html.dark .border-outline-variant\/50 { border-color: rgba(52,68,59,0.5) !important; }
+        html.dark .border-primary { border-color: #83db9f !important; }
+        html.dark .border-primary\/10 { border-color: rgba(131,219,159,0.1) !important; }
+        html.dark .border-primary\/20 { border-color: rgba(131,219,159,0.2) !important; }
+        html.dark .border-primary\/30 { border-color: rgba(131,219,159,0.3) !important; }
+        html.dark .border-primary-fixed { border-color: #245f45 !important; }
+        html.dark .border-error\/20 { border-color: rgba(255,180,171,0.2) !important; }
+        html.dark .border-error\/50 { border-color: rgba(255,180,171,0.5) !important; }
+
+        /* Divide */
+        html.dark .divide-outline-muted > * + * { border-color: rgba(174,187,179,0.14) !important; }
+
+        /* Hover backgrounds */
+        html.dark .hover\:bg-surface:hover { background-color: #0f1512 !important; }
+        html.dark .hover\:bg-surface-low:hover { background-color: #151d19 !important; }
+        html.dark .hover\:bg-surface-low\/50:hover { background-color: rgba(21,29,25,0.5) !important; }
+        html.dark .hover\:bg-surface-container:hover { background-color: #1a231e !important; }
+        html.dark .hover\:bg-primary:hover { background-color: #3a7a55 !important; }
+        html.dark .hover\:bg-primary\/90:hover { background-color: rgba(58,122,85,0.9) !important; }
+        html.dark .hover\:bg-primary\/10:hover { background-color: rgba(131,219,159,0.1) !important; }
+        html.dark .hover\:bg-primary-container:hover { background-color: #1a4d38 !important; }
+        html.dark .hover\:bg-error-container\/20:hover { background-color: rgba(147,0,10,0.2) !important; }
+        html.dark .hover\:bg-error-container\/40:hover { background-color: rgba(147,0,10,0.4) !important; }
+        html.dark .hover\:bg-secondary-fixed\/40:hover { background-color: rgba(174,187,179,0.4) !important; }
+
+        /* Hover text */
+        html.dark .hover\:text-primary:hover { color: #83db9f !important; }
+        html.dark .hover\:text-error:hover { color: #ffb4ab !important; }
+
+        /* Inputs */
+        html.dark input,
+        html.dark select,
+        html.dark textarea {
+            background-color: #18211c !important;
+            color: #e7eee9 !important;
+            border-color: #34443b !important;
+        }
+        html.dark input::placeholder,
+        html.dark textarea::placeholder { color: #8c9a92 !important; }
+
+        /* Scrollbar */
+        html.dark ::-webkit-scrollbar-track { background: #0f1512 !important; }
+        html.dark ::-webkit-scrollbar-thumb { background: #34443b !important; }
+
+        /* Table row hover */
+        html.dark .table-row-hover:hover { background-color: rgba(255,255,255,0.04) !important; }
+
+        /* Botanical shadow */
+        html.dark .botanical-shadow { box-shadow: 0 10px 30px -5px rgba(0,0,0,0.35) !important; }
+
+        /* Additional backgrounds for user sub-views */
+        html.dark .bg-primary { background-color: #1a4d38 !important; }
+        html.dark .bg-primary-container { background-color: #1a4d38 !important; }
+        html.dark .bg-surface-container-low\/30 { background-color: rgba(28,33,27,0.3) !important; }
+
+        /* Hover variants for user sub-views */
+        html.dark .hover\:bg-primary-dark:hover { background-color: #3a7a55 !important; }
+        html.dark .hover\:text-white:hover { color: #e7eee9 !important; }
+
+        /* Border variants */
+        html.dark .border-secondary { border-color: #aebbb3 !important; }
+
+        /* Focus ring */
+        html.dark .focus\:ring-primary\/20:focus { --tw-ring-color: rgba(131,219,159,0.2) !important; }
     </style>
 </head>
 <body class="min-h-screen" style="font-family:'Hanken Grotesk',sans-serif;">

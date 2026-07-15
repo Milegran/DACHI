@@ -1,27 +1,27 @@
 <div class="space-y-stack-lg">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
-        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow" style="border-left:4px solid #11663C;">
+        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow border-l-4 border-primary">
             <div class="w-12 h-12 rounded-2xl bg-success-badge-bg flex items-center justify-center text-primary mb-6">
                 <span class="material-symbols-outlined font-bold">inventory_2</span>
             </div>
             <p class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-bold">Productos</p>
             <h2 class="font-headline-md text-headline-md font-bold text-primary mt-1"><?= (int)($stats['total_productos'] ?? 0) ?></h2>
         </div>
-        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow" style="border-left:4px solid #bfc9c1;">
+        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow border-l-4 border-outline-variant">
             <div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-secondary mb-6">
                 <span class="material-symbols-outlined font-bold">group</span>
             </div>
             <p class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-bold">Usuarios</p>
             <h2 class="font-headline-md text-headline-md font-bold text-primary mt-1"><?= (int)($stats['total_usuarios'] ?? 0) ?></h2>
         </div>
-        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow" style="border-left:4px solid #bfc9c1;">
+        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow border-l-4 border-outline-variant">
             <div class="w-12 h-12 rounded-2xl bg-outline-muted flex items-center justify-center text-muted mb-6">
                 <span class="material-symbols-outlined font-bold">local_shipping</span>
             </div>
             <p class="font-label-sm text-label-sm uppercase tracking-widest text-secondary font-bold">Pedidos Totales</p>
             <h2 class="font-headline-md text-headline-md font-bold text-primary mt-1"><?= (int)($stats['total_pedidos'] ?? 0) ?></h2>
         </div>
-        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow" style="border-left:4px solid #11663C;">
+        <div class="bg-surface-lowest rounded-[24px] p-6 botanical-shadow border-l-4 border-primary">
             <div class="w-12 h-12 rounded-2xl border border-primary/20 flex items-center justify-center text-primary mb-6">
                 <span class="material-symbols-outlined font-bold">payments</span>
             </div>

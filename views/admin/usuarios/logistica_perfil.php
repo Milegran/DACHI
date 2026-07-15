@@ -37,7 +37,7 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-stack-lg">
     <div class="lg:col-span-4 flex flex-col gap-gutter">
-        <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow" style="border-left:4px solid #11663C;">
+        <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow border-l-4 border-primary">
             <div class="flex items-center gap-2 mb-4 text-secondary">
                 <span class="material-symbols-outlined text-[18px]">badge</span>
                 <h3 class="font-label-bold text-label-bold uppercase tracking-wider">DATOS GENERALES</h3>
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow" style="border-left:4px solid #57615b;">
+        <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow border-l-4 border-secondary">
             <div class="flex items-center gap-2 mb-4 text-secondary">
                 <span class="material-symbols-outlined text-[18px]">info</span>
                 <h3 class="font-label-bold text-label-bold uppercase tracking-wider">INFORMACIÓN ADICIONAL</h3>
@@ -69,17 +69,17 @@
 
     <div class="lg:col-span-8 flex flex-col gap-gutter">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-            <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow flex flex-col justify-between" style="border-left:4px solid #11663C;">
+            <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow border-l-4 border-primary flex flex-col justify-between">
                 <h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">ENTREGAS TOTALES</h4>
                 <div class="text-headline-lg font-headline-lg text-primary mb-2"><?= (int)($logistico['total_entregas'] ?? 0) ?></div>
                 <span class="bg-success-badge-bg text-success-badge-text font-pill-text text-pill-text px-2 py-1 rounded-full w-fit">Registradas</span>
             </div>
-            <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow flex flex-col justify-between" style="border-left:4px solid #bfc9c1;">
+            <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow border-l-4 border-outline-variant flex flex-col justify-between">
                 <h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">% ÉXITO</h4>
                 <div class="text-headline-lg font-headline-lg text-primary mb-2"><?= number_format($logistico['porcentaje_exito'] ?? 0, 1) ?>%</div>
                 <span class="bg-surface-container text-secondary font-pill-text text-pill-text px-2 py-1 rounded-full w-fit">Efectividad</span>
             </div>
-            <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow flex flex-col justify-between" style="border-left:4px solid #bfc9c1;">
+            <div class="bg-surface-lowest rounded-xl p-6 botanical-shadow border-l-4 border-outline-variant flex flex-col justify-between">
                 <h4 class="font-label-sm text-label-sm text-secondary uppercase tracking-wider mb-2">CALIFICACIÓN</h4>
                 <div class="text-headline-lg font-headline-lg <?= ($logistico['calificacion_promedio'] ?? 0) >= 4 ? 'text-primary' : 'text-muted' ?> mb-2">
                     <?= ($logistico['calificacion_promedio'] ?? 0) > 0 ? number_format($logistico['calificacion_promedio'], 1) : '—' ?>
