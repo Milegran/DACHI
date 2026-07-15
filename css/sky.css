@@ -1,7 +1,21 @@
-/* BLOQUE SIDEBAR - NAV LINKS */
-#sidebarNav .nav-link { background: transparent !important; color: rgba(255, 255, 255, 0.65) !important; padding: 9px 16px !important; margin: 0 8px; border-left: none; border-radius: 10px !important; box-shadow: none !important; }
-#sidebarNav .nav-link:hover { background: rgba(255, 255, 255, 0.06) !important; color: white !important; }
-#sidebarNav .nav-link.nav-item-active { background: rgba(255, 255, 255, 0.14) !important; color: white !important; box-shadow: none !important; }
+/* BLOQUE SIDEBAR - NAV LINKS (fondo blanco) */
+#sidebarNav .nav-link,
+#sidebarFooter .nav-link {
+    background: transparent !important;
+    color: #414942 !important;
+    padding: 10px 16px !important;
+    margin: 0 6px 3px;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    display: flex;
+    align-items: center;
+}
+#sidebarNav .nav-link:hover { background: #f1f4f0 !important; color: #191c1a !important; }
+#sidebarNav .nav-link.nav-item-active { background: rgba(158, 211, 172, 0.35) !important; color: #003118 !important; font-weight: 700; }
+
+/* BLOQUE LOGOUT EN SIDEBAR */
+#sidebarFooter .nav-link { color: #ba1a1a !important; }
+#sidebarFooter .nav-link:hover { background: rgba(186, 26, 26, 0.08) !important; }
 
 /* BLOQUE MENU FLOTANTE (usuario/notificaciones) */
 .user-menu { transform: translateY(-10px); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -11,8 +25,23 @@
 .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
 
 /* BLOQUE TRANSICION SIDEBAR */
-.sidebar-transition { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.sidebar-transition { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease; }
 
 /* BLOQUE SCROLLBAR PERSONALIZADO */
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
+
+/* BLOQUE SIDEBAR COLAPSADO (rail solo iconos) */
+#sidebarExpandBtn { display: none; }
+.sidebar-mini #sidebarHeader { display: none !important; }
+.sidebar-mini #sidebar { width: 5.5rem !important; }
+.sidebar-mini #sidebarNav { margin-top: 1.5rem; }
+.sidebar-mini #sidebarNav .nav-label,
+.sidebar-mini #sidebarFooter .nav-label { display: none; }
+.sidebar-mini #sidebarNav .nav-link,
+.sidebar-mini #sidebarFooter .nav-link { justify-content: center; padding: 12px !important; margin: 0 10px 6px; }
+
+@media (min-width: 1024px) {
+    .sidebar-mini #mainWrapper { margin-left: 5.5rem !important; }
+    .sidebar-mini #sidebarExpandBtn { display: inline-flex !important; }
+}
