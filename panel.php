@@ -1152,11 +1152,22 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
                 </div>
             </div>
 
+            <div class="consumer-category-section" aria-labelledby="consumerCategoriesTitle" role="region">
+                <div class="consumer-catalog-heading">
+                    <div>
+                        <p class="consumer-eyebrow">Compra a tu manera</p>
+                        <h2 id="consumerCategoriesTitle">Explora por categor&iacute;a</h2>
+                        <p>Encuentra productos locales seg&uacute;n lo que necesitas hoy.</p>
+                    </div>
+                </div>
+                <div class="consumer-category-grid" id="consumerCategoryGrid"></div>
+            </div>
+
             <div class="consumer-catalog-section" id="productos">
                 <div class="consumer-catalog-heading">
                     <div>
                         <p class="consumer-eyebrow">Mercado local</p>
-                        <h2>Productos disponibles</h2>
+                        <h2 id="consumerCatalogTitle">Productos disponibles</h2>
                         <p>Selecciona productos frescos de productores paname&ntilde;os.</p>
                     </div>
                 </div>
@@ -1165,7 +1176,7 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
                 <div class="consumer-product-empty hidden" id="consumerProductEmpty">
                     <span class="material-symbols-outlined">search_off</span>
                     <h3>No encontramos productos</h3>
-                    <p>Prueba con otro nombre o productor.</p>
+                    <p id="consumerProductEmptyMessage">Prueba con otro nombre, productor o categor&iacute;a.</p>
                 </div>
                 <div class="consumer-product-pagination" id="consumerProductPagination">
                     <p id="consumerProductRange"></p>
@@ -1573,6 +1584,56 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
         }
 
         const CONSUMER_PRODUCTS_PER_PAGE = 9;
+        const CONSUMER_CATEGORIES = [
+            {
+                id: 'todos',
+                label: 'Todos',
+                description: 'Explora el mercado completo',
+                icon: 'grid_view',
+                image: 'img/dachi-compromiso-banner.png',
+                terms: []
+            },
+            {
+                id: 'vegetales',
+                label: 'Vegetales',
+                description: 'Hojas y vegetales frescos',
+                icon: 'eco',
+                image: 'img/products/lechuga.jpg',
+                terms: ['tomate', 'lechuga', 'hojas verdes']
+            },
+            {
+                id: 'frutas',
+                label: 'Frutas',
+                description: 'Frutas frescas de temporada',
+                icon: 'nutrition',
+                image: 'img/products/pina.jpg',
+                terms: ['pina', 'platano', 'banano', 'aguacate']
+            },
+            {
+                id: 'cacao',
+                label: 'Derivados del cacao',
+                description: 'Cacao y chocolates artesanales',
+                icon: 'cookie',
+                image: 'img/products/cacao.jpg',
+                terms: ['chocolate', 'cacao']
+            },
+            {
+                id: 'cafe',
+                label: 'Café',
+                description: 'Granos y café de altura',
+                icon: 'coffee',
+                image: 'img/products/cafe.jpg',
+                terms: ['cafe']
+            },
+            {
+                id: 'miel',
+                label: 'Miel y derivados',
+                description: 'Miel natural y combinaciones',
+                icon: 'hive',
+                image: 'img/products/miel.jpg',
+                terms: ['miel']
+            }
+        ];
         const CONSUMER_OFFERS = [
             { id: 1, discount: 15 },
             { id: 2, discount: 10 },
@@ -1582,8 +1643,66 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
         ];
         let consumerFilteredProducts = [];
         let consumerProductPage = 1;
+        let consumerSelectedCategory = 'todos';
+        let consumerSearchTerm = '';
         let consumerOfferIndex = 0;
         let consumerOfferTimer = null;
+
+        function getConsumerProductCategory(product) {
+            const searchable = normalizeProductSearch(product.nombre);
+            const category = CONSUMER_CATEGORIES.find(item =>
+                item.id !== 'todos' && item.terms.some(term => searchable.includes(term))
+            );
+            return category?.id || 'todos';
+        }
+
+        function getConsumerCategory(categoryId) {
+            return CONSUMER_CATEGORIES.find(category => category.id === categoryId) || CONSUMER_CATEGORIES[0];
+        }
+
+        function getFilteredConsumerProducts() {
+            return availableConsumerProducts().filter(product => {
+                const matchesCategory = consumerSelectedCategory === 'todos'
+                    || getConsumerProductCategory(product) === consumerSelectedCategory;
+                const matchesSearch = !consumerSearchTerm
+                    || normalizeProductSearch(product.nombre).includes(consumerSearchTerm)
+                    || normalizeProductSearch(product.nom_productor).includes(consumerSearchTerm);
+                return matchesCategory && matchesSearch;
+            });
+        }
+
+        function renderConsumerCategories() {
+            const grid = document.getElementById('consumerCategoryGrid');
+            if (!grid) return;
+            const products = availableConsumerProducts();
+
+            grid.innerHTML = CONSUMER_CATEGORIES.map(category => {
+                const count = category.id === 'todos'
+                    ? products.length
+                    : products.filter(product => getConsumerProductCategory(product) === category.id).length;
+                const isActive = consumerSelectedCategory === category.id;
+                return `
+                    <button aria-pressed="${isActive}" class="consumer-category-card ${isActive ? 'is-active' : ''}"
+                        onclick="selectConsumerCategory('${category.id}')" type="button">
+                        <img alt="" aria-hidden="true" loading="lazy" src="${escapeMarkup(category.image)}" />
+                        <span class="consumer-category-card-top">
+                            <span class="consumer-category-icon material-symbols-outlined">${category.icon}</span>
+                            <span class="consumer-category-count">${count} ${count === 1 ? 'producto' : 'productos'}</span>
+                        </span>
+                        <span class="consumer-category-card-copy">
+                            <strong>${category.label}</strong>
+                            <span>${category.description}</span>
+                        </span>
+                        <span class="consumer-category-selected material-symbols-outlined" aria-hidden="true">check_circle</span>
+                    </button>`;
+            }).join('');
+        }
+
+        function selectConsumerCategory(categoryId) {
+            consumerSelectedCategory = getConsumerCategory(categoryId).id;
+            renderConsumerCategories();
+            renderConsumerProducts(getFilteredConsumerProducts(), 1);
+        }
 
         function renderConsumerProducts(products = availableConsumerProducts(), requestedPage = 1) {
             const rail = document.getElementById('consumerProductRail');
@@ -1598,6 +1717,13 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
                 rail.classList.add('hidden');
                 empty.classList.remove('hidden');
                 pagination.classList.add('hidden');
+                const category = getConsumerCategory(consumerSelectedCategory);
+                const message = document.getElementById('consumerProductEmptyMessage');
+                if (message) {
+                    message.textContent = consumerSearchTerm
+                        ? `No hay coincidencias en ${category.label.toLowerCase()}. Prueba con otra búsqueda.`
+                        : 'Esta categoría no tiene productos disponibles por el momento.';
+                }
                 return;
             }
 
@@ -1637,7 +1763,11 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
 
             const firstVisible = start + 1;
             const lastVisible = Math.min(start + CONSUMER_PRODUCTS_PER_PAGE, products.length);
-            document.getElementById('consumerProductRange').textContent = `Mostrando ${firstVisible}-${lastVisible} de ${products.length} productos`;
+            const selectedCategory = getConsumerCategory(consumerSelectedCategory);
+            document.getElementById('consumerCatalogTitle').textContent = consumerSelectedCategory === 'todos'
+                ? 'Productos disponibles'
+                : selectedCategory.label;
+            document.getElementById('consumerProductRange').textContent = `Mostrando ${firstVisible}-${lastVisible} de ${products.length} productos${consumerSelectedCategory === 'todos' ? '' : ` en ${selectedCategory.label}`}`;
             document.getElementById('consumerProductPages').innerHTML = `
                 <button ${consumerProductPage === 1 ? 'disabled' : ''} onclick="goToConsumerProductPage(${consumerProductPage - 1})" title="P&aacute;gina anterior" type="button"><span class="material-symbols-outlined">chevron_left</span></button>
                 ${Array.from({ length: pageCount }, (_, index) => {
@@ -1750,10 +1880,8 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
 
         function filterConsumerProducts(value) {
             const term = normalizeProductSearch(value);
-            const products = availableConsumerProducts().filter(product =>
-                normalizeProductSearch(product.nombre).includes(term)
-                || normalizeProductSearch(product.nom_productor).includes(term)
-            );
+            consumerSearchTerm = term;
+            const products = getFilteredConsumerProducts();
             renderConsumerProducts(products);
 
             const results = document.getElementById('globalSearchResults');
@@ -2124,6 +2252,7 @@ if (in_array($rolActual, ['admin', 'productor'], true)) {
                 showSection('consumer-dashboard');
                 renderConsumerProducts();
                 renderConsumerOffers();
+                renderConsumerCategories();
                 const searchInput = document.getElementById('globalProductSearch');
                 if (searchInput && INITIAL_PRODUCT_SEARCH) {
                     searchInput.value = INITIAL_PRODUCT_SEARCH;

@@ -833,6 +833,162 @@ html.dark .dachi-auth select:focus {
     font-size: 20px;
 }
 
+.consumer-category-section {
+    min-width: 0;
+    padding-top: 8px;
+}
+
+.consumer-category-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.consumer-category-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    aspect-ratio: 1;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 8px;
+    background: #173722;
+    box-shadow: var(--dachi-shadow);
+    color: #ffffff;
+    isolation: isolate;
+    text-align: left;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.consumer-category-card::after {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: rgba(6, 24, 13, 0.55);
+    content: '';
+    transition: background-color 180ms ease;
+}
+
+.consumer-category-card > img {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 260ms ease;
+}
+
+.consumer-category-card:hover,
+.consumer-category-card:focus-visible {
+    border-color: #d9b354;
+    box-shadow: var(--dachi-shadow-float);
+    transform: translateY(-3px);
+}
+
+.consumer-category-card:hover::after,
+.consumer-category-card:focus-visible::after {
+    background: rgba(6, 24, 13, 0.43);
+}
+
+.consumer-category-card:hover > img,
+.consumer-category-card:focus-visible > img {
+    transform: scale(1.06);
+}
+
+.consumer-category-card.is-active {
+    border-color: #f0c85d;
+    box-shadow: inset 0 0 0 2px #f0c85d, var(--dachi-shadow-float);
+}
+
+.consumer-category-card.is-active::after {
+    background: rgba(4, 27, 14, 0.42);
+}
+
+.consumer-category-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.consumer-category-icon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 50%;
+    background: rgba(7, 38, 20, 0.68);
+    color: #baf0c8;
+    font-size: 21px;
+    backdrop-filter: blur(6px);
+    transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.consumer-category-card:hover .consumer-category-icon,
+.consumer-category-card:focus-visible .consumer-category-icon,
+.consumer-category-card.is-active .consumer-category-icon {
+    background: var(--dachi-primary);
+    transform: scale(1.06);
+}
+
+.consumer-category-count {
+    padding: 5px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.74);
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #174a2b;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.consumer-category-card-copy {
+    display: block;
+    padding-right: 22px;
+}
+
+.consumer-category-card-copy strong,
+.consumer-category-card-copy > span {
+    display: block;
+}
+
+.consumer-category-card-copy strong {
+    color: #ffffff;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.consumer-category-card-copy > span {
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.consumer-category-selected {
+    position: absolute;
+    right: 13px;
+    bottom: 13px;
+    color: #f0c85d;
+    font-size: 20px;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.consumer-category-card.is-active .consumer-category-selected {
+    opacity: 1;
+    transform: scale(1);
+}
+
 .consumer-catalog-heading {
     display: flex;
     align-items: flex-end;
@@ -1813,6 +1969,10 @@ html.dark .dachi-auth select:focus {
         grid-auto-columns: min(360px, 72vw);
     }
 
+    .consumer-category-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .consumer-brand-banner {
         width: calc(100% + 32px);
         min-height: 300px;
@@ -1872,6 +2032,21 @@ html.dark .dachi-auth select:focus {
     .consumer-brand-values {
         gap: 11px 18px;
         margin-top: 20px;
+    }
+
+    .consumer-category-grid {
+        display: grid;
+        overflow-x: auto;
+        grid-auto-columns: min(164px, 72vw);
+        grid-auto-flow: column;
+        grid-template-columns: none;
+        padding: 2px 2px 12px;
+        scroll-snap-type: x proximity;
+        scrollbar-width: thin;
+    }
+
+    .consumer-category-card {
+        scroll-snap-align: start;
     }
 
     .consumer-product-grid {
