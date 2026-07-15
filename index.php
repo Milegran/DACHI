@@ -22,9 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion'])) {
 
 //BLOQUE VERIFICAR SESION ACTIVA
 if (isset($_SESSION['usuario'])) {
-    $redirect = (strtolower(trim($_SESSION['usuario']['nom_rol'] ?? '')) === 'administrador')
-        ? 'admin.php'
-        : 'panel.php';
+    $rolSesion = strtolower(trim($_SESSION['usuario']['nom_rol'] ?? ''));
+    $redirect = match ($rolSesion) {
+        'administrador' => 'admin.php',
+        'logistico' => 'logistica.php',
+        default => 'panel.php'
+    };
     header("Location: $redirect");
     exit();
 }
