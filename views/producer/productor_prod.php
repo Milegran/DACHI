@@ -26,6 +26,40 @@ if ($categoryResult) {
     }
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_producto'])) {
+    $idProducto = (int)($_POST['id_producto'] ?? 0);
+    $idUsuario = (int)($usuarioActual['id'] ?? 0);
+    if ($idProducto > 0 && $idUsuario > 0) {
+        $stmt = $conn->prepare("DELETE FROM productos WHERE id = ? AND id_usuario = ?");
+        $stmt->bind_param('ii', $idProducto, $idUsuario);
+        $stmt->execute();
+        $stmt->close();
+    }
+    $conn->close();
+    header('Location: productor_prod.php?success=Producto+eliminado+correctamente');
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_producto'])) {
+    $idProducto = (int)($_POST['id_producto'] ?? 0);
+    $nombre = trim($_POST['nombre'] ?? '');
+    $descripcion = trim($_POST['descripcion'] ?? '');
+    $precio = (float)($_POST['precio'] ?? 0);
+    $cantidad = (int)($_POST['cantidad'] ?? 0);
+    $estado = isset($_POST['estado']) && $_POST['estado'] === '0' ? 0 : 1;
+    $idUsuario = (int)($usuarioActual['id'] ?? 0);
+
+    if ($nombre !== '' && $idProducto > 0 && $idUsuario > 0) {
+        $stmt = $conn->prepare("UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, cantidad = ?, estado = ? WHERE id = ? AND id_usuario = ?");
+        $stmt->bind_param('ssdiiii', $nombre, $descripcion, $precio, $cantidad, $estado, $idProducto, $idUsuario);
+        $stmt->execute();
+        $stmt->close();
+    }
+    $conn->close();
+    header('Location: productor_prod.php?success=Producto+actualizado+correctamente');
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_producto'])) {
     $nombre = trim($_POST['nombre'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
@@ -197,11 +231,12 @@ $conn->close();
                                 <th class="px-4 py-3 text-sm font-semibold uppercase text-[#404942]">Precio</th>
                                 <th class="px-4 py-3 text-sm font-semibold uppercase text-[#404942]">Stock</th>
                                 <th class="px-4 py-3 text-sm font-semibold uppercase text-[#404942]">Estado</th>
+                                <th class="px-4 py-3 text-sm font-semibold uppercase text-[#404942] text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (empty($contexto['productos'])): ?>
-                                <tr><td colspan="4" class="px-4 py-6 text-[#404942]">No hay productos registrados para esta cuenta.</td></tr>
+                                <tr><td colspan="5" class="px-4 py-6 text-[#404942]">No hay productos registrados para esta cuenta.</td></tr>
                             <?php else: ?>
                                 <?php foreach ($contexto['productos'] as $producto): ?>
                                     <?php $cantidad = (int) ($producto['cantidad'] ?? 0); ?>
@@ -218,6 +253,21 @@ $conn->close();
                                                 <?= $estado ?>
                                             </span>
                                         </td>
+                                        <td class="px-4 py-4">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <button type="button" onclick='openEditModal(<?= json_encode($producto) ?>)' class="inline-flex items-center gap-1 rounded-lg bg-[#e8f2ea] px-3 py-1.5 text-xs font-semibold text-[#004528] transition hover:bg-[#d0e8d5]" title="Editar">
+                                                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                                                    Editar
+                                                </button>
+                                                <form method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este producto?');" class="inline">
+                                                    <input type="hidden" name="id_producto" value="<?= (int)$producto['id'] ?>">
+                                                    <button type="submit" name="eliminar_producto" class="inline-flex items-center gap-1 rounded-lg bg-[#ffdad6] px-3 py-1.5 text-xs font-semibold text-[#93000a] transition hover:bg-[#ffc9c2]" title="Eliminar">
+                                                        <span class="material-symbols-outlined text-[16px]">delete</span>
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -225,4 +275,69 @@ $conn->close();
                     </table>
                 </div>
             </section>
+
+<!-- MODAL EDITAR PRODUCTO -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[300] hidden items-center justify-center p-4 modal-overlay" id="editProductModal">
+    <div class="bg-white rounded-[24px] w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline-sm text-headline-sm text-primary">Editar Producto</h3>
+            <button class="p-2 hover:bg-surface-container-low rounded-full" onclick="closeEditModal()"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <form method="POST" class="space-y-4">
+            <input type="hidden" name="editar_producto" value="1">
+            <input type="hidden" name="id_producto" id="editIdProducto">
+            <div>
+                <label class="block text-sm font-semibold text-[#404942] mb-1">Nombre</label>
+                <input type="text" name="nombre" id="editNombre" class="w-full rounded-xl border border-[#e1e3e4] bg-[#f8f9fa] p-3 text-sm text-[#191c1d]" required />
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-[#404942] mb-1">Descripción</label>
+                <textarea name="descripcion" id="editDescripcion" rows="3" class="w-full rounded-xl border border-[#e1e3e4] bg-[#f8f9fa] p-3 text-sm text-[#191c1d]" required></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-[#404942] mb-1">Precio</label>
+                    <input type="number" name="precio" id="editPrecio" min="0" step="0.01" class="w-full rounded-xl border border-[#e1e3e4] bg-[#f8f9fa] p-3 text-sm text-[#191c1d]" required />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-[#404942] mb-1">Cantidad</label>
+                    <input type="number" name="cantidad" id="editCantidad" min="0" step="1" class="w-full rounded-xl border border-[#e1e3e4] bg-[#f8f9fa] p-3 text-sm text-[#191c1d]" required />
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-[#404942] mb-1">Estado</label>
+                <select name="estado" id="editEstado" class="w-full rounded-xl border border-[#e1e3e4] bg-[#f8f9fa] p-3 text-sm text-[#191c1d]">
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full rounded-xl bg-[#004528] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#05391f]">GUARDAR CAMBIOS</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function openEditModal(producto) {
+    document.getElementById('editIdProducto').value = producto.id;
+    document.getElementById('editNombre').value = producto.nombre || '';
+    document.getElementById('editDescripcion').value = producto.descripcion || '';
+    document.getElementById('editPrecio').value = producto.precio || 0;
+    document.getElementById('editCantidad').value = producto.cantidad || 0;
+    document.getElementById('editEstado').value = producto.estado ?? 1;
+    document.getElementById('editProductModal').classList.remove('hidden');
+    document.getElementById('editProductModal').classList.add('flex');
+}
+function closeEditModal() {
+    document.getElementById('editProductModal').classList.add('hidden');
+    document.getElementById('editProductModal').classList.remove('flex');
+}
+document.addEventListener('click', function(e) {
+    const overlay = e.target.closest('.modal-overlay');
+    if (overlay && e.target === overlay) {
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+    }
+});
+</script>
+
 <?php require_once __DIR__ . '/producer_layout_end.php'; ?>
